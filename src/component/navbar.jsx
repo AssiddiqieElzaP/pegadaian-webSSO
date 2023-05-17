@@ -23,8 +23,8 @@ function navbar() {
             <NavbarBrand>
                 <i><FaBell/></i>
             </NavbarBrand>
-            <NavDropdown title="USER ID" id="basic-nav-dropdown" className=''>
-              <NavDropdown.Item href="#action/3.1">Logout</NavDropdown.Item>
+            <NavDropdown title="USER ID" id="basic-nav-dropdown" className='' align={{ lg: 'start'}} >
+              <NavDropdown.Item href="#action/3.1" >Logout</NavDropdown.Item>
             </NavDropdown>
 
         </Navbar.Collapse>

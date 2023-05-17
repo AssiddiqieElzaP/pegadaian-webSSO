@@ -1,17 +1,18 @@
-import React from 'react'
-import { Stack } from 'react-bootstrap'
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
-function SideBar() {
+const SidebarMenu = () => {
   return (
-   <>
-   <div className='sidebar p-1'>
-    <Stack gap={2} className="col-md-10  mt-4 mx-auto">
-      <button className='btn-sidebar'>PENDAFTARAN</button>
-      <button className='btn-sidebar'>CEK APPROVAL</button>
-    </Stack>
-   </div>
-   </>
-   )
-}
-
-export default SideBar
+    <div style={{ display: "flex", height: "100vh" }}>
+      <Sidebar className="sidebar p-1">
+        <Menu className="p-2">
+          <SubMenu label="PENDAFTARAN" className="btn-sidebar">
+            <MenuItem> Penambahan </MenuItem>
+            <MenuItem> Pergantian </MenuItem>
+          </SubMenu>
+          <MenuItem className="btn-sidebar"> CEK PERSETUJUAN </MenuItem>
+        </Menu>
+      </Sidebar>
+    </div>
+  );
+};
+export default SidebarMenu;
