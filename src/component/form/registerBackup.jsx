@@ -39,6 +39,7 @@ function RegisterBackup() {
                   required
                   type="number"
                   placeholder="Input NIK yang menggantikan"
+                  className="mb-3"
                 />
                 <Form.Control.Feedback>NIK sudah sesuai</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
@@ -52,6 +53,7 @@ function RegisterBackup() {
                   disabled
                   type="text"
                   placeholder="Nama Pegawai"
+                  className="mb-3"
                 />
               </Form.Group>
               <Form.Group md="4" controlId="validation3">

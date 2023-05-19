@@ -21,7 +21,7 @@ function AddBackup() {
                         <Form.Control type="text" placeholder="Nama Pegawai" disabled />
                      </Form.Group>
                      <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Jabatan address</Form.Label>
+                        <Form.Label>Jabatan</Form.Label>
                         <Form.Control type="text" placeholder="Kode Jabatan - Nama Jabatan" disabled />
                      </Form.Group>
                      <Form.Group className="mb-3" controlId="formBasicEmail">

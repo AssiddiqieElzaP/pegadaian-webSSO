@@ -1,4 +1,5 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Link } from "react-router-dom";
 
 const SidebarMenu = () => {
   return (
@@ -6,10 +7,10 @@ const SidebarMenu = () => {
       <Sidebar className="sidebar p-1">
         <Menu className="p-2">
           <SubMenu label="PENDAFTARAN" className="btn-sidebar">
-            <MenuItem> Penambahan </MenuItem>
-            <MenuItem> Pergantian </MenuItem>
+            <MenuItem component={<Link to="/"/>}> Penambahan </MenuItem>
+            <MenuItem component={<Link to="/replacedRegister"/>}> Pergantian </MenuItem>
           </SubMenu>
-          <MenuItem className="btn-sidebar"> CEK PERSETUJUAN </MenuItem>
+          <MenuItem component={<Link to="/approval"/>} className="btn-sidebar"> PERSETUJUAN </MenuItem>
         </Menu>
       </Sidebar>
     </div>

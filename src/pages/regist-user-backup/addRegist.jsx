@@ -3,8 +3,8 @@ import React from 'react'
 import { Container} from 'react-bootstrap'
 // import DashboardForm from '../../component/form/dashboardForm'
 // import TablefromAdd from '../../component/table/tablefromAdd'
-// import AddBackup from '../../component/form/addBackup'
-import RegisterBackup from '../../component/form/registerBackup'
+import AddBackup from '../../component/form/addBackup'
+// import RegisterBackup from '../../component/form/registerBackup'
 
 function AddRegist() {
   return (
@@ -14,8 +14,8 @@ function AddRegist() {
             <h4 className='title-head mx-2'>DATA PENDAFTARAN USER BACKUP</h4>
             {/* <DashboardForm/>
             <TablefromAdd/> */}
-            {/* <AddBackup/> */}
-            <RegisterBackup/>
+            <AddBackup/>
+            {/* <RegisterBackup/> */}
         </div>
     </Container>
     </>
