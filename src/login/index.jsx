@@ -1,16 +1,18 @@
 import React from 'react'
 
 import {Container, Form} from 'react-bootstrap'
-import Logo from '../../asset/images/logoNav.png'
+import Logo from '../asset/images/logoNav.png'
 
 function loginPage() {
   return (
     <>
-        <div className='bg-login'>
-            <Container className='mx-auto mt-5 '>
+      <div className='bg-login'>
+            <Container className='mx-auto'>
                 <div className='wrapper-login'>
-                <img src={Logo} alt="Login" />
-                <h1 className='mt-4'>Login</h1>
+                <br/><br/>
+                <img src={Logo} alt="Login" className='mt-5' />
+                <br/><br/><br/>
+                <h1 className='mt-5'>Login</h1>
                 <Form>
                     <Form.Group className="my-3" controlId="formBasicNik">
                         <Form.Control type="text" placeholder="NIK HCIS / Aralia" 
