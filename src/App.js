@@ -1,17 +1,14 @@
+import React from 'react';
 import './App.css';
 
+// import AddRegist from './pages/regist-user-backup/addRegist';
+import Login from './login'
 
-import NavbaR from './component/navbar'
-import SideBar from './component/sidebar';
-import AddRegist from './pages/regist-user-backup/addRegist';
 function App() {
   return (
     <>
-  <NavbaR/>
-  <div className='d-flex'>
-    <SideBar/>
-    <AddRegist/>
-  </div>
+    {/* <AddRegist/> */}
+    <Login/>
     </>
   );
 }

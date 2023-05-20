@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Navbar, NavbarBrand, NavDropdown } from 'react-bootstrap'
 
-import Logo from '../asset/images/logoNav.png'
+import Logo from '../../asset/images/logoNav.png'
 import {FaBell} from 'react-icons/fa'
 
 function navbar() {

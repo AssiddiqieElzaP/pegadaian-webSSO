@@ -11,6 +11,14 @@
     box-sizing: border-box;
 }
 
+::placeholder {
+    font-size: 14px;
+}
+
+Form {
+    font-size: 14px;
+}
+
 .App {
     text-align: center;
 }
@@ -113,4 +121,20 @@
     width: 400px;
     height: 85vh;
     background-color: #E7EDED;
+}
+
+.bg-login {
+    width: 100%;
+    height: 100vh;
+    background-image: url('./asset/images/background.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.wrapper-login {
+    width: 600px;
+    height: 400px;
+    margin: auto;
+    padding: 20px;
 }
