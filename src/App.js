@@ -1,14 +1,16 @@
 import React from 'react';
 import './App.css';
 
-// import AddRegist from './pages/regist-user-backup/addRegist';
 import Login from './login'
+import Dashboard from './pages/Pendaftaran/dashboard';
+import SidebarMenu from './component/sidebar/sidebar';
 
 function App() {
   return (
     <>
-    {/* <AddRegist/> */}
-    <Login/>
+    <SidebarMenu/>
+    <Dashboard/>
+    {/* <Login/> */}
     </>
   );
 }
