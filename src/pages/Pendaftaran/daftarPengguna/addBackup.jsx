@@ -5,7 +5,7 @@ import Header from '../../../component/navbar/header'
 function AddBackup() {
   return (
    <Container className='m-0 p-0'>
-      <Header/>
+      <Header heading="PENDAFTARAN USER BACKUP"/>
     <div className='mt-2'>
             <h6 className='mx-3 mb-2'>Detail Pegawai yang ditambahkan</h6>
             <div className='px-3'>

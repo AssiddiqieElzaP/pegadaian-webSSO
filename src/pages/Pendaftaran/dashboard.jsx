@@ -8,7 +8,7 @@ function dashboard() {
   return (
     <>
     <Container className='m-0 p-0'>
-    <Header/>
+    <Header heading="WEB SSO DELEGASI"/>
     <div className='mt-3 mx-auto'>
             <h6 className='mx-3 mb-3'>Cari Data Pendaftaran User Backup</h6>
             <div className='px-3'>
