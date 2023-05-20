@@ -5,6 +5,7 @@ import TablefromAdd from '../../component/table/tablefromAdd'
 import Header from '../../component/navbar/header'
 
 function dashboard() {
+  
   return (
     <>
     <Container className='m-0 p-0'>
@@ -22,7 +23,7 @@ function dashboard() {
                 </Card.Body>
                 </Card>
             </div>
-            <TablefromAdd/>
+            <TablefromAdd/>     
     </div>
     </Container>
     </>
