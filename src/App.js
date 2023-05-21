@@ -1,18 +1,28 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import { ProSidebarProvider } from "react-pro-sidebar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Login from './login'
-import Dashboard from './pages/Pendaftaran/dashboard';
-import SidebarMenu from './component/sidebar/sidebar';
+import "./App.css";
+import Login from "./login";
+import Dashboard from "./pages/Pendaftaran/dashboard";
+import NavbarComp from "./component/navbar/NavbarComp";
+import AddBackup from "./pages/Pendaftaran/daftarPengguna/addBackup";
+import RegisterBackup from "./pages/Pendaftaran/daftarPengganti/registerBackup";
 
-function App() {
+const App = () => {
   return (
-    <>
-    <SidebarMenu/>
-    <Dashboard/>
-    {/* <Login/> */}
-    </>
+    <Router>
+      <ProSidebarProvider>
+        <NavbarComp/>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/add-backup" element={<AddBackup />} />
+          <Route path="/register-backup" element={<RegisterBackup />} />
+        </Routes>
+      </ProSidebarProvider>
+    </Router>
   );
-}
+};
 
 export default App;

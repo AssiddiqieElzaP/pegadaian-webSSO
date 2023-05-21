@@ -4,7 +4,7 @@ import { Container, Navbar, NavbarBrand, NavDropdown } from 'react-bootstrap'
 import Logo from '../../asset/images/logoNav.png'
 import {FaBell} from 'react-icons/fa'
 
-function navbar() {
+function NavbarComp() {
   return (
    <Container fluid className='mt-2'>
      <Navbar>
@@ -34,4 +34,4 @@ function navbar() {
   )
 }
 
-export default navbar
+export default NavbarComp
