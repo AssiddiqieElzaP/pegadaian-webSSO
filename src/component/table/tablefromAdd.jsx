@@ -9,7 +9,7 @@ function TablefromAdd() {
   const [data,setData] = useState([]);
   useEffect(()=>{
     axios.get('http://10.87.10.123:8080/api/v1/backup/list')
-    .then(res => setData(res.data))
+    .then(res => setData(res.data.data))
     .catch(err => console.error(err));
   },[])
 
@@ -25,6 +25,7 @@ function TablefromAdd() {
           <th>NAMA PEGAWAI</th>
           <th>JABATAN</th>
           <th>UNIT KERJA</th>
+          <th>JENIS BACKUP</th>
           <th>STATUS</th>
         </tr>
       </thead>
