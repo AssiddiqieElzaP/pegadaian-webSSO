@@ -3,14 +3,15 @@ import axios from 'axios'
 import {Container, Form} from 'react-bootstrap'
 import Logo from '../asset/images/logoNav.png'
 
-// import {useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 
 
 const Login = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [values, setValues] = useState({
-        email:"",
+        nik:"",
+        // email:"",
         password:"",
         
     });
@@ -20,14 +21,15 @@ const Login = () => {
        
             try {
                 axios
-                .post("https://reqres.in/api/login", {
-                    email: values.email,
+                .post('http://172.168.102.91:8080/api/v1/welcome/login', {
+                    nik: values.nik,
+                    // email: values.email,
                     password: values.password,
                 })  
                 .then((res) => {
-                    console.log((res));
+                    console.log((res.data));
                     // localStorage.setItem("token", res.data.token);
-                    // navigate("/dashboard")
+                    navigate("/dashboard")
                 })
                 
             } catch (error) {
@@ -49,10 +51,10 @@ const Login = () => {
                 <h1 className='mt-5'>Login</h1>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="my-3" >
-                        <Form.Control type="email" placeholder="NIK HCIS / Aralia" 
-                       controlid='email'
-                        name='email'
-                         onChange={(e)=>setValues({...values,email:e.target.value})}
+                        <Form.Control type="text" placeholder="NIK HCIS / Aralia" 
+                       controlid='nik'
+                        name='nik'
+                         onChange={(e)=>setValues({...values,nik:e.target.value})}
                          required   
                         />
                     </Form.Group>
