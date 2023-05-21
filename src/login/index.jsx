@@ -28,7 +28,8 @@ const Login = () => {
                 })  
                 .then((res) => {
                     console.log((res.data));
-                    // localStorage.setItem("token", res.data.token);
+                    // input data create by 
+                    // localStorage.setItem("token", res.data);
                     navigate("/dashboard")
                 })
                 
