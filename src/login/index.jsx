@@ -11,7 +11,6 @@ const Login = () => {
     const navigate = useNavigate();
     const [values, setValues] = useState({
         nik:"",
-        // email:"",
         password:"",
         
     });
@@ -30,6 +29,7 @@ const Login = () => {
                     // input data create by 
                     localStorage.setItem("token", res.data.data.Token);
                     localStorage.setItem("name", res.data.data.Name);
+                    
                     navigate("/dashboard")
                 })
                 

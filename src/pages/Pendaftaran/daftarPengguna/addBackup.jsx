@@ -1,59 +1,117 @@
 import React, { useState } from "react";
-import { Button, Card, Container } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 import Header from "../../../component/navbar/header";
 import SidebarMenu from "../../../component/sidebar/sidebar";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import { v4 as uuid } from "uuid";
-import PegawaiData from "../../../component/table/PegawaiData";
+// import { v4 as uuid } from "uuid";
+// import PegawaiData from "../../../component/table/PegawaiData";
 import InputGroup from "react-bootstrap/InputGroup";
 
-// import axios from "axios";
+import axios from "axios";
 
 function AddBackup() {
-  const [nik, setNik] = useState("");
-  const [userIdBackup, setUserIdBackup] = useState("");
-  const [name, setName] = useState("");
-  const [jabatan, setJabatan] = useState("");
-  const [unitKerja, setUnitKerja] = useState("");
-  // const [jenisBackup, setJenisBackup] = useState('')
-  // const [status, setStatus] = useState('')
+  // const [nik, setNik] = useState("");
+  // const [userIdBackup, setUserIdBackup] = useState("");
+  // const [name, setName] = useState("");
+  // const [jabatan, setJabatan] = useState("");
+  // const [unitKerja, setUnitKerja] = useState("");
+  // // const [jenisBackup, setJenisBackup] = useState('')
+  // // const [status, setStatus] = useState('')
 
-  const [validated, setValidated] = useState(false);
+  // const [validated, setValidated] = useState(false);
 
-  let history = useNavigate();
+  // let history = useNavigate();
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const ids = uuid();
+  //   let uniqeId = ids.slice(0, 8);
+
+  //   let a = nik,
+  //     b = userIdBackup,
+  //     c = name,
+  //     d = jabatan,
+  //     f = unitKerja;
+
+  //   PegawaiData.push({
+  //     id: uniqeId,
+  //     NIK: a,
+  //     UserIdBackup: b,
+  //     Name: c,
+  //     Jabatan: d,
+  //     UnitKerja: f,
+  //   });
+
+  //   history("/dashboard");
+
+  //   const form = e.currentTarget;
+
+  //   if (form.checkValidity() === false) {
+  //     e.preventDefault();
+  //     e.stopPropagation();
+
+  const [data, setData] = useState({
+    nik: "",
+    nama_pegawai: "",
+    jabatan: "",
+    unit_kerja: "",
+    user_id_bkp: "",
+    user_id: "",
+  });
+
+  const saveData = (e) => {
     e.preventDefault();
 
-    const ids = uuid();
-    let uniqeId = ids.slice(0, 8);
+    const insert = {
+      user_id: data.user_id,
+      uid_bkp: data.user_id_bkp,
+      name: data.nama_pegawai,
+      created_by: localStorage.getItem("name"),
+      updated_by: localStorage.getItem("name"),
+    };
 
-    let a = nik,
-      b = userIdBackup,
-      c = name,
-      d = jabatan,
-      f = unitKerja;
+    axios
+      .post("http://10.87.10.123:8080/api/v1/backup/create", insert)
+      .then((res) => {
+        alert(res.data.message);
+      });
+  };
 
-    PegawaiData.push({
-      id: uniqeId,
-      NIK: a,
-      UserIdBackup: b,
-      Name: c,
-      Jabatan: d,
-      UnitKerja: f,
-    });
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     axios.post("http://10.87.10.123:8080/api/v1/backup/create")
+  //   } catch (error) {
 
-    history("/dashboard");
+  //   }
+  // }
 
-    const form = e.currentTarget;
-
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
+  const handleKey = (Event) => {
+    if (Event.key === "Enter") {
+      try {
+        axios
+          .post("http://10.87.10.123:8080/api/v1/backup/nik", {
+            nik: data.nik,
+          })
+          .then((res) => {
+            console.log(res.data);
+            setData({
+              user_id: res.data.data.user_id,
+              nik: res.data.data.nik,
+              nama_pegawai: res.data.data.nama_pegawai,
+              jabatan: res.data.data.jabatan,
+              unit_kerja: res.data.data.unit_kerja,
+              user_id_bkp: res.data.data.user_id_bkp,
+            });
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
 
-    setValidated(true);
+    // setValidated(true);
   };
 
   //   const [data, setData] = useState({
@@ -102,11 +160,11 @@ function AddBackup() {
               >
                 <Card.Body>
                   <Form
-                    noValidate
-                    validated={validated}
-                    onSubmit={handleSubmit}
+                  // noValidate
+                  // validated={validated}
+                  // onSubmit={handleSubmit}
                   >
-                    <Form.Group className="mb-2" controlId="validation">
+                    <Form.Group className="mb-2" controlId="nik">
                       <Form.Label className="mb-0">NIK *</Form.Label>
                       <Form.Control
                         type="number"
@@ -114,11 +172,11 @@ function AddBackup() {
                         style={{ height: "30px", fontSize: "14px" }}
                         name="nik"
                         required
-                        onChange={(e) => setNik(e.target.value)}
-                        // onChange={(e) =>
-                        //   setData({ ...data, nik: e.target.value })
-                        // }
-                        //   onKeyDown={handleKey}
+                        // onChange={(e) => setNik(e.target.value)}
+                        onChange={(e) =>
+                          setData({ ...data, nik: e.target.value })
+                        }
+                        onKeyDown={handleKey}
                       />
                       <Form.Control.Feedback>
                         NIK sudah sesuai
@@ -132,14 +190,14 @@ function AddBackup() {
                       <Form.Control
                         type="text"
                         style={{ height: "30px", fontSize: "14px" }}
-                        // disabled
+                        disabled
                         required
                         name="name"
                         placeholder="Nama Pegawai"
-                        onChange={(e) => setName(e.target.value)}
-                        // value={
-                        //   data.nama_pegawai !== "" ? data.nama_pegawai : ""
-                        // }
+                        // onChange={(e) => setName(e.target.value)}
+                        value={
+                          data.nama_pegawai !== "" ? data.nama_pegawai : ""
+                        }
                       />
                     </Form.Group>
                     <Form.Group className="mb-2" controlid="name">
@@ -148,12 +206,12 @@ function AddBackup() {
                         type="text"
                         placeholder="Kode Jabatan - Nama Jabatan"
                         style={{ height: "30px", fontSize: "14px" }}
-                        // disabled
+                        disabled
                         required
-                        onChange={(e) => setJabatan(e.target.value)}
-                        // value={
-                        //   data.jabatan !== "" ? data.jabatan : "Nama Pegawai"
-                        // }
+                        // onChange={(e) => setJabatan(e.target.value)}
+                        value={
+                          data.jabatan !== "" ? data.jabatan : "Nama Pegawai"
+                        }
                       />
                     </Form.Group>
                     <Form.Group className="mb-2" controlid="formBasicEmail">
@@ -162,11 +220,11 @@ function AddBackup() {
                         type="text"
                         placeholder="Kode Unit - Nama Unit"
                         style={{ height: "30px", fontSize: "14px" }}
-                        // disabled
+                        disabled
                         required
                         name="text"
-                        onChange={(e) => setUnitKerja(e.target.value)}
-                        // value={data.unit_kerja !== "" ? data.unit_kerja : ""}
+                        // onChange={(e) => setUnitKerja(e.target.value)}
+                        value={data.unit_kerja !== "" ? data.unit_kerja : ""}
                       />
                     </Form.Group>
                     <Form.Group className="mb-2" controlid="UserIdBackup">
@@ -177,15 +235,15 @@ function AddBackup() {
                           placeholder="Generate NIK"
                           style={{ height: "30px", fontSize: "14px" }}
                           required
-                          onChange={(e) =>
-                            setUserIdBackup(e.target.value + " - BKP")
-                          }
-                          // disabled
-                          // value={
-                          //   data.user_id_bkp !== ""
-                          //     ? data.user_id_bkp
-                          //     : "Nama Pegawai"
+                          // onChange={(e) =>
+                          //   setUserIdBackup(e.target.value + " - BKP")
                           // }
+                          disabled
+                          value={
+                            data.user_id_bkp !== ""
+                              ? data.user_id_bkp
+                              : "Nama Pegawai"
+                          }
                         />
                         <InputGroup.Text
                           id="inputGroupPrepend"
@@ -196,15 +254,12 @@ function AddBackup() {
                         </InputGroup.Text>
                       </InputGroup>
                     </Form.Group>
-                    <Button type="submit" hidden>
-                      Submit form
-                    </Button>
                   </Form>
                   <div className="d-flex">
                     <button
-                      onClick={(e) => handleSubmit(e)}
-                      type="submit"
                       className="mt-3 btn-color mx-3"
+                      onClick={(e) => saveData(e)}
+                      type="submit"
                     >
                       Simpan
                     </button>
