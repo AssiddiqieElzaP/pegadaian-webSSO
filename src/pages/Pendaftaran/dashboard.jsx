@@ -6,18 +6,19 @@ import Header from "../../component/navbar/header";
 import SidebarMenu from "../../component/sidebar/sidebar";
 
 function dashboard() {
+  
   return (
     <>
-      <div className="d-flex">
+      <div className="d-flex" style={{height:"125vh"}}>
         <SidebarMenu />
         <Container className="m-0 p-0">
-          <Header />
+        <Header heading="WEB SSO DELEGASI"/>
           <div className="mt-3 mx-auto">
             <h6 className="mx-3 mb-3">Cari Data Pendaftaran User Backup</h6>
             <div className="px-3">
               <Card
                 border="secondary"
-                style={{ width: "100%", height: "200px" }}
+                style={{ width: "100%", height: "185px" }}
                 className="mx-auto"
               >
                 <Card.Body>

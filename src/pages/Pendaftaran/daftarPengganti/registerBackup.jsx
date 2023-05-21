@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container, InputGroup } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -26,7 +26,7 @@ function RegisterBackup() {
       <div className="d-flex">
         <SidebarMenu />
         <Container className="m-0 p-0">
-          <Header />
+          <Header  heading="PENDAFTARAN USER PENGGANTI"/>
           <div className="mt-2 mb-0">
             <div className="d-flex  justify-content-evenly">
               <h6 className="mx-5">Detail Pegawai yang menggantikan</h6>
@@ -93,16 +93,25 @@ function RegisterBackup() {
                         style={{ height: "30px", fontSize: "14px" }}
                       />
                     </Form.Group>
-                    <Form.Group md="4" controlId="validation5">
+                    <Form.Group className="mb-2" controlid="UserIdBackup">
                       <Form.Label className="mb-0">User ID Backup</Form.Label>
-                      <Form.Control
-                        required
-                        disabled
-                        type="text"
-                        placeholder="NIK - BKP"
-                        className="mt-0 mb-2"
-                        style={{ height: "30px", fontSize: "14px" }}
-                      />
+                      <InputGroup hasValidation>
+                        <Form.Control
+                          type="text"
+                          placeholder=" NIK"
+                          style={{ height: "30px", fontSize: "14px" }}
+                          className="mt-0 mb-2"
+                          required
+                          disabled
+                        />
+                        <InputGroup.Text
+                          id="inputGroupPrepend"
+                          style={{ height: "30px", fontSize: "14px" }}
+                          defaultValue={"BKP"}
+                        >
+                          BKP
+                        </InputGroup.Text>
+                      </InputGroup>
                     </Form.Group>
                     <Button type="submit" hidden>
                       Submit form
