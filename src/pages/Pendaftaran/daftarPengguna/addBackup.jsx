@@ -12,16 +12,47 @@ function AddBackup() {
    jabatan: "",
    unit_kerja: "",
    user_id_bkp: "",
+   user_id :"",
+   
   })
+
+  const saveData = (e) => {
+    e.preventDefault();
+
+    const insert = {
+      user_id: data.user_id,
+      uid_bkp: data.user_id_bkp,
+      name: data.nama_pegawai,
+      created_by : localStorage.getItem('name'),
+      updated_by : localStorage.getItem('name'),
+
+    }
+
+    axios.post("http://10.87.10.123:8080/api/v1/backup/create", insert)
+    .then(res => {
+      alert(res.data.message)
+    })
+  }
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     axios.post("http://10.87.10.123:8080/api/v1/backup/create")
+  //   } catch (error) {
+      
+  //   }
+  // }
+
   const handleKey = (Event) => {
     if (Event.key === "Enter") {
         try {
-          axios.post("http://172.168.102.91:8080/api/v1/backup/nik",{
+          axios.post("http://10.87.10.123:8080/api/v1/backup/nik",{
             nik : data.nik
           })
             .then((res) => {
               console.log(res.data);
               setData({
+                user_id : res.data.data.user_id,
                nik : res.data.data.nik,
                nama_pegawai : res.data.data.nama_pegawai,
                jabatan: res.data.data.jabatan,
@@ -108,7 +139,7 @@ function AddBackup() {
                 </Form.Group>
               </Form>
               <div className="d-flex">
-                <button className="mt-3 btn-color mx-3">Simpan</button>
+                <button className="mt-3 btn-color mx-3" onClick={(e) => saveData(e)} type="submit">Simpan</button>
                 <button className="mt-3 btn-color mx-3">Batal</button>
               </div>
             </Card.Body>

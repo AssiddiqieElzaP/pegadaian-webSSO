@@ -5,7 +5,7 @@ import axios from 'axios'
 function TablefromAdd() {
   const [data,setData] = useState([]);
   useEffect(()=>{
-    axios.get('https://jsonplaceholder.typicode.com/users')
+    axios.get('http://10.87.10.123:8080/api/v1/backup/list')
     .then(res => setData(res.data))
     .catch(err => console.error(err));
   },[])
@@ -21,7 +21,6 @@ function TablefromAdd() {
           <th>NAMA PEGAWAI</th>
           <th>JABATAN</th>
           <th>UNIT KERJA</th>
-          <th>JENIS BACKUP</th>
           <th>STATUS</th>
         </tr>
       </thead>
@@ -29,10 +28,12 @@ function TablefromAdd() {
      {
       data.map((user,i) =>{
         return <tr key={i}>
-            <td>{user.id}</td>
-            <td>{user.name}</td>
-            <td>{user.username}</td>
-            <td>{user.email}</td>
+            <td>{user.nik}</td>
+            <td>{user.uid_bkp}</td>
+            <td>{user.nama_pegawai}</td>
+            <td>{user.jabatan}</td>
+            <td>{user.unit_kerja}</td>
+            <td>{user.status}</td>
         </tr>
       })
      }

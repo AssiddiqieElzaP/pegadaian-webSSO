@@ -11,7 +11,6 @@ const Login = () => {
     const navigate = useNavigate();
     const [values, setValues] = useState({
         nik:"",
-        // email:"",
         password:"",
         
     });
@@ -21,15 +20,16 @@ const Login = () => {
        
             try {
                 axios
-                .post('http://172.168.102.91:8080/api/v1/welcome/login', {
+                .post('http://10.87.10.123:8080/api/v1/welcome/login', {
                     nik: values.nik,
-                    // email: values.email,
                     password: values.password,
                 })  
                 .then((res) => {
                     console.log((res.data));
                     // input data create by 
-                    // localStorage.setItem("token", res.data);
+                    localStorage.setItem("token", res.data.data.Token);
+                    localStorage.setItem("name", res.data.data.Name);
+                    
                     navigate("/dashboard")
                 })
                 
