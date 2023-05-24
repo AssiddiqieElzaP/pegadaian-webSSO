@@ -4,6 +4,7 @@ import {Container, Form} from 'react-bootstrap'
 import Logo from '../asset/images/logoNav.png'
 
 import {useNavigate} from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 
 
@@ -17,30 +18,43 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-       
-            try {
-                axios
-                .post('http://10.87.10.123:8080/api/v1/welcome/login', {
-                    nik: values.nik,
-                    password: values.password,
-                })  
-                .then((res) => {
-                    console.log((res.data));
-                    // input data create by 
-                    localStorage.setItem("token", res.data.data.Token);
-                    localStorage.setItem("name", res.data.data.Name);
+        if(validated()){
+            console.log('test')
+            // try {
+            //     axios
+            //     .post('http://10.87.10.123:8080/api/v1/welcome/login', {
+            //         nik: values.nik,
+            //         password: values.password,
+            //     })  
+            //     .then((res) => {
+            //         console.log((res.data));
+            //         // input data create by 
+            //         localStorage.setItem("token", res.data.data.Token);
+            //         localStorage.setItem("name", res.data.data.Name);
                     
-                    navigate("/dashboard")
-                })
+            //         navigate("/dashboard")
+            //     })
                 
-            } catch (error) {
-                console.error((error))
-            }
+            // } catch (error) {
+            //     console.error((error))
+            // }
+        }
           
            
     };
     
-
+    const validated = () =>{
+        let result =true;
+        if(values.nik === '' || values.nik===null){
+            result=false;
+            toast.warning('Nik yang anda masukkan salah')
+        }
+        if(values === '' || values===null){
+            result=false;
+            toast.warning('Password yang anda masukkan salah')
+        }
+        return result;
+    }
   return (
     <>
       <div className='bg-login'>
@@ -53,23 +67,22 @@ const Login = () => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="my-3" >
                         <Form.Control type="text" placeholder="NIK HCIS / Aralia" 
-                       controlid='nik'
+                
                         name='nik'
                          onChange={(e)=>setValues({...values,nik:e.target.value})}
-                         required   
+                        //  required   
+                         value={values.nik}
                         />
                     </Form.Group>
 
                     <Form.Group className="my-3" >
                     <Form.Control type='password' placeholder="Password HCIS / Aralia"
-                    controlid='password'
+                    
                     name='password'
+                    // value={password}
                     onChange={(e)=>setValues({...values,password:e.target.value})}
-                    required 
+                    // required 
                     />
-                    <Form.Text className="text-muted">
-                        <p className='d-none'>*NIK / Password yang dimasukkan salah*</p>
-                        </Form.Text>
                     </Form.Group>
                     <div className='mx-auto'>
                         <button className='me-5 mt-3'>Lupa Password ?</button>

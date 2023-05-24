@@ -5,7 +5,7 @@ import TablefromAdd from "../../component/table/tablefromAdd";
 import Header from "../../component/navbar/header";
 import SidebarMenu from "../../component/sidebar/sidebar";
 
-function dashboard() {
+function Dashboard() {
   
   return (
     <>
@@ -38,4 +38,4 @@ function dashboard() {
   );
 }
 
-export default dashboard;
+export default Dashboard;

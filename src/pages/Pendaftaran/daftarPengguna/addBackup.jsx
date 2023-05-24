@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
 import axios from "axios";
+import Tabs from "../../../component/tabs/Tabs";
 
 function AddBackup() {
   // const [nik, setNik] = useState("");
@@ -147,9 +148,7 @@ function AddBackup() {
   return (
     <>
       <div className="d-flex" style={{ height: "125vh" }}>
-        <SidebarMenu />
         <Container className="m-0 p-0">
-          <Header heading="PENDAFTARAN USER BACKUP" />
           <div className="mt-2">
             <h6 className="mx-3 mb-2">Detail Pegawai yang ditambahkan</h6>
             <div className="px-3">
@@ -270,6 +269,7 @@ function AddBackup() {
             </div>
           </div>
         </Container>
+        
       </div>
     </>
   );
