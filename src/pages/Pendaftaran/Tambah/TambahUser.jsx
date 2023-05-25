@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Card, Col, Container, Form, FormGroup, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
+
 function TambahUser() {
+  
   const [data, setData] = useState({
     nik: "",
   });
+  
   const [replace, setReplace] = useState({
     unit_kerja: "",
     group_backup: "",
@@ -16,6 +19,13 @@ function TambahUser() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (validateForm()) {
+      setNik('')
+      setKetBackup('')
+      setTanggal('')
+    }
+
     if (validated()) {
       console.log("test");
       // try {
@@ -42,10 +52,54 @@ function TambahUser() {
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
 
+  const [nik, setNik] = useState();
+  const [ketBackup, setKetBackup] = useState();
+  const [tanggal, setTanggal] = useState();
+
+  const [nikError, setNikError] = useState();
+  const [ketBackupError, setKetBackupError] = useState();
+  const [tanggalError, setTanggalError] = useState();
+
+  const validateForm = () => {
+    let isValid = true;
+
+    if(!nik) {
+      setNikError('*Nik Harus Diisi');
+      isValid = false;
+    } else {
+      setNikError('')
+    }
+
+    if(!ketBackup) {
+      setKetBackupError('*Keterangan Backup Harus Diisi');
+      isValid = false;
+    } else {
+      setKetBackupError('')
+    }
+
+    if(!tanggal) {
+      setTanggalError('*Tanggal Harus Diisi');
+      isValid = false;
+    } else {
+      setTanggalError('')
+    }
+
+    return isValid
+  }
+
   function onChangeHandler(value) {
     setDateStart(value[0]);
     setDateEnd(value[1]);
   }
+
+  // const validateForm = (values) => {
+  //   const errors = {};
+  //   if (!values.nik) {
+  //     errors.nik = 'NIK is required';
+  //   }
+
+  //   return errors
+  // }
 
   const validated = () => {
     let result = true;
@@ -80,10 +134,13 @@ function TambahUser() {
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Masukkan Nik Pegawai lalu tekan enter"
                   name="nik"
-                  onChange={(e) => setData({ ...data, nik: e.target.value })}
+                  id="nik"
+                  value={nik}
+                  placeholder="Masukkan Nik Pegawai lalu tekan enter"
+                  onChange={(e) => setNik(e.target.value) + setData({ ...replace, nik: e.target.value })}
                 />
+                <div style={{ marginLeft: '5px' }}>{nikError && <div style={{ color : 'red'}}>{nikError}</div>}</div>
               </Form.Group>
               <Form.Group as={Col}>
                 <Row>
@@ -123,7 +180,12 @@ function TambahUser() {
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"
+                  name="backup"
+                  id="backup"
+                  value={ketBackup}
+                  onChange={(e) => setKetBackup(e.target.value)}
                 />
+                <div style={{ marginLeft:'5px' }}>{ketBackupError && <div style={{ color : 'red'}}>{ketBackupError}</div>}</div>
               </Form.Group>
             </Row>
             <Row className="mb-3">
