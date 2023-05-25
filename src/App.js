@@ -15,7 +15,7 @@ import Tabs from "./component/tabs/Tabs";
 const App = () => {
   return (
     <>
-    <ToastContainer theme='colored' position='top-center'></ToastContainer>
+    <ToastContainer theme='colored' position='center'></ToastContainer>
     <Router>
       <ProSidebarProvider>
         <NavbarComp/>

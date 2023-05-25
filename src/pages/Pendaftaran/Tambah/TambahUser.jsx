@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Form, FormGroup, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
+import axios from "axios";
+
 function TambahUser() {
   const [data, setData] = useState({
     nik: "",
   });
+
+  const [unit, setUnit] = useState([
+    {
+      id:"",
+      userId:"",
+      title:"",
+    }
+  ]);
+
+  useEffect(() => {
+    try {
+       axios.get("https://jsonplaceholder.typicode.com/posts")
+      .then((res) =>{
+        setUnit(res.data)
+        // console.log(res)
+      })
+    } catch (error) {}
+  }, []);
+ 
+
   const [replace, setReplace] = useState({
     unit_kerja: "",
     group_backup: "",
@@ -14,34 +36,78 @@ function TambahUser() {
     tanggal_backup: "",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validated()) {
-      console.log("test");
-      // try {
-      //     axios
-      //     .post('http://10.87.10.123:8080/api/v1/welcome/login', {
-      //         nik: values.nik,
-      //         password: values.password,
-      //     })
-      //     .then((res) => {
-      //         console.log((res.data));
-      //         // input data create by
-      //         localStorage.setItem("token", res.data.data.Token);
-      //         localStorage.setItem("name", res.data.data.Name);
+  // useEffect(() =>{
+  //   try {
+  //     axios
+  //       .get("http://172.168.102.91:8080/api/v1/backup/work-unit")
+  //       .then((res) => {
+  //         console.log(res.data);
+  //         setUnit(res.data.data);
+  //       });
+  //       console.log(unit)
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // },[])
+  // get api
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (validated()) {
+  //     console.log("test");
+  //     try {
+  //         axios
+  //         .post('http://172.168.102.91:8080/api/v1/backup/nik', {
+  //             nik: values.nik,
+  //             password: values.password,
+  //         })
+  //         .then((res) => {
+  //             console.log((res.data));
+  //             // input data create by
+  //             localStorage.setItem("token", res.data.data.Token);
+  //             localStorage.setItem("name", res.data.data.Name);
 
-      //         navigate("/dashboard")
-      //     })
+  //             navigate("/dashboard")
+  //         })
 
-      // } catch (error) {
-      //     console.error((error))
-      // }
+  //     } catch (error) {
+  //         console.error((error))
+  //     }
+  //   }
+  // };
+  const handleKey = (Event) => {
+    if (Event.key === "Enter") {
+      if (validated()) {
+        try {
+          axios
+            .post("http://172.168.102.91:8080/api/v1/backup/nik", {
+              nik: data.nik,
+            })
+            .then((res) => {
+              // console.log(res.data);
+              setData({
+                user_id: res.data.data.user_id,
+                nik: res.data.data.nik,
+                nama_pegawai: res.data.data.nama_pegawai,
+                jabatan: res.data.data.jabatan,
+                kode_jabatan: res.data.data.kode_jabatan,
+                unit_kerja: res.data.data.unit_kerja,
+                kode_unit_kerja: res.data.data.kode_unit_kerja,
+                user_id_bkp: res.data.data.user_id_bkp,
+              });
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      }
     }
+
+    // setValidated(true);
   };
 
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
-
+  const currentDate = new Date();
+  const maxDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
   function onChangeHandler(value) {
     setDateStart(value[0]);
     setDateEnd(value[1]);
@@ -68,11 +134,12 @@ function TambahUser() {
     }
     return result;
   };
+
   return (
     <>
       <Container className="mx-auto p-0">
         <Card className="mx-3 my-2" border="dark">
-          <Form className="mx-3 py-3 px-3" onSubmit={handleSubmit}>
+          <Form className="mx-3 py-3 px-3">
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
@@ -81,6 +148,7 @@ function TambahUser() {
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Nik Pegawai lalu tekan enter"
+                  onKeyDown={handleKey}
                   name="nik"
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                 />
@@ -88,14 +156,16 @@ function TambahUser() {
               <Form.Group as={Col}>
                 <Row>
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Unit Kerja Backup</Form.Label>
-                    <Form.Select
-                      style={{ fontSize: "12px" }}
-                      onChange={(e) =>
-                        setReplace({ ...replace, unit_kerja: e.target.value })
-                      }
-                    >
-                      <option>Pilih Unit Kerja yang dibackup</option>
+                    <Form.Label className="mb-0 ms-1">
+                      Unit Kerja Backup
+                    </Form.Label>
+                    <Form.Select style={{ fontSize: "12px" }}>
+                    <option>Kode Group - Nama Group</option>
+                   {unit.map((list =>
+                   <option key={list.id}>{list.userId}-{list.title}</option>
+                   ))
+
+                   }
                     </Form.Select>
                   </Col>
                   <Col>
@@ -113,9 +183,15 @@ function TambahUser() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="nama">
+              <Form.Group as={Col} controlid="nama">
                 <Form.Label className="mb-0 ms-1">Nama</Form.Label>
-                <Form.Control type="text" placeholder="Nama Pegawai" disabled />
+                <Form.Control
+                  type="text"
+                  placeholder="Nama Pegawai"
+                  disabled
+                  name="nama"
+                  value={data.nama_pegawai !== "" ? data.nama_pegawai : ""}
+                />
               </Form.Group>
 
               <Form.Group as={Col} controlid="backup">
@@ -133,6 +209,11 @@ function TambahUser() {
                   type="text"
                   placeholder="Kode Unit - Unit Kerja"
                   disabled
+                  value={
+                    data.kode_unit_kerja + "-" + data.unit_kerja !== ""
+                      ? data.kode_unit_kerja + "-" + data.unit_kerja
+                      : ""
+                  }
                 />
               </Form.Group>
 
@@ -158,11 +239,18 @@ function TambahUser() {
                   type="text"
                   placeholder="Kode Jabatan - Nama Jabatan"
                   disabled
+                  value={
+                    data.kode_jabatan + "-" + data.jabatan !== ""
+                      ? data.kode_jabatan + "-" + data.jabatan
+                      : ""
+                  }
                 />
               </Form.Group>
 
               <Form.Group as={Col} controlid="tanggal">
-                <Form.Label className="mb-0 ms-1">Tanggal Mulai - Akhir Backup</Form.Label>
+                <Form.Label className="mb-0 ms-1">
+                  Tanggal Mulai - Akhir Backup
+                </Form.Label>
                 <DatePicker
                   id="dateStartEnd"
                   selectsRange={true}
@@ -173,6 +261,7 @@ function TambahUser() {
                   dateFormat="dd MMM yyyy"
                   className={"form-control form-control-sm"}
                   showDisabledMonthNavigation
+                  maxDate={maxDate}
                   // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                 />
               </Form.Group>
@@ -184,18 +273,19 @@ function TambahUser() {
                   type="text"
                   placeholder="Generate NIKBKP"
                   disabled
+                  value={data.user_id_bkp !== "" ? data.user_id_bkp : ""}
                 />
               </Form.Group>
 
               <Form.Group as={Col}></Form.Group>
             </Row>
-            <div className="d-flex  mb-3">
-              <button className="btn-color me-2" type="sumbit">
-                Simpan
-              </button>
-              <button className="btn-color">Batal</button>
-            </div>
           </Form>
+          <div className="d-flex  mb-3">
+            <button className="btn-color me-2" type="sumbit">
+              Simpan
+            </button>
+            <button className="btn-color">Batal</button>
+          </div>
         </Card>
       </Container>
     </>

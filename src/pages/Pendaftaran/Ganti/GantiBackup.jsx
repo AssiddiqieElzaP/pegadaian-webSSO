@@ -19,7 +19,8 @@ function GantiBackup() {
 
       const [dateStart, setDateStart] = useState();
       const [dateEnd, setDateEnd] = useState();
-    
+      const currentDate = new Date();
+      const maxDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
       function onChangeHandler(value) {
         setDateStart(value[0]);
         setDateEnd(value[1]);
@@ -193,6 +194,8 @@ function GantiBackup() {
                   dateFormat="dd MMM yyyy"
                   className={"form-control form-control-sm"}
                   showDisabledMonthNavigation
+                  maxDate={maxDate}
+                  name="tanggal_mulai"
                   // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                 />
               </Form.Group>

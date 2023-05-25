@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import TambahUser from "../../pages/Pendaftaran/Tambah/TambahUser";
 import { Container, Nav } from "react-bootstrap";
-import DatePicker from "../datepicker/DatePicker";
 import Header from "../navbar/header";
 import AddBackup from "../../pages/Pendaftaran/daftarPengguna/addBackup";
 import RegisterBackup from "../../pages/Pendaftaran/daftarPengganti/registerBackup";

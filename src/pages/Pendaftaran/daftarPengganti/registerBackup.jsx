@@ -116,6 +116,7 @@ function RegisterBackup() {
       user_need_backup_id: replace.user_need_backup_id,
       created_by: localStorage.getItem("name"),
       updated_by: localStorage.getItem("name"),
+      tanggal_backup : data.tanggal_backup,
     };
 
     axios
