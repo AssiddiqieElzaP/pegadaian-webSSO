@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Form, FormGroup, Row } from "react-bootstrap";
+import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import axios from "axios";
@@ -12,19 +12,23 @@ function TambahUser() {
   const [unit, setUnit] = useState([
     {
       id:"",
-      userId:"",
-      title:"",
+      groupId:"",
+      workUnitName:"",
+      workUnitCode:"",
     }
   ]);
 
   useEffect(() => {
     try {
-       axios.get("https://jsonplaceholder.typicode.com/posts")
+       axios.get("http://172.168.102.91:8080/api/v1/backup/work-unit")
       .then((res) =>{
-        setUnit(res.data)
-        // console.log(res)
+        const test = (res.data) //harus dibuatkan variabel sebelum di panggil di usestate
+        setUnit(test)
+        // console.log(test)
       })
+     
     } catch (error) {}
+    
   }, []);
  
 
@@ -36,6 +40,21 @@ function TambahUser() {
     tanggal_backup: "",
   });
 
+const [mygroup,setMygroup] = useState({});
+
+  function Click (value){
+    try {
+      axios.get(`http://172.168.102.91:8080/api/v1/backup/group?id=${value}`)
+      .then((res)=>{
+        const testgroup = (res.data)
+        setMygroup(testgroup)
+        // console.log(testgroup)
+
+      })
+    } catch (error) {
+      
+    }
+  }
   // useEffect(() =>{
   //   try {
   //     axios
@@ -76,7 +95,7 @@ function TambahUser() {
   // };
   const handleKey = (Event) => {
     if (Event.key === "Enter") {
-      if (validated()) {
+      // if (validated()) {
         try {
           axios
             .post("http://172.168.102.91:8080/api/v1/backup/nik", {
@@ -98,7 +117,7 @@ function TambahUser() {
         } catch (error) {
           console.error(error);
         }
-      }
+      // }
     }
 
     // setValidated(true);
@@ -134,7 +153,7 @@ function TambahUser() {
     }
     return result;
   };
-
+  
   return (
     <>
       <Container className="mx-auto p-0">
@@ -161,22 +180,27 @@ function TambahUser() {
                     </Form.Label>
                     <Form.Select style={{ fontSize: "12px" }}>
                     <option>Kode Group - Nama Group</option>
-                   {unit.map((list =>
-                   <option key={list.id}>{list.userId}-{list.title}</option>
-                   ))
-
-                   }
+                   {/* {unit?.data?.map((list) =>
+                   <option onChange={Click(list.id)} value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
+                   )
+                   } */}
                     </Form.Select>
                   </Col>
                   <Col>
                     <Form.Label className="mb-0 ms-1">Group Backup</Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
-                      onChange={(e) =>
-                        setReplace({ ...replace, group_backup: e.target.value })
-                      }
+                      // onChange={(e) =>
+                      //   setReplace({ ...replace, group_backup: e.target.value })
+                      // }
                     >
                       <option>Kode Group - Nama Group</option>
+
+                      {mygroup?.data?.map((g,key)  =>
+                         <option  key={key}>{g.groupCode}-{g.groupName}</option>
+                      )
+
+                      }
                     </Form.Select>
                   </Col>
                 </Row>
@@ -242,7 +266,7 @@ function TambahUser() {
                   value={
                     data.kode_jabatan + "-" + data.jabatan !== ""
                       ? data.kode_jabatan + "-" + data.jabatan
-                      : ""
+                      : "" 
                   }
                 />
               </Form.Group>
@@ -261,7 +285,7 @@ function TambahUser() {
                   dateFormat="dd MMM yyyy"
                   className={"form-control form-control-sm"}
                   showDisabledMonthNavigation
-                  maxDate={maxDate}
+                  // maxDate={maxDate}
                   // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                 />
               </Form.Group>
