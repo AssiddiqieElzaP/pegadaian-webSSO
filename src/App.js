@@ -7,10 +7,10 @@ import "./App.css";
 import Login from "./login";
 import Dashboard from "./pages/Pendaftaran/dashboard";
 import NavbarComp from "./component/navbar/NavbarComp";
-import AddBackup from "./pages/Pendaftaran/daftarPengguna/addBackup";
-import RegisterBackup from "./pages/Pendaftaran/daftarPengganti/registerBackup";
 import { ToastContainer } from "react-toastify";
 import Tabs from "./component/tabs/Tabs";
+import UserRoleMatrix from "./pages/Rolematrix/UserRoleMatrix";
+import PersetujuanUserBackup from "./pages/Persetujuan/PersetujuanUserBackup";
 
 const App = () => {
   return (
@@ -23,7 +23,8 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add-backup" element={<Tabs />} />
-          <Route path="/register-backup" element={<RegisterBackup />} />
+          <Route path="/register-backup" element={<PersetujuanUserBackup />} />
+          <Route path="/user-role" element={<UserRoleMatrix />} />
         </Routes>
       </ProSidebarProvider>
     </Router>

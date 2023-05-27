@@ -178,12 +178,12 @@ const [mygroup,setMygroup] = useState({});
                     <Form.Label className="mb-0 ms-1">
                       Unit Kerja Backup
                     </Form.Label>
-                    <Form.Select style={{ fontSize: "12px" }}>
+                    <Form.Select style={{ fontSize: "12px" }} onClick={Click()}>
                     <option>Kode Group - Nama Group</option>
-                   {/* {unit?.data?.map((list) =>
-                   <option onChange={Click(list.id)} value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
+                   {unit?.data?.map((list) =>
+                   <option  value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
                    )
-                   } */}
+                   }
                     </Form.Select>
                   </Col>
                   <Col>
