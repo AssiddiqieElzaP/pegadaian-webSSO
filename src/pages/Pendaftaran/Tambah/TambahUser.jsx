@@ -30,7 +30,6 @@ function TambahUser() {
     } catch (error) {}
     
   }, []);
- 
 
   const [replace, setReplace] = useState({
     unit_kerja: "",
@@ -125,8 +124,45 @@ const [mygroup,setMygroup] = useState({});
 
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
+
   const currentDate = new Date();
   const maxDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
+
+  const [nik, setNik] = useState("");
+  const [ketBackup, setKetBackup] = useState("");
+  const [durasi, setDurasi] = useState("");
+
+  const [nikError, setNikError] = useState("");
+  const [ketBackupError, setKetBackupError] = useState("");
+  const [durasiError, setDurasiError] = useState("");
+
+  const validateForm = () => {
+    let isValid = true;
+
+    if (!nik) {
+      setNikError("*Nik Harus Diisi");
+      isValid = false;
+    } else {
+      setNikError("");
+    }
+
+    if (!ketBackup) {
+      setKetBackupError("*Keterangan Backup Harus Diisi");
+      isValid = false;
+    } else {
+      setKetBackupError("");
+    }
+
+    if (!durasi) {
+      setDurasiError("*Durasi Harus Diisi");
+      isValid = false;
+    } else {
+      setDurasiError("");
+    }
+
+    return isValid;
+  };
+
   function onChangeHandler(value) {
     setDateStart(value[0]);
     setDateEnd(value[1]);
@@ -153,12 +189,45 @@ const [mygroup,setMygroup] = useState({});
     }
     return result;
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(validateForm()) {
+      setNik("");
+      setKetBackup("");
+      setDurasi("");
+    }
+
+    if (validated()) {
+      console.log("test");
+      // try {
+        //     axios
+        //     .post('http://10.87.10.123:8080/api/v1/welcome/login', {
+        //         nik: values.nik,
+        //         password: values.password,
+        //     })
+        //     .then((res) => {
+        //         console.log((res.data));
+        //         // input data create by
+        //         localStorage.setItem("token", res.data.data.Token);
+        //         localStorage.setItem("name", res.data.data.Name);
+  
+        //             navigate("/dashboard")
+        //         })
+  
+        //     } catch (error) {
+        //         console.error((error))
+        //     }
+        //   }
+    }
+  }
   
   return (
     <>
       <Container className="mx-auto p-0">
         <Card className="mx-3 my-2" border="dark">
-          <Form className="mx-3 py-3 px-3">
+          <Form className="mx-3 py-3 px-3" onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
@@ -166,11 +235,19 @@ const [mygroup,setMygroup] = useState({});
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Masukkan Nik Pegawai lalu tekan enter"
-                  onKeyDown={handleKey}
                   name="nik"
-                  onChange={(e) => setData({ ...data, nik: e.target.value })}
+                  id="nik"
+                  value={nik}
+                  placeholder="Masukkan Nik Pegawai lalu tekan enter"
+                  // onKeyDown={handleKey}
+                  onChange={(e) =>
+                    setNik(e.target.value) +
+                    setData({ ...data, nik: e.target.value })
+                  }
                 />
+                <div style={{ marginLeft: "5px" }}>
+                  {nikError && <div style={{ color: "red" }}>{nikError}</div>}
+                </div>
               </Form.Group>
               <Form.Group as={Col}>
                 <Row>
@@ -190,9 +267,9 @@ const [mygroup,setMygroup] = useState({});
                     <Form.Label className="mb-0 ms-1">Group Backup</Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
-                      // onChange={(e) =>
-                      //   setReplace({ ...replace, group_backup: e.target.value })
-                      // }
+                      onChange={(e) =>
+                        setReplace({ ...replace, group_backup: e.target.value })
+                      }
                     >
                       <option>Kode Group - Nama Group</option>
 
@@ -223,7 +300,16 @@ const [mygroup,setMygroup] = useState({});
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"
+                  name="backup"
+                  id="backup"
+                  value={ketBackup}
+                  onChange={(e) => setKetBackup(e.target.value)}
                 />
+                <div style={{ marginLeft: "5px" }}>
+                  {ketBackupError && (
+                    <div style={{ color: "red" }}>{ketBackupError}</div>
+                  )}
+                </div>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -241,19 +327,26 @@ const [mygroup,setMygroup] = useState({});
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridPassword">
+              <Form.Group as={Col} controlId="duration">
                 <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
                   onChange={(e) =>
+                    setDurasi(e.target.value) +
                     setReplace({ ...replace, durasi_backup: e.target.value })
                   }
+                  name="duration"
+                  id="duration"
+                  value={durasi}
                 >
                   <option>Pilih lama hari backup</option>
                   <option value="">1 Hari</option>
                   <option value="">2 Hari</option>
                   <option value="">3 Hari</option>
                 </Form.Select>
+                <div style={{ marginLeft: "5px" }}>
+                  {durasiError && <div style={{ color: "red" }}>{durasiError}</div>}
+                </div>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -303,13 +396,13 @@ const [mygroup,setMygroup] = useState({});
 
               <Form.Group as={Col}></Form.Group>
             </Row>
-          </Form>
-          <div className="d-flex  mb-3">
+            <div className="d-flex justify-content-end mb-3">
             <button className="btn-color me-2" type="sumbit">
               Simpan
             </button>
             <button className="btn-color">Batal</button>
           </div>
+          </Form>
         </Card>
       </Container>
     </>

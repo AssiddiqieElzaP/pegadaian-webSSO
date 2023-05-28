@@ -8,7 +8,7 @@ function NavbarComp() {
   return (
    <Container fluid className=''>
      <Navbar>
-             <Navbar.Brand href="#home">
+             <Navbar.Brand href="/dashboard">
         <img
               src={Logo}
               width="230px"

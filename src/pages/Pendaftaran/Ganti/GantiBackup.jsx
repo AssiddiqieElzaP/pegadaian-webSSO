@@ -213,7 +213,7 @@ function GantiBackup() {
               </Form.Group>
                
             </Row>
-            <div className="d-flex  mt-5 mb-1">
+            <div className="d-flex justify-content-end mt-5 mb-1">
               <button className="btn-color me-2" type="sumbit">
                 Simpan
               </button>

@@ -23,8 +23,8 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add-backup" element={<Tabs />} />
-          <Route path="/register-backup" element={<PersetujuanUserBackup />} />
-          <Route path="/user-role" element={<UserRoleMatrix />} />
+          <Route path="/approval" element={<PersetujuanUserBackup />} />
+          <Route path="/role-matrix" element={<UserRoleMatrix />} />
         </Routes>
       </ProSidebarProvider>
     </Router>
