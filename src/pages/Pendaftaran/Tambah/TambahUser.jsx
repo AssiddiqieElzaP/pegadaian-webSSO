@@ -11,22 +11,20 @@ function TambahUser() {
 
   const [unit, setUnit] = useState([
     {
-      id:"",
-      userId:"",
-      title:"",
-    }
+      id: "",
+      userId: "",
+      title: "",
+    },
   ]);
 
   useEffect(() => {
     try {
-       axios.get("https://jsonplaceholder.typicode.com/posts")
-      .then((res) =>{
-        setUnit(res.data)
+      axios.get("https://jsonplaceholder.typicode.com/posts").then((res) => {
+        setUnit(res.data);
         // console.log(res)
-      })
+      });
     } catch (error) {}
   }, []);
- 
 
   const [replace, setReplace] = useState({
     unit_kerja: "",
@@ -36,44 +34,6 @@ function TambahUser() {
     tanggal_backup: "",
   });
 
-  // useEffect(() =>{
-  //   try {
-  //     axios
-  //       .get("http://172.168.102.91:8080/api/v1/backup/work-unit")
-  //       .then((res) => {
-  //         console.log(res.data);
-  //         setUnit(res.data.data);
-  //       });
-  //       console.log(unit)
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // },[])
-  // get api
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (validated()) {
-  //     console.log("test");
-  //     try {
-  //         axios
-  //         .post('http://172.168.102.91:8080/api/v1/backup/nik', {
-  //             nik: values.nik,
-  //             password: values.password,
-  //         })
-  //         .then((res) => {
-  //             console.log((res.data));
-  //             // input data create by
-  //             localStorage.setItem("token", res.data.data.Token);
-  //             localStorage.setItem("name", res.data.data.Name);
-
-  //             navigate("/dashboard")
-  //         })
-
-  //     } catch (error) {
-  //         console.error((error))
-  //     }
-  //   }
-  // };
   const handleKey = (Event) => {
     if (Event.key === "Enter") {
       if (validated()) {
@@ -104,14 +64,93 @@ function TambahUser() {
     // setValidated(true);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(validateForm()) {
+      setNik("");
+      setKetBackup("");
+      setTanggal("");
+    }
+
+    if (validated()) {
+      console.log("test");
+      // try {
+        //     axios
+        //     .post('http://10.87.10.123:8080/api/v1/welcome/login', {
+        //         nik: values.nik,
+        //         password: values.password,
+        //     })
+        //     .then((res) => {
+        //         console.log((res.data));
+        //         // input data create by
+        //         localStorage.setItem("token", res.data.data.Token);
+        //         localStorage.setItem("name", res.data.data.Name);
+  
+        //             navigate("/dashboard")
+        //         })
+  
+        //     } catch (error) {
+        //         console.error((error))
+        //     }
+        //   }
+    }
+  }
+
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
+
   const currentDate = new Date();
   const maxDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
+
+  const [nik, setNik] = useState();
+  const [ketBackup, setKetBackup] = useState();
+  const [tanggal, setTanggal] = useState();
+
+  const [nikError, setNikError] = useState();
+  const [ketBackupError, setKetBackupError] = useState();
+  const [tanggalError, setTanggalError] = useState();
+
+  const validateForm = () => {
+    let isValid = true;
+
+    if (!nik) {
+      setNikError("*Nik Harus Diisi");
+      isValid = false;
+    } else {
+      setNikError("");
+    }
+
+    if (!ketBackup) {
+      setKetBackupError("*Keterangan Backup Harus Diisi");
+      isValid = false;
+    } else {
+      setKetBackupError("");
+    }
+
+    if (!tanggal) {
+      setTanggalError("*Tanggal Harus Diisi");
+      isValid = false;
+    } else {
+      setTanggalError("");
+    }
+
+    return isValid;
+  };
+
   function onChangeHandler(value) {
     setDateStart(value[0]);
     setDateEnd(value[1]);
   }
+
+  // const validateForm = (values) => {
+  //   const errors = {};
+  //   if (!values.nik) {
+  //     errors.nik = 'NIK is required';
+  //   }
+
+  //   return errors
+  // }
 
   const validated = () => {
     let result = true;
@@ -139,7 +178,7 @@ function TambahUser() {
     <>
       <Container className="mx-auto p-0">
         <Card className="mx-3 my-2" border="dark">
-          <Form className="mx-3 py-3 px-3">
+          <Form className="mx-3 py-3 px-3" onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
@@ -147,11 +186,19 @@ function TambahUser() {
                 </Form.Label>
                 <Form.Control
                   type="text"
+                  name="nik"
+                  id="nik"
+                  value={nik}
                   placeholder="Masukkan Nik Pegawai lalu tekan enter"
                   onKeyDown={handleKey}
-                  name="nik"
-                  onChange={(e) => setData({ ...data, nik: e.target.value })}
+                  onChange={(e) =>
+                    setNik(e.target.value) +
+                    setData({ ...data, nik: e.target.value })
+                  }
                 />
+                <div style={{ marginLeft: "5px" }}>
+                  {nikError && <div style={{ color: "red" }}>{nikError}</div>}
+                </div>
               </Form.Group>
               <Form.Group as={Col}>
                 <Row>
@@ -160,12 +207,12 @@ function TambahUser() {
                       Unit Kerja Backup
                     </Form.Label>
                     <Form.Select style={{ fontSize: "12px" }}>
-                    <option>Kode Group - Nama Group</option>
-                   {unit.map((list =>
-                   <option key={list.id}>{list.userId}-{list.title}</option>
-                   ))
-
-                   }
+                      <option>Kode Group - Nama Group</option>
+                      {unit.map((list) => (
+                        <option key={list.id}>
+                          {list.userId}-{list.title}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Col>
                   <Col>
@@ -173,7 +220,10 @@ function TambahUser() {
                     <Form.Select
                       style={{ fontSize: "12px" }}
                       onChange={(e) =>
-                        setReplace({ ...replace, group_backup: e.target.value })
+                        setReplace({
+                          ...replace,
+                          group_backup: e.target.value,
+                        })
                       }
                     >
                       <option>Kode Group - Nama Group</option>
@@ -199,7 +249,16 @@ function TambahUser() {
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"
+                  name="backup"
+                  id="backup"
+                  value={ketBackup}
+                  onChange={(e) => setKetBackup(e.target.value)}
                 />
+                <div style={{ marginLeft: "5px" }}>
+                  {ketBackupError && (
+                    <div style={{ color: "red" }}>{ketBackupError}</div>
+                  )}
+                </div>
               </Form.Group>
             </Row>
             <Row className="mb-3">
