@@ -284,7 +284,6 @@ const [mygroup,setMygroup] = useState({});
                   dateFormat="dd MMM yyyy"
                   className={"form-control form-control-sm"}
                   showDisabledMonthNavigation
-                  maxDate={maxDate}
                   // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                 />
               </Form.Group>
