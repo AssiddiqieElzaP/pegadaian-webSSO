@@ -3,7 +3,7 @@ import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import axios from "axios";
-import {addDays, isWeekend} from 'date-fns'
+import {addBusinessDays, isWeekend} from 'date-fns'
 
 
 function TambahUser() {
@@ -102,32 +102,72 @@ const [mygroup,setMygroup] = useState({});
     // setValidated(true);
   };
 
-  const [dateStart, setDateStart] = useState(null);
-  const [dateEnd, setDateEnd] = useState(null);
-  const currentDate = new Date();
-  // const maxDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
-  // function onChangeHandler(value) {
-  //   setDateStart(value[0]);
-  //   setDateEnd(value[1]);
-  // }
-
-  const handleDateSelect = (date) =>{
-    if(isWeekend(date)){
-      return;
-    }
-
-    if(!dateStart){
-      setDateStart(date);
-      setDateEnd(null);
-    } else if(!dateEnd){
-      if(date > dateStart){
-        setDateEnd(date)
-      } else{
-        setDateStart(date);
-        setDateEnd(null)
+  const [save,setSave] = useState({})
+  const handleSUmbit = (event) =>{
+    event.preventDefault();
+    const fetchdata = async ()=>{
+      try {
+        
+        await axios.post('http://172.168.102.91:8080/api/v1/backup/create')
+        .then((res) =>{
+          setSave(res)
+        })
+  
+  
+  
+      } catch (error) {
+        
       }
     }
   }
+
+  const [dateStart, setDateStart] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
+
+  const [selectedDate, setSelectedDate] = useState('')
+  
+
+  const handleChangeDurasi=(event)=>{
+    const duration = event.target.value;
+    setSelectedDate(duration)
+    calculateEndDate(dateStart, duration)
+    // const currentDate = new Date();
+    // const endDate = new Date(currentDate.setDate(currentDate.getDate() + parseInt(duration)))
+    // setDateEnd(endDate)
+  }
+
+  const calculateEndDate = (startDate, duration) =>{
+    const durationInDays = parseInt(duration, 10)
+    if(startDate && !isNaN(durationInDays)){
+      const calculatedEndDate = addBusinessDays(startDate, durationInDays);
+      setDateEnd(calculatedEndDate);
+    }else{
+      setDateEnd(null)
+    }
+  }
+
+  const handleStartDateChange = (date) =>{
+    setDateStart(date)
+    calculateEndDate(dateStart, selectedDate)
+  }
+
+  // const handleDateSelect = (date) =>{
+  //   if(isWeekend(date)){
+  //     return;
+  //   }
+
+  //   if(!dateStart){
+  //     setDateStart(date);
+  //     setDateEnd(null);
+  //   } else if(!dateEnd){
+  //     if(date > dateStart){
+  //       setDateEnd(date)
+  //     } else{
+  //       setDateStart(date);
+  //       setDateEnd(null)
+  //     }
+  //   }
+  // }
 
   const validated = () => {
     let result = true;
@@ -178,7 +218,7 @@ const [mygroup,setMygroup] = useState({});
                     <Form.Select style={{ fontSize: "12px" }} value={selectedUnit} onChange={pilihUnitKerja}>
                     <option>Kode Group - Nama Group</option>
                    {unit?.data?.map((list) =>
-                    <option key={list.id} value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
+                    <option name="work_unit_id" key={list.id} value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
                    )
                    }
                     </Form.Select>
@@ -194,7 +234,7 @@ const [mygroup,setMygroup] = useState({});
                       <option>Kode Group - Nama Group</option>
 
                       {mygroup?.data?.map((g)  =>
-                         <option  key={g.id}>{g.groupCode}-{g.groupName}</option>
+                         <option name="group_id" key={g.id}>{g.groupCode}-{g.groupName}</option>
                       )
 
                       }
@@ -210,7 +250,7 @@ const [mygroup,setMygroup] = useState({});
                   type="text"
                   placeholder="Nama Pegawai"
                   disabled
-                  name="nama"
+                  name="name"
                   value={data.nama_pegawai !== "" ? data.nama_pegawai : ""}
                 />
               </Form.Group>
@@ -220,6 +260,7 @@ const [mygroup,setMygroup] = useState({});
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"
+                  name="description"
                 />
               </Form.Group>
             </Row>
@@ -238,20 +279,43 @@ const [mygroup,setMygroup] = useState({});
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridPassword">
-                <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
-                <Form.Select
-                  style={{ fontSize: "12px" }}
-                  onChange={(e) =>
-                    setReplace({ ...replace, durasi_backup: e.target.value })
-                  }
-                >
-                  <option>Pilih lama hari backup</option>
-                  <option value="">1 Hari</option>
-                  <option value="">2 Hari</option>
-                  <option value="">3 Hari</option>
-                </Form.Select>
+              <Form.Group as={Col}>
+                <Row>
+                  <Col>
+                    <Form.Label className="mb-0 ms-1">
+                      Tanggal Mulai
+                    </Form.Label>
+                    <DatePicker
+                    name="dateStart"
+                    selected={dateStart}
+                    filterDate={(date) => !isWeekend(date)}
+                    dateFormat="dd MMM yyyy"
+                    minDate={new Date()}
+                    onChange={handleStartDateChange}
+                    className={"form-control form-control-sm"}
+
+                    // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
+                  />
+                  </Col>
+                  <Col>
+                    <Form.Label className="mb-0 ms-1">Tanggal Akhir</Form.Label>
+                    <DatePicker
+                    name="dateEnd"
+                    selected={dateEnd}
+                    filterDate={(date) => !isWeekend(date)}
+                    dateFormat="dd MMM yyyy"
+                    className={"form-control form-control-sm"}
+                    value={dateEnd ? dateEnd.toDateString() : ''} 
+                    disabled
+                    placeholderText="pilih durasi"
+
+                    // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
+                  />
+                  </Col>
+                </Row>
               </Form.Group>
+
+              
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="jabatan">
@@ -268,7 +332,25 @@ const [mygroup,setMygroup] = useState({});
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlid="tanggal">
+              <Form.Group as={Col} controlId="formGridPassword">
+                <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
+                <Form.Select
+                  style={{ fontSize: "12px" }}
+                  // onChange={(e) =>
+                  //   setReplace({ ...replace, durasi_backup: e.target.value })
+                  // }
+                  onChange={handleChangeDurasi}
+                  value={selectedDate}
+                  name="duration"
+                >
+                  <option>Pilih lama hari backup</option>
+                  <option value="0">1 Hari</option>
+                  <option value="1">2 Hari</option>
+                  <option value="2">3 Hari</option>
+                </Form.Select>
+              </Form.Group>
+
+              {/* <Form.Group as={Col} controlid="tanggal">
                 <Form.Label className="mb-0 ms-1">
                   Tanggal Mulai - Akhir Backup
                 </Form.Label>
@@ -278,15 +360,15 @@ const [mygroup,setMygroup] = useState({});
                   minDate={new Date()}
                   startDate={dateStart}
                   endDate={dateEnd}
-                  excludeDates={[new Date(), addDays(new Date(), -1), addDays(new Date(), -2)]}
+                  // excludeDates={[new Date(), addDays(new Date(), -1), addDays(new Date(), -2)]}
                   filterDate={(date) => !isWeekend(date)}
-                  onChange={handleDateSelect}
+                  onChange={onChangeHandler}
                   dateFormat="dd MMM yyyy"
                   className={"form-control form-control-sm"}
                   showDisabledMonthNavigation
                   // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                 />
-              </Form.Group>
+              </Form.Group> */}
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} controlId="user_id">
