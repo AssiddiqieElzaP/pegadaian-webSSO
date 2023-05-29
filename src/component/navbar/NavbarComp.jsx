@@ -6,13 +6,13 @@ import {FaBell} from 'react-icons/fa'
 
 function NavbarComp() {
   return (
-   <Container fluid className='mt-2'>
+   <Container fluid className=''>
      <Navbar>
-             <Navbar.Brand href="#home">
+             <Navbar.Brand href="/dashboard">
         <img
               src={Logo}
-              width="273px"
-              height="50px"
+              width="230px"
+              height="40px"
               className="d-inline-block align-top"
               alt="React Bootstrap logo"
             />

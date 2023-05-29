@@ -1,0 +1,10 @@
+.dropdownClass {
+    width: 100%;
+    border: none;
+    outline: 1px solid black;
+    border-radius: 0;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+}

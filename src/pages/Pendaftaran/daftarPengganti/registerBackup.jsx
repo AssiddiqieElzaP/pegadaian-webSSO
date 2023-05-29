@@ -116,6 +116,7 @@ function RegisterBackup() {
       user_need_backup_id: replace.user_need_backup_id,
       created_by: localStorage.getItem("name"),
       updated_by: localStorage.getItem("name"),
+      tanggal_backup : data.tanggal_backup,
     };
 
     axios
@@ -128,14 +129,10 @@ function RegisterBackup() {
   return (
     <>
       <div className="d-flex">
-        <SidebarMenu />
+        {/* <SidebarMenu /> */}
         <Container className="m-0 p-0">
-          <Header heading="PENDAFTARAN USER PENGGANTI" />
+          {/* <Header heading="PENDAFTARAN USER PENGGANTI" /> */}
           <div className="mt-2 mb-0">
-            <div className="d-flex  justify-content-evenly">
-              <h6 className="mx-5">Detail Pegawai yang menggantikan</h6>
-              <h6 className="mx-5">Detail Pegawai yang digantikan</h6>
-            </div>
             <div className="px-3 d-flex">
               <Card
                 border="secondary"
