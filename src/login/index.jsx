@@ -20,7 +20,7 @@ const Login = () => {
        
             try {
                 axios
-                .post('http://10.87.10.123:8080/api/v1/welcome/login', {
+                .post('http://172.168.102.91:8080/api/v1/welcome/login', {
                     nik: values.nik,
                     password: values.password,
                 })  
