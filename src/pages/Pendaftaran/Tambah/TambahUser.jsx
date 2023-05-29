@@ -3,32 +3,63 @@ import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import axios from "axios";
+import {addDays, isWeekend} from 'date-fns'
+
 
 function TambahUser() {
   const [data, setData] = useState({
     nik: "",
   });
 
-  const [unit, setUnit] = useState([
+  const [selectedUnit, setSelectedUnit] = useState('');
+
+  const [unit, setUnit] = useState(
     {
       id:"",
       groupId:"",
       workUnitName:"",
       workUnitCode:"",
     }
-  ]);
+  )
 
-  useEffect(() => {
-    try {
-       axios.get("http://172.168.102.91:8080/api/v1/backup/work-unit")
-      .then((res) =>{
-        const test = (res.data) //harus dibuatkan variabel sebelum di panggil di usestate
-        setUnit(test)
-        // console.log(test)
-      })
-     
-    } catch (error) {}
+  //ini ketika kita memilih dropdown untuk di targetkan
+  const pilihUnitKerja=(event)=>{
+    const selectedValue = event.target.value;
+    setSelectedUnit(selectedValue)
+    Click(selectedValue)
+  }
+  
+    const Click = async (value) =>{
+      if(value == null){
+         return(<option>Kode Group - Nama Group</option>)
+      }else{
+        try {
+          await axios.get(`http://172.168.102.91:8080/api/v1/backup/group?id=${value}`)
+          .then((res)=>{
+            const testgroup = (res.data)
+            setMygroup(testgroup)
+            // console.log(testgroup)
     
+          })
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      
+    }
+  useEffect(() => {
+    const fetchData = async ()=>{
+      try {
+        await axios.get("http://172.168.102.91:8080/api/v1/backup/work-unit")
+        .then((res) =>{
+          const test = (res.data) //harus dibuatkan variabel sebelum di panggil di usestate
+          setUnit(test)
+          // console.log(test)
+        })
+       
+      } catch (error) {}
+    }
+    fetchData();
   }, []);
  
 
@@ -41,58 +72,6 @@ function TambahUser() {
   });
 
 const [mygroup,setMygroup] = useState({});
-
-  function Click (value){
-    try {
-      axios.get(`http://172.168.102.91:8080/api/v1/backup/group?id=${value}`)
-      .then((res)=>{
-        const testgroup = (res.data)
-        setMygroup(testgroup)
-        // console.log(testgroup)
-
-      })
-    } catch (error) {
-      
-    }
-  }
-  // useEffect(() =>{
-  //   try {
-  //     axios
-  //       .get("http://172.168.102.91:8080/api/v1/backup/work-unit")
-  //       .then((res) => {
-  //         console.log(res.data);
-  //         setUnit(res.data.data);
-  //       });
-  //       console.log(unit)
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // },[])
-  // get api
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (validated()) {
-  //     console.log("test");
-  //     try {
-  //         axios
-  //         .post('http://172.168.102.91:8080/api/v1/backup/nik', {
-  //             nik: values.nik,
-  //             password: values.password,
-  //         })
-  //         .then((res) => {
-  //             console.log((res.data));
-  //             // input data create by
-  //             localStorage.setItem("token", res.data.data.Token);
-  //             localStorage.setItem("name", res.data.data.Name);
-
-  //             navigate("/dashboard")
-  //         })
-
-  //     } catch (error) {
-  //         console.error((error))
-  //     }
-  //   }
-  // };
   const handleKey = (Event) => {
     if (Event.key === "Enter") {
       // if (validated()) {
@@ -123,13 +102,31 @@ const [mygroup,setMygroup] = useState({});
     // setValidated(true);
   };
 
-  const [dateStart, setDateStart] = useState();
-  const [dateEnd, setDateEnd] = useState();
+  const [dateStart, setDateStart] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
   const currentDate = new Date();
-  const maxDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
-  function onChangeHandler(value) {
-    setDateStart(value[0]);
-    setDateEnd(value[1]);
+  // const maxDate = new Date(currentDate.setDate(currentDate.getDate() + 2));
+  // function onChangeHandler(value) {
+  //   setDateStart(value[0]);
+  //   setDateEnd(value[1]);
+  // }
+
+  const handleDateSelect = (date) =>{
+    if(isWeekend(date)){
+      return;
+    }
+
+    if(!dateStart){
+      setDateStart(date);
+      setDateEnd(null);
+    } else if(!dateEnd){
+      if(date > dateStart){
+        setDateEnd(date)
+      } else{
+        setDateStart(date);
+        setDateEnd(null)
+      }
+    }
   }
 
   const validated = () => {
@@ -178,10 +175,10 @@ const [mygroup,setMygroup] = useState({});
                     <Form.Label className="mb-0 ms-1">
                       Unit Kerja Backup
                     </Form.Label>
-                    <Form.Select style={{ fontSize: "12px" }} onClick={Click()}>
+                    <Form.Select style={{ fontSize: "12px" }} value={selectedUnit} onChange={pilihUnitKerja}>
                     <option>Kode Group - Nama Group</option>
                    {unit?.data?.map((list) =>
-                   <option  value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
+                    <option key={list.id} value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
                    )
                    }
                     </Form.Select>
@@ -193,11 +190,11 @@ const [mygroup,setMygroup] = useState({});
                       // onChange={(e) =>
                       //   setReplace({ ...replace, group_backup: e.target.value })
                       // }
-                    >
+                     >
                       <option>Kode Group - Nama Group</option>
 
-                      {mygroup?.data?.map((g,key)  =>
-                         <option  key={key}>{g.groupCode}-{g.groupName}</option>
+                      {mygroup?.data?.map((g)  =>
+                         <option  key={g.id}>{g.groupCode}-{g.groupName}</option>
                       )
 
                       }
@@ -281,11 +278,13 @@ const [mygroup,setMygroup] = useState({});
                   minDate={new Date()}
                   startDate={dateStart}
                   endDate={dateEnd}
-                  onChange={onChangeHandler}
+                  excludeDates={[new Date(), addDays(new Date(), -1), addDays(new Date(), -2)]}
+                  filterDate={(date) => !isWeekend(date)}
+                  onChange={handleDateSelect}
                   dateFormat="dd MMM yyyy"
                   className={"form-control form-control-sm"}
                   showDisabledMonthNavigation
-                  // maxDate={maxDate}
+                  maxDate={maxDate}
                   // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                 />
               </Form.Group>
