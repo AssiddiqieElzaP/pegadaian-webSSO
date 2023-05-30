@@ -4,12 +4,24 @@ import DatePicker from "react-datepicker";
 import axios from "axios";
 import { addBusinessDays, isWeekend } from "date-fns";
 import './TambahUser.css'
+import { useNavigate } from 'react-router-dom';
+
 function TambahUser() {
+  
+  
+  const naavigate = useNavigate();
+  
+  const handleNavigation = () => {
+    // Navigate to a different route
+    naavigate('/other-route');
+  }
+
   const [data, setData] = useState({
     nik: "",
   });
 
   const [selectedUnit, setSelectedUnit] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("");
 
   const [unit, setUnit] = useState({
     id: "",
@@ -23,6 +35,12 @@ function TambahUser() {
     const selectedValue =  event.target.value;
     setSelectedUnit(selectedValue);
     Click(selectedValue);
+  };
+
+  const pilihGroupKerja = (event) => {
+    const selectedValue =  event.target.value;
+    setSelectedGroup(selectedValue);
+    
   };
 
   const Click = async (value) => {
@@ -86,20 +104,43 @@ function TambahUser() {
     }
   };
 
-  
+  const [formData, setFormData] = useState({
+    description:""
+  });
+
+  const handleDecription = (event) =>{
+    const{name,value} = event.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name] : value
+    }))
+  }
+
+  const [alertMessage, setAlertMessage] = useState('');
  
   const handleSave = async (e) => {
     e.preventDefault();
     const insert = {
+      user_id: data.user_id,
       uid_bkp: data.user_id_bkp,
+      work_unit_id: parseInt(selectedUnit),
+      group_id: parseInt(selectedGroup),
+      duration: parseInt(selectedDate),
+      start_date: dateStart,
+      end_date: dateEnd,
+      description: formData.description,
+      name: data.nama_pegawai,
       created_by: localStorage.getItem("name"),
       updated_by: localStorage.getItem("name"),
-      
+     
     };
     try {
       const response = await axios.post('http://localhost:8081/api/v1/backup/create', insert);
-      console.log('data tersimpan',response.data); // Optional: Handle the server response
+      setAlertMessage('Data tersimpan');
+      console.log('data tersimpan',response.data); 
+      // Optional: Handle the server response
     } catch (error) {
+      setAlertMessage('Error submitting data!');
       console.error('data tidak tersimpan',error);
     }
   };
@@ -132,8 +173,9 @@ function TambahUser() {
 
   return (
     <>
-      <Container className="mx-auto p-0">
+      <Container className="mx-auto p-0" id="defaultActiveKey">
         <Card className="mx-3 my-2" border="dark">
+          {alertMessage && <div>{alertMessage}</div>}
           <Form className="mx-3 py-3 px-3" onSubmit={handleSave}>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
@@ -165,7 +207,7 @@ function TambahUser() {
                           name="work_unit_id"
                           key={list.id}
                           value={list.id}
-                          
+                          onChange={pilihGroupKerja}
                         >
                           {list.workUnitCode}-{list.workUnitName}
                         </option>
@@ -179,11 +221,13 @@ function TambahUser() {
                       // onChange={(e) =>
                       //   setReplace({ ...replace, group_backup: e.target.value })
                       // }
+                      value={selectedGroup}
+                      onChange={pilihGroupKerja}
                     >
                       <option>Kode Group - Nama Group</option>
 
                       {mygroup?.data?.map((g) => (
-                        <option name="group_id" key={g.id}>
+                        <option name="group_id" key={g.id} value={g.id}>
                           {g.groupCode}-{g.groupName}
                         </option>
                       ))}
@@ -211,6 +255,8 @@ function TambahUser() {
                   type="text"
                   placeholder="Masukkan Alasan Backup"
                   name="description"
+                  value={formData.description}
+                  onChange={handleDecription}
                 />
               </Form.Group>
             </Row>

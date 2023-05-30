@@ -77,6 +77,7 @@ function AddBackup() {
       .post("http://10.87.10.123:8080/api/v1/backup/create", insert)
       .then((res) => {
         alert(res.data.message);
+        // navigate("/dashboard")
       });
   };
 

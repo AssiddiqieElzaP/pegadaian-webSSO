@@ -7,7 +7,7 @@ import RegisterBackup from "../../pages/Pendaftaran/daftarPengganti/registerBack
 import SidebarMenu from "../sidebar/sidebar";
 import GantiBackup from "../../pages/Pendaftaran/Ganti/GantiBackup";
 export default function Tabs() {
-  const [currentTabs, setCurrentTabs] = useState();
+  const [currentTabs, setCurrentTabs] = useState('1');
   const tabs = [
     {
       id: 1,
@@ -24,6 +24,7 @@ export default function Tabs() {
   const handleTabClick = (e) => {
     setCurrentTabs(e.target.id);
   };
+  
 
   return (
     <>
@@ -31,31 +32,10 @@ export default function Tabs() {
     <SidebarMenu/>
       <Container className="mx-auto p-0">
       <Header heading="PENGAJUAN" />
-        {/* <div>
-                {tabs.map((tab, i) =>
-                <button 
-                key={i}
-                id={tab.id}
-                disabled={currentTabs === `${tab.id}`}
-                onClick={handleTabClick}
-                >{tab.tabTitle}</button>
-                )}
-            </div>
-            <div>
-                {tabs.map((tab,i) =>
-                <div key={i}>
-                        {currentTabs === `${tab.id}` && 
-                        <div>
-                            {tab.content}
-                        </div>
-                        }
-                </div>
-                )}
-            </div> */}
 
-        <Nav fill variant="tabs" >
+        <Nav fill variant="tabs">
           {tabs.map((tab, i) =>
-          <Nav.Item key={i}
+          <Nav.Item key={i} 
             id={tab.id}
                 disabled={currentTabs === `${tab.id}`}
                 onClick={handleTabClick} className="text-start mx-3 my-2" style={{cursor:'pointer'}}>{tab.tabTitle}
@@ -64,7 +44,7 @@ export default function Tabs() {
         </Nav>
         <div>
                 {tabs.map((tab,i) =>
-                <div key={i}>
+                <div key={i} >
                         {currentTabs === `${tab.id}` && 
                         <div>
                             {tab.content}
