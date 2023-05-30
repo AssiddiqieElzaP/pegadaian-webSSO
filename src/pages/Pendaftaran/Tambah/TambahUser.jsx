@@ -1,201 +1,140 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Form, Row } from "react-bootstrap";
-import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import axios from "axios";
-import {addBusinessDays, isWeekend} from 'date-fns'
-
-
+import { addBusinessDays, isWeekend } from "date-fns";
+import './TambahUser.css'
 function TambahUser() {
   const [data, setData] = useState({
     nik: "",
   });
 
-  const [selectedUnit, setSelectedUnit] = useState('');
+  const [selectedUnit, setSelectedUnit] = useState("");
 
-  const [unit, setUnit] = useState(
-    {
-      id:"",
-      groupId:"",
-      workUnitName:"",
-      workUnitCode:"",
-    }
-  )
-
-  //ini ketika kita memilih dropdown untuk di targetkan
-  const pilihUnitKerja=(event)=>{
-    const selectedValue = event.target.value;
-    setSelectedUnit(selectedValue)
-    Click(selectedValue)
-  }
-  
-    const Click = async (value) =>{
-      if(value == null){
-         return(<option>Kode Group - Nama Group</option>)
-      }else{
-        try {
-          await axios.get(`http://172.168.102.91:8080/api/v1/backup/group?id=${value}`)
-          .then((res)=>{
-            const testgroup = (res.data)
-            setMygroup(testgroup)
-            // console.log(testgroup)
-    
-          })
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      
-    }
-  useEffect(() => {
-    const fetchData = async ()=>{
-      try {
-        await axios.get("http://172.168.102.91:8080/api/v1/backup/work-unit")
-        .then((res) =>{
-          const test = (res.data) //harus dibuatkan variabel sebelum di panggil di usestate
-          setUnit(test)
-          // console.log(test)
-        })
-       
-      } catch (error) {}
-    }
-    fetchData();
-  }, []);
- 
-
-  const [replace, setReplace] = useState({
-    unit_kerja: "",
-    group_backup: "",
-    keterangan: "",
-    durasi_backup: "",
-    tanggal_backup: "",
+  const [unit, setUnit] = useState({
+    id: "",
+    groupId: "",
+    workUnitName: "",
+    workUnitCode: "",
   });
 
-const [mygroup,setMygroup] = useState({});
-  const handleKey = (Event) => {
-    if (Event.key === "Enter") {
-      // if (validated()) {
-        try {
-          axios
-            .post("http://172.168.102.91:8080/api/v1/backup/nik", {
-              nik: data.nik,
-            })
-            .then((res) => {
-              // console.log(res.data);
-              setData({
-                user_id: res.data.data.user_id,
-                nik: res.data.data.nik,
-                nama_pegawai: res.data.data.nama_pegawai,
-                jabatan: res.data.data.jabatan,
-                kode_jabatan: res.data.data.kode_jabatan,
-                unit_kerja: res.data.data.unit_kerja,
-                kode_unit_kerja: res.data.data.kode_unit_kerja,
-                user_id_bkp: res.data.data.user_id_bkp,
-              });
-            });
-        } catch (error) {
-          console.error(error);
-        }
-      // }
-    }
-
-    // setValidated(true);
+  //ini ketika kita memilih dropdown untuk di targetkan
+  const pilihUnitKerja = (event) => {
+    const selectedValue =  event.target.value;
+    setSelectedUnit(selectedValue);
+    Click(selectedValue);
   };
 
-  const [save,setSave] = useState({})
-  const handleSUmbit = (event) =>{
-    event.preventDefault();
-    const fetchdata = async ()=>{
+  const Click = async (value) => {
+    if (value == null) {
+      return <option>Kode Group - Nama Group</option>;
+    } else {
       try {
-        
-        await axios.post('http://172.168.102.91:8080/api/v1/backup/create')
-        .then((res) =>{
-          setSave(res)
-        })
-  
-  
-  
+        await axios
+          .get(`http://localhost:8081/api/v1/backup/group?id=${value}`)
+          .then((res) => {
+            const testgroup = res.data;
+            setMygroup(testgroup);
+            // console.log(testgroup)
+          });
       } catch (error) {
-        
+        console.error(error);
       }
     }
-  }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await axios
+          .get("http://localhost:8081/api/v1/backup/work-unit")
+          .then((res) => {
+            const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
+            setUnit(test);
+            // console.log(test)
+          });
+      } catch (error) {}
+    };
+    fetchData();
+  }, []);
 
+
+  const [mygroup, setMygroup] = useState({});
+  const handleKey = (Event) => {
+    if (Event.key === "Enter") {
+      try {
+        axios
+          .post("http://localhost:8081/api/v1/backup/nik", {
+            nik: data.nik,
+          })
+          .then((res) => {
+            // console.log(res.data);
+            setData({
+              user_id: res.data.data.user_id,
+              nik: res.data.data.nik,
+              nama_pegawai: res.data.data.nama_pegawai,
+              jabatan: res.data.data.jabatan,
+              kode_jabatan: res.data.data.kode_jabatan,
+              unit_kerja: res.data.data.unit_kerja,
+              kode_unit_kerja: res.data.data.kode_unit_kerja,
+              user_id_bkp: res.data.data.user_id_bkp,
+            });
+          });
+          console.log('data Succes')
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  
+ 
+  const handleSave = async (e) => {
+    e.preventDefault();
+    const insert = {
+      uid_bkp: data.user_id_bkp,
+      created_by: localStorage.getItem("name"),
+      updated_by: localStorage.getItem("name"),
+      
+    };
+    try {
+      const response = await axios.post('http://localhost:8081/api/v1/backup/create', insert);
+      console.log('data tersimpan',response.data); // Optional: Handle the server response
+    } catch (error) {
+      console.error('data tidak tersimpan',error);
+    }
+  };
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
 
-  const [selectedDate, setSelectedDate] = useState('')
-  
+  const [selectedDate, setSelectedDate] = useState("");
 
-  const handleChangeDurasi=(event)=>{
-    const duration = event.target.value;
-    setSelectedDate(duration)
-    calculateEndDate(dateStart, duration)
-    // const currentDate = new Date();
-    // const endDate = new Date(currentDate.setDate(currentDate.getDate() + parseInt(duration)))
-    // setDateEnd(endDate)
-  }
+  const handleChangeDurasi = (event) => {
+    const duration =  event.target.value;
+    setSelectedDate(duration);
+    calculateEndDate(dateStart, duration);
+  };
 
-  const calculateEndDate = (startDate, duration) =>{
-    const durationInDays = parseInt(duration, 10)
-    if(startDate && !isNaN(durationInDays)){
+  const calculateEndDate = (startDate, duration) => {
+    const durationInDays = parseInt(duration, 10);
+    if (startDate && !isNaN(durationInDays)) {
       const calculatedEndDate = addBusinessDays(startDate, durationInDays);
       setDateEnd(calculatedEndDate);
-    }else{
-      setDateEnd(null)
+    } else {
+      setDateEnd(null);
     }
-  }
-
-  const handleStartDateChange = (date) =>{
-    setDateStart(date)
-    calculateEndDate(dateStart, selectedDate)
-  }
-
-  // const handleDateSelect = (date) =>{
-  //   if(isWeekend(date)){
-  //     return;
-  //   }
-
-  //   if(!dateStart){
-  //     setDateStart(date);
-  //     setDateEnd(null);
-  //   } else if(!dateEnd){
-  //     if(date > dateStart){
-  //       setDateEnd(date)
-  //     } else{
-  //       setDateStart(date);
-  //       setDateEnd(null)
-  //     }
-  //   }
-  // }
-
-  const validated = () => {
-    let result = true;
-    if (data.nik === "" || data.nik === null) {
-      result = false;
-      toast.warning("Nik Tidak Boleh Kosong");
-    }
-    if (
-      replace.unit_kerja === "" ||
-      (replace.unit_kerja === null && replace.group_backup === "") ||
-      (replace.group_backup === null && replace.keterangan === "") ||
-      (replace.keterangan === null && replace.durasi_backup === "") ||
-      (replace.durasi_backup === null && replace.tanggal_backup === "") ||
-      replace.tanggal_backup === null
-    ) {
-      result = false;
-      toast.warning(
-        "Data yang di masukkan belum lengkap, Silahkan lengkapi data!!"
-      );
-    }
-    return result;
   };
-  
+
+  const handleStartDateChange = (date) => {
+    setDateStart(date);
+    calculateEndDate(dateStart, selectedDate);
+
+  };
+
   return (
     <>
       <Container className="mx-auto p-0">
         <Card className="mx-3 my-2" border="dark">
-          <Form className="mx-3 py-3 px-3">
+          <Form className="mx-3 py-3 px-3" onSubmit={handleSave}>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
@@ -215,12 +154,22 @@ const [mygroup,setMygroup] = useState({});
                     <Form.Label className="mb-0 ms-1">
                       Unit Kerja Backup
                     </Form.Label>
-                    <Form.Select style={{ fontSize: "12px" }} value={selectedUnit} onChange={pilihUnitKerja}>
-                    <option>Kode Group - Nama Group</option>
-                   {unit?.data?.map((list) =>
-                    <option name="work_unit_id" key={list.id} value={list.id}>{list.workUnitCode}-{list.workUnitName}</option>
-                   )
-                   }
+                    <Form.Select
+                      style={{ fontSize: "12px" }}
+                      value={selectedUnit}
+                      onChange={pilihUnitKerja}
+                    >
+                      <option>Kode Group - Nama Group</option>
+                      {unit?.data?.map((list) => (
+                        <option
+                          name="work_unit_id"
+                          key={list.id}
+                          value={list.id}
+                          
+                        >
+                          {list.workUnitCode}-{list.workUnitName}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Col>
                   <Col>
@@ -230,28 +179,29 @@ const [mygroup,setMygroup] = useState({});
                       // onChange={(e) =>
                       //   setReplace({ ...replace, group_backup: e.target.value })
                       // }
-                     >
+                    >
                       <option>Kode Group - Nama Group</option>
 
-                      {mygroup?.data?.map((g)  =>
-                         <option name="group_id" key={g.id}>{g.groupCode}-{g.groupName}</option>
-                      )
-
-                      }
+                      {mygroup?.data?.map((g) => (
+                        <option name="group_id" key={g.id}>
+                          {g.groupCode}-{g.groupName}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Col>
                 </Row>
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlid="nama">
+              <Form.Group as={Col} controlid="">
                 <Form.Label className="mb-0 ms-1">Nama</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Nama Pegawai"
                   disabled
-                  name="name"
+                  name="nama_pegawai"
                   value={data.nama_pegawai !== "" ? data.nama_pegawai : ""}
+                  
                 />
               </Form.Group>
 
@@ -265,15 +215,16 @@ const [mygroup,setMygroup] = useState({});
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlid="unitkerja">
+              <Form.Group as={Col}>
                 <Form.Label className="mb-0 ms-1">Unit Kerja</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Kode Unit - Unit Kerja"
                   disabled
+                  name="kode_unit"
                   value={
-                    data.kode_unit_kerja + "-" + data.unit_kerja !== ""
-                      ? data.kode_unit_kerja + "-" + data.unit_kerja
+                    data.kode_unit_kerja && data.unit_kerja !== ""
+                      ? data.kode_unit_kerja && data.unit_kerja
                       : ""
                   }
                 />
@@ -282,57 +233,54 @@ const [mygroup,setMygroup] = useState({});
               <Form.Group as={Col}>
                 <Row>
                   <Col>
-                    <Form.Label className="mb-0 ms-1">
-                      Tanggal Mulai
-                    </Form.Label>
+                    <Form.Label className="mb-0 ms-1">Tanggal Mulai</Form.Label>
                     <DatePicker
-                    name="dateStart"
-                    selected={dateStart}
-                    filterDate={(date) => !isWeekend(date)}
-                    dateFormat="dd MMM yyyy"
-                    minDate={new Date()}
-                    onChange={handleStartDateChange}
-                    className={"form-control form-control-sm"}
+                      name="start_date"
+                      selected={dateStart}
+                      filterDate={(date) => !isWeekend(date)}
+                      dateFormat="dd MMM yyyy"
+                      minDate={new Date()}
+                      onChange={handleStartDateChange}
+                      className={"form-control form-control-sm"}
+                     
 
-                    // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
-                  />
+                      // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
+                    />
                   </Col>
                   <Col>
                     <Form.Label className="mb-0 ms-1">Tanggal Akhir</Form.Label>
                     <DatePicker
-                    name="dateEnd"
-                    selected={dateEnd}
-                    filterDate={(date) => !isWeekend(date)}
-                    dateFormat="dd MMM yyyy"
-                    className={"form-control form-control-sm"}
-                    value={dateEnd ? dateEnd.toDateString() : ''} 
-                    disabled
-                    placeholderText="pilih durasi"
+                      name="end_date"
+                      selected={dateEnd}
+                      filterDate={(date) => !isWeekend(date)}
+                      dateFormat="dd MMM yyyy"
+                      className={"form-control form-control-sm"}
+                      value={dateEnd ? dateEnd.toDateString() : ""}
+                      disabled
+                      placeholderText="pilih durasi"
 
-                    // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
-                  />
+                      // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
+                    />
                   </Col>
                 </Row>
               </Form.Group>
-
-              
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlid="jabatan">
+              <Form.Group as={Col}>
                 <Form.Label className="mb-0 ms-1">Jabatan</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Kode Jabatan - Nama Jabatan"
                   disabled
                   value={
-                    data.kode_jabatan + "-" + data.jabatan !== ""
-                      ? data.kode_jabatan + "-" + data.jabatan
-                      : "" 
+                    data.kode_jabatan && data.jabatan !== ""
+                      ? data.kode_jabatan && data.jabatan
+                      : ""
                   }
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridPassword">
+              <Form.Group as={Col}>
                 <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
@@ -371,24 +319,25 @@ const [mygroup,setMygroup] = useState({});
               </Form.Group> */}
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="user_id">
+              <Form.Group as={Col}>
                 <Form.Label className="mb-0 ms-1">User ID Backup</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Generate NIKBKP"
                   disabled
                   value={data.user_id_bkp !== "" ? data.user_id_bkp : ""}
+                  name="uid_bkp"
                 />
               </Form.Group>
 
               <Form.Group as={Col}></Form.Group>
             </Row>
           </Form>
-          <div className="d-flex  mb-3">
-            <button className="btn-color me-2" type="sumbit">
+          <div className="d-flex  mb-3 ">
+            <button className="btn-color me-2 group_button" type="sumbit" onClick={(e) => handleSave(e)}>
               Simpan
             </button>
-            <button className="btn-color">Batal</button>
+            <button className="btn-color me-5">Batal</button>
           </div>
         </Card>
       </Container>
