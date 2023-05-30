@@ -104,32 +104,50 @@ const [dateStart, setDateStart] = useState(null);
 
   };
   //akhir setting tanggal
-      // const validated = () => {
-      //   let result = true;
-      //   if (data.nik === "" || data.nik === null) {
-      //     result = false;
-      //     toast.warning("Nik Tidak Boleh Kosong");
-      //   }
-      //   if (
-      //     replace.unit_kerja === "" ||
-      //     (replace.unit_kerja === null && replace.group_backup === "") ||
-      //     (replace.group_backup === null && replace.keterangan === "") ||
-      //     (replace.keterangan === null && replace.durasi_backup === "") ||
-      //     (replace.durasi_backup === null && replace.tanggal_backup === "") ||
-      //     replace.tanggal_backup === null
-      //   ) {
-      //     result = false;
-      //     toast.warning(
-      //       "Data yang di masukkan belum lengkap, Silahkan lengkapi data!!"
-      //     );
-      //   }
-      //   return result;
-      // };
+      // untuk tugas insert (simpan database)
+      const [formData, setFormData] = useState({
+        description:""
+      });
+    
+      const handleDecription = (event) =>{
+        const{name,value} = event.target;
+        setFormData((prevState) => ({
+          ...prevState,
+          [name] : value
+        }))
+      }
+    
+      const [alertMessage, setAlertMessage] = useState('');
+     
+      const handleSave = async (e) => {
+        e.preventDefault();
+        const insert = {
+          user_id: data.user_id,
+          user_need_backup_id: dataGanti.user_id,
+          uidBkp: data.user_id_bkp,
+          duration: parseInt(selectedDate),
+          start_date: dateStart,
+          end_date: dateEnd,
+          description: formData.description,
+          created_by: localStorage.getItem("name"),
+          updated_by: localStorage.getItem("name"),
+         
+        };
+        try {
+          const response = await axios.post('http://localhost:8081/api/v1/change-backup/save', insert);
+          setAlertMessage('Data tersimpan');
+          console.log('data tersimpan',response.data); 
+          // Optional: Handle the server response
+        } catch (error) {
+          setAlertMessage('Error submitting data!');
+          console.error('data tidak tersimpan',error);
+        }
+      };
   return (
    <>
    <Container className="mx-auto p-0">
         <Card className="mx-3 my-2" border="dark">
-          <Form className="mx-3 py-3 px-3">
+          <Form className="mx-3 py-3 px-3" onSubmit={handleSave}>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
@@ -315,7 +333,10 @@ const [dateStart, setDateStart] = useState(null);
             </Row>
           </Form>
             <div className="d-flex  mt-2 mb-3 me-3" >
-              <button className="btn-color me-2" type="sumbit" style={{float:'right', display:'block',margin:'auto'}}>
+              <button className="btn-color me-2" type="sumbit" 
+              style={{float:'right', display:'block',margin:'auto'}}
+              onClick={handleSave}
+              >
                 Simpan
               </button>
               <button className="btn-color ms-3 me-3">Batal</button>

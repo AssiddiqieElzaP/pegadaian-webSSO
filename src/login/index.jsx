@@ -32,7 +32,7 @@ const Login = () => {
                     localStorage.setItem("token", res.data.data.Token);
                     localStorage.setItem("name", res.data.data.Name);
                     
-                    navigate("/dashboard")
+                    navigate("/add-backup")
                 })
                 
             } catch (error) {
