@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import TambahUser from "../../pages/Pendaftaran/Tambah/TambahUser";
 import { Container, Nav } from "react-bootstrap";
-import Header from "../navbar/header";
-import AddBackup from "../../pages/Pendaftaran/daftarPengguna/addBackup";
-import RegisterBackup from "../../pages/Pendaftaran/daftarPengganti/registerBackup";
+import Header from "../navbar/header";  
 import SidebarMenu from "../sidebar/sidebar";
 import GantiBackup from "../../pages/Pendaftaran/Ganti/GantiBackup";
 export default function Tabs() {

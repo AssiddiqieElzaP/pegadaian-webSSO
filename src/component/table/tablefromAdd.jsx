@@ -2,17 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 
 import axios from "axios";
-import { Link } from "react-router-dom";
-// import PegawaiData from "./PegawaiData";
-// import { Link } from "react-router-dom";
+
+
 
 function TablefromAdd() {
   const [dataBackup, setDataBackup] = useState({});
-  // useEffect(()=>{
-  //   axios.get('http://10.87.10.123:8080/api/v1/backup/list')
-  //   .then(res => setData(res.data.data))
-  //   .catch(err => console.error(err));
-  // },[])
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +23,7 @@ function TablefromAdd() {
       } catch (error) {}
     };
     fetchData();
-  }, []);
+  },[]);
 
   return (
     <>
@@ -47,6 +42,7 @@ function TablefromAdd() {
           </thead>
           <tbody>
             {dataBackup?.data.content?.map((g,key) => (
+              
               <tr key={key}>
                       <td>{g.nik}</td>
                       <td>{g.uid_bkp}</td>
@@ -55,7 +51,8 @@ function TablefromAdd() {
                       <td>{g.unit_kerja}</td>
                       <td>{g.backupType}</td>
                     </tr>
-            ))}
+               
+           ))}
           </tbody>
         </Table>
       </div>
