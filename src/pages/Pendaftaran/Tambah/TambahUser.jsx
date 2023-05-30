@@ -9,12 +9,12 @@ import { useNavigate } from 'react-router-dom';
 function TambahUser() {
   
   
-  const naavigate = useNavigate();
+  // const naavigate = useNavigate();
   
-  const handleNavigation = () => {
-    // Navigate to a different route
-    naavigate('/other-route');
-  }
+  // const handleNavigation = () => {
+  //   // Navigate to a different route
+  //   naavigate('/other-route');
+  // }
 
   const [data, setData] = useState({
     nik: "",
@@ -70,7 +70,9 @@ function TambahUser() {
             setUnit(test);
             // console.log(test)
           });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error)
+      }
     };
     fetchData();
   }, []);

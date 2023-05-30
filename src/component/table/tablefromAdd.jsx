@@ -6,19 +6,19 @@ import axios from "axios";
 
 
 function TablefromAdd() {
-  const [dataBackup, setDataBackup] = useState({});
+  const [dataBackup, setDataBackup] = useState([]);
   
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await axios
-          .get("http://localhost:8081/api/v1/dashboard/grid")
+          .get(`http://localhost:8081/api/v1/dashboard/grid?size=6`)
           .then((res) => {
-            const data = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
+            const data = res.data.data.content; //harus dibuatkan variabel sebelum di panggil di usestate
             setDataBackup(data);
             // console.log(test)
-            console.log(dataBackup)
+            console.log(data)
           });
       } catch (error) {}
     };
@@ -41,8 +41,10 @@ function TablefromAdd() {
             </tr>
           </thead>
           <tbody>
-            {dataBackup?.data.content?.map((g,key) => (
-              
+            {
+            // dataBackup && dataBackup.length > 0 ? 
+            dataBackup?.map((g,key) => {
+              return(
               <tr key={key}>
                       <td>{g.nik}</td>
                       <td>{g.uid_bkp}</td>
@@ -51,8 +53,10 @@ function TablefromAdd() {
                       <td>{g.unit_kerja}</td>
                       <td>{g.backupType}</td>
                     </tr>
-               
-           ))}
+               )
+            })
+          //  : "data not available"
+           }
           </tbody>
         </Table>
       </div>
