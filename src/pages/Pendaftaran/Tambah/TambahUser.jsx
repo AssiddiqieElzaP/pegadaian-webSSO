@@ -4,18 +4,10 @@ import DatePicker from "react-datepicker";
 import axios from "axios";
 import { addBusinessDays, isWeekend } from "date-fns";
 import './TambahUser.css'
-import { useNavigate } from 'react-router-dom';
-
+import FooterWeb from "../../../component/footer/FooterWeb";
+import Confirmasi from '../../../component/modal/Confirmasi'
 function TambahUser() {
   
-  
-  // const naavigate = useNavigate();
-  
-  // const handleNavigation = () => {
-  //   // Navigate to a different route
-  //   naavigate('/other-route');
-  // }
-
   const [data, setData] = useState({
     nik: "",
   });
@@ -29,12 +21,11 @@ function TambahUser() {
     workUnitName: "",
     workUnitCode: "",
   });
-
-  //ini ketika kita memilih dropdown untuk di targetkan
   const pilihUnitKerja = (event) => {
-    const selectedValue =  event.target.value;
+    const selectedValue =  event.target.value
     setSelectedUnit(selectedValue);
     Click(selectedValue);
+    
   };
 
   const pilihGroupKerja = (event) => {
@@ -49,7 +40,7 @@ function TambahUser() {
     } else {
       try {
         await axios
-          .get(`http://localhost:8081/api/v1/backup/group?id=${value}`)
+          .get(`http://localhost:8080/api/v1/backup/group?id=${value}`)
           .then((res) => {
             const testgroup = res.data;
             setMygroup(testgroup);
@@ -64,7 +55,7 @@ function TambahUser() {
     const fetchData = async () => {
       try {
         await axios
-          .get("http://localhost:8081/api/v1/backup/work-unit")
+          .get("http://localhost:8080/api/v1/backup/work-unit")
           .then((res) => {
             const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setUnit(test);
@@ -83,7 +74,7 @@ function TambahUser() {
     if (Event.key === "Enter") {
       try {
         axios
-          .post("http://localhost:8081/api/v1/backup/nik", {
+          .post("http://localhost:8080/api/v1/backup/nik", {
             nik: data.nik,
           })
           .then((res) => {
@@ -107,7 +98,8 @@ function TambahUser() {
   };
 
   const [formData, setFormData] = useState({
-    description:""
+    description:"",
+    nik:"",
   });
 
   const handleDecription = (event) =>{
@@ -136,8 +128,11 @@ function TambahUser() {
       updated_by: localStorage.getItem("name"),
      
     };
+   
+    // console.log('data tidak ada',validation())
+  
     try {
-      const response = await axios.post('http://localhost:8081/api/v1/backup/create', insert);
+      const response = await axios.post('http://localhost:8080/api/v1/backup/create', insert);
       setAlertMessage('Data tersimpan');
       console.log('data tersimpan',response.data); 
       // Optional: Handle the server response
@@ -145,18 +140,22 @@ function TambahUser() {
       setAlertMessage('Error submitting data!');
       console.error('data tidak tersimpan',error);
     }
+   
+   // Tutup dialog konfirmasi
+   setShowConfirmation(false);
   };
+  // setting date
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
-
   const [selectedDate, setSelectedDate] = useState("");
-
   const handleChangeDurasi = (event) => {
     const duration =  event.target.value;
     setSelectedDate(duration);
     calculateEndDate(dateStart, duration);
   };
 
+
+  // setting duration
   const calculateEndDate = (startDate, duration) => {
     const durationInDays = parseInt(duration, 10);
     if (startDate && !isNaN(durationInDays)) {
@@ -165,13 +164,16 @@ function TambahUser() {
     } else {
       setDateEnd(null);
     }
-  };
+  }; 
 
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
 
   };
+
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   return (
     <>
@@ -191,6 +193,7 @@ function TambahUser() {
                   name="nik"
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                 />
+                 
               </Form.Group>
               <Form.Group as={Col}>
                 <Row>
@@ -202,27 +205,28 @@ function TambahUser() {
                       style={{ fontSize: "12px" }}
                       value={selectedUnit}
                       onChange={pilihUnitKerja}
+                     
                     >
                       <option>Kode Group - Nama Group</option>
                       {unit?.data?.map((list) => (
                         <option
-                          name="work_unit_id"
+                       
                           key={list.id}
                           value={list.id}
                           onChange={pilihGroupKerja}
                         >
                           {list.workUnitCode}-{list.workUnitName}
+                         
                         </option>
                       ))}
                     </Form.Select>
+                   
                   </Col>
+                  
                   <Col>
                     <Form.Label className="mb-0 ms-1">Group Backup</Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
-                      // onChange={(e) =>
-                      //   setReplace({ ...replace, group_backup: e.target.value })
-                      // }
                       value={selectedGroup}
                       onChange={pilihGroupKerja}
                     >
@@ -290,9 +294,6 @@ function TambahUser() {
                       minDate={new Date()}
                       onChange={handleStartDateChange}
                       className={"form-control form-control-sm"}
-                     
-
-                      // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                     />
                   </Col>
                   <Col>
@@ -306,8 +307,6 @@ function TambahUser() {
                       value={dateEnd ? dateEnd.toDateString() : ""}
                       disabled
                       placeholderText="pilih durasi"
-
-                      // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
                     />
                   </Col>
                 </Row>
@@ -327,14 +326,10 @@ function TambahUser() {
                   }
                 />
               </Form.Group>
-
               <Form.Group as={Col}>
                 <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
-                  // onChange={(e) =>
-                  //   setReplace({ ...replace, durasi_backup: e.target.value })
-                  // }
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
@@ -345,26 +340,6 @@ function TambahUser() {
                   <option value="2">3 Hari</option>
                 </Form.Select>
               </Form.Group>
-
-              {/* <Form.Group as={Col} controlid="tanggal">
-                <Form.Label className="mb-0 ms-1">
-                  Tanggal Mulai - Akhir Backup
-                </Form.Label>
-                <DatePicker
-                  id="dateStartEnd"
-                  selectsRange={true}
-                  minDate={new Date()}
-                  startDate={dateStart}
-                  endDate={dateEnd}
-                  // excludeDates={[new Date(), addDays(new Date(), -1), addDays(new Date(), -2)]}
-                  filterDate={(date) => !isWeekend(date)}
-                  onChange={onChangeHandler}
-                  dateFormat="dd MMM yyyy"
-                  className={"form-control form-control-sm"}
-                  showDisabledMonthNavigation
-                  // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
-                />
-              </Form.Group> */}
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col}>
@@ -377,17 +352,23 @@ function TambahUser() {
                   name="uid_bkp"
                 />
               </Form.Group>
-
               <Form.Group as={Col}></Form.Group>
             </Row>
           </Form>
           <div className="d-flex  mb-3 ">
-            <button className="btn-color me-2 group_button" type="sumbit" onClick={(e) => handleSave(e)}>
+            <button className="btn-color me-2 group_button"  onClick={() => setShowConfirmation(true)}>
               Simpan
             </button>
             <button className="btn-color me-5">Batal</button>
           </div>
+           {/* Komponen Dialog Konfirmasi */}
+      <Confirmasi
+        show={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onSave={handleSave}
+      />
         </Card>
+        <FooterWeb/>
       </Container>
     </>
   );

@@ -143,3 +143,11 @@ Form {
     margin: auto;
     padding: 20px;
 }
+
+.bg-footer {
+    background-color: #20A94D;
+    font-size: 18px;
+    font-weight: 600;
+    color: #E7EDED;
+    border-radius: 10px;
+}

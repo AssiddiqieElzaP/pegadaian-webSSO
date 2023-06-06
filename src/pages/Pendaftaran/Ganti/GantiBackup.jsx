@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Card, Col, Container, Form, FormGroup, Row } from 'react-bootstrap'
+import { Card, Col, Container, Form, Row } from 'react-bootstrap'
 // import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import axios from "axios";
-import { async } from "q";
+// import { async } from "q";
 import { addBusinessDays, isWeekend } from "date-fns";
-
+import FooterWeb from "../../../component/footer/FooterWeb";
+import Confirmasi from '../../../component/modal/Confirmasi'
 
 function GantiBackup() {
     const [data, setData] = useState({
@@ -14,20 +15,17 @@ function GantiBackup() {
     const [dataGanti,setDataGanti] = useState({
       nik:""
     })
-      const [replace, setReplace] = useState({
-        unit_kerja: "",
-        group_backup: "",
-        keterangan: "",
-        durasi_backup: "",
-        tanggal_backup: "",
-      });
 
+    
+     
+      //validasi modal untuk informasi
+      const [showConfirmation, setShowConfirmation] = useState(false);
       
       const handleKey = (Event) => {
         if (Event.key === "Enter") {
           try {
             axios
-              .post("http://localhost:8081/api/v1/change-backup/nik", {
+              .post("http://localhost:8080/api/v1/change-backup/nik", {
                 nik: data.nik,
               })
               .then((res) => {
@@ -54,7 +52,7 @@ function GantiBackup() {
         if(Event.key === "Enter" ){
           try {
             axios
-              .post("http://localhost:8081/api/v1/change-backup/nik", {
+              .post("http://localhost:8080/api/v1/change-backup/nik", {
                 nik: dataGanti.nik,
               })
               .then((res) => {
@@ -118,9 +116,19 @@ const [dateStart, setDateStart] = useState(null);
       }
     
       const [alertMessage, setAlertMessage] = useState('');
-     
+      const handleClear = () => {
+        setData('')
+        setDataGanti('')
+        setDateStart('')
+        setDateEnd('')
+      };
       const handleSave = async (e) => {
         e.preventDefault();
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
         const insert = {
           user_id: data.user_id,
           user_need_backup_id: dataGanti.user_id,
@@ -133,8 +141,9 @@ const [dateStart, setDateStart] = useState(null);
           updated_by: localStorage.getItem("name"),
          
         };
+
         try {
-          const response = await axios.post('http://localhost:8081/api/v1/change-backup/save', insert);
+          const response = await axios.post('http://localhost:8080/api/v1/change-backup/save', insert);
           setAlertMessage('Data tersimpan');
           console.log('data tersimpan',response.data); 
           // Optional: Handle the server response
@@ -142,12 +151,20 @@ const [dateStart, setDateStart] = useState(null);
           setAlertMessage('Error submitting data!');
           console.error('data tidak tersimpan',error);
         }
+        //dialog konfirmasi batal
+        setShowConfirmation(false);
+        setValidated(true);
       };
+
+      // validasi
+
+      const [validated, setValidated] = useState(false);
   return (
    <>
    <Container className="mx-auto p-0">
         <Card className="mx-3 my-2" border="dark">
-          <Form className="mx-3 py-3 px-3" onSubmit={handleSave}>
+        {alertMessage && <div className="text-center">{alertMessage}</div>}
+          <Form className="mx-3 py-3 px-3" onSubmit={handleSave} noValidate validated={validated}>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
@@ -159,7 +176,11 @@ const [dateStart, setDateStart] = useState(null);
                   name="nik"
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                   onKeyDown={handleKey}
+                  hasValidation
                 />
+                <Form.Control.Feedback type="invalid">
+              Please choose a username.
+            </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
@@ -275,7 +296,7 @@ const [dateStart, setDateStart] = useState(null);
                       className={"form-control form-control-sm"}
                      
 
-                      // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
+                      
                     />
                   </Col>
                   <Col>
@@ -290,7 +311,7 @@ const [dateStart, setDateStart] = useState(null);
                       disabled
                       placeholderText="pilih durasi"
 
-                      // onChange={(e)=>setReplace({...replace,tanggal_backup:e.target.value})}
+                      
                     />
                   </Col>
                 </Row>
@@ -303,9 +324,6 @@ const [dateStart, setDateStart] = useState(null);
                <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
-                  // onChange={(e) =>
-                  //   setReplace({ ...replace, durasi_backup: e.target.value })
-                  // }
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
@@ -327,6 +345,9 @@ const [dateStart, setDateStart] = useState(null);
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"
+                  onChange={handleDecription}
+                  name="description"
+                  value={formData.description}
                 />
               </Form.Group>
                
@@ -335,13 +356,20 @@ const [dateStart, setDateStart] = useState(null);
             <div className="d-flex  mt-2 mb-3 me-3" >
               <button className="btn-color me-2" type="sumbit" 
               style={{float:'right', display:'block',margin:'auto'}}
-              onClick={handleSave}
+              onClick={() => setShowConfirmation(true)}
               >
                 Simpan
               </button>
-              <button className="btn-color ms-3 me-3">Batal</button>
+              <button className="btn-color ms-3 me-3" onClick={handleClear}>Batal</button>
             </div>
+             {/* Komponen Dialog Konfirmasi */}
+      <Confirmasi
+        show={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onSave={handleSave}
+      />
         </Card>
+        <FooterWeb />
       </Container>
    </>
   )
