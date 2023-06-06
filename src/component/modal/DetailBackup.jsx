@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Form, Col, Row } from 'react-bootstrap';
 
-function DetailBackup({ show, onClose}) {
+function DetailBackup({ show, onClose,data}) {
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
@@ -11,10 +11,10 @@ function DetailBackup({ show, onClose}) {
       <Form>
       <Form.Group as={Row} className="mb-3" controlid="nik">
         <Form.Label column sm="4">
-          NiK :
+          NiK : 
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue="0000000000" />
+          <Form.Control plaintext readOnly defaultValue={data.nama_pegawai} />
         </Col>
       </Form.Group>
       <Form.Group as={Row} className="mb-3" controlid="nik">

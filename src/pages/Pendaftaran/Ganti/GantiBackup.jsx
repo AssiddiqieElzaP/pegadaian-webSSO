@@ -17,7 +17,7 @@ function GantiBackup() {
     })
 
     
-     
+  
       //validasi modal untuk informasi
       const [showConfirmation, setShowConfirmation] = useState(false);
       
@@ -56,6 +56,7 @@ function GantiBackup() {
                 nik: dataGanti.nik,
               })
               .then((res) => {
+               
                 setDataGanti({
                   user_id: res.data.data.user_id,
                   nik: res.data.data.nik,
@@ -117,8 +118,25 @@ const [dateStart, setDateStart] = useState(null);
     
       const [alertMessage, setAlertMessage] = useState('');
       const handleClear = () => {
-        setData('')
-        setDataGanti('')
+        setData({
+          user_id: "",
+          nik: "",
+          nama_pegawai: "",
+          jabatan: "",
+          kode_jabatan: "",
+          unit_kerja: "",
+          kode_unit_kerja: "",
+          user_id_bkp: ""
+        });
+        setDataGanti({
+          user_id: "",
+          nik: "",
+          nama_pegawai: "",
+          jabatan: "",
+          kode_jabatan: "",
+          unit_kerja: "",
+          kode_unit_kerja: ""
+        });
         setDateStart('')
         setDateEnd('')
       };
@@ -176,7 +194,8 @@ const [dateStart, setDateStart] = useState(null);
                   name="nik"
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                   onKeyDown={handleKey}
-                  hasValidation
+                  value={data.nik}
+                
                 />
                 <Form.Control.Feedback type="invalid">
               Please choose a username.
@@ -192,6 +211,7 @@ const [dateStart, setDateStart] = useState(null);
                   name="nik"
                   onChange={(e) => setDataGanti({ ...dataGanti, nik: e.target.value })}
                   onKeyDown={handleKeyGanti}
+                  value={dataGanti.nik}
                 />
               </Form.Group>
             </Row>
@@ -199,7 +219,8 @@ const [dateStart, setDateStart] = useState(null);
               <Form.Group as={Col} controlId="nama">
                 <Form.Label className="mb-0 ms-1">Nama</Form.Label>
                 <Form.Control type="text" placeholder="Nama Pegawai" disabled 
-                value={data.nama_pegawai !== "" ? data.nama_pegawai : ""}
+                // value={data.nama_pegawai !== "" ? data.nama_pegawai : ""}
+                value={data.nama_pegawai}
                 />
               </Form.Group>
 
