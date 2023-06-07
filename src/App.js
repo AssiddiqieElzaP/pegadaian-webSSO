@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Login from "./login";
 import Dashboard from "./pages/Pendaftaran/dashboard";
-import NavbarComp from "./component/navbar/NavbarComp";
 import { ToastContainer } from "react-toastify";
 import Tabs from "./component/tabs/Tabs";
 import UserRoleMatrix from "./pages/Rolematrix/UserRoleMatrix";
@@ -18,7 +17,6 @@ const App = () => {
     <ToastContainer theme='colored' position='center'></ToastContainer>
     <Router>
       <ProSidebarProvider>
-        <NavbarComp/>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
