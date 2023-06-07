@@ -19,8 +19,8 @@ const App = () => {
         <NavbarComp/>
         <Routes>
           <Route path="/" element={<Tabs />} />
-          <Route path="/register-backup" element={<PersetujuanUserBackup />} />
-          <Route path="/user-role" element={<UserRoleMatrix />} />
+          <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
+          {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
         </Routes>
       </ProSidebarProvider>
     </Router>

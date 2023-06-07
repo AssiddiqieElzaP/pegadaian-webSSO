@@ -1,7 +1,12 @@
 import React from 'react';
 import { Modal, Button, Form, Col, Row } from 'react-bootstrap';
-
+import moment from 'moment/moment';
 function DetailBackup({ show, onClose,data}) {
+
+  const currentDate = new Date();
+
+  const formattedDate = moment(currentDate).format('yyyy-MM-DD');
+
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
@@ -9,60 +14,76 @@ function DetailBackup({ show, onClose,data}) {
       </Modal.Header>
       <Modal.Body>
       <Form>
-      <Form.Group as={Row} className="mb-3" controlid="nik">
+      <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
-          NiK : 
+          Nama
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue={data.nama_pegawai} />
+          <Form.Control type='text' defaultValue={data.nama_pegawai} disabled/>
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlid="nik">
+      <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
-          Nama :
+          User ID Backup
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue="0000000000" />
+          <Form.Control type='text' defaultValue={data.uid_bkp}  disabled/>
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlid="nik">
+      <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
-          Unit Kerja :
+          Unit Kerja
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue="0000000000" />
+          <Form.Control type='text'  defaultValue={data.unit_kerja} disabled/>
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlid="nik">
+      <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
-          Jabatan :
+          Jabatan
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue="0000000000" />
+          <Form.Control type='text' defaultValue={data.jabatan} disabled/>
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlid="nik">
+      <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
-          Jenis Backup:
+          Unit Kerja Backup
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue="0000000000" />
+          <Form.Control type='text' defaultValue={data.unit_kerja_bkp} disabled/>
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlid="nik">
+      <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
-          Durasi Backup :
+          Jabatan Backup
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue="0000000000" />
+          <Form.Control type='text' defaultValue={data.jabatan_bkp} disabled/>
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlid="nik">
+      <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
-          Keterangan:
+          Tanggal Mulai Backup
         </Form.Label>
         <Col sm="8">
-          <Form.Control plaintext readOnly defaultValue="0000000000" />
+          <Form.Control  value={formattedDate} defaultValue={data.tanggal_mulai_backup} disabled />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlid="">
+        <Form.Label column sm="4">
+          Status
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type='text'  defaultValue={data.status} disabled/>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlid="">
+        <Form.Label column sm="4">
+          Keterangan
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type='text' defaultValue={data.keterangan} disabled/>
         </Col>
       </Form.Group>
       </Form>

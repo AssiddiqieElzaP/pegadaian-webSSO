@@ -1,14 +1,28 @@
 import React, {  useEffect, useState } from 'react'
 import SidebarMenu from '../../component/sidebar/sidebar'
 import Header from '../../component/navbar/header'
-import { Card, Container, Pagination, Table, Button, Modal, Form, Col, Row } from 'react-bootstrap'
+import {  Card, Container, Pagination, Table} from 'react-bootstrap'
 import axios from 'axios';
 import DetailBackup from '../../component/modal/DetailBackup';
-import { async } from 'q';
+
+import {AiOutlineCloseCircle,AiOutlineCheckCircle,AiOutlineFileDone} from 'react-icons/ai'
+// import {GoLog} from 'react-icons/go'
+import ApprovalMessage from '../../component/modal/Approval';
+import NonApprovalMessage from '../../component/modal/NonAprroval';
 
 export default function PersetujuanUserBackup() {
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [showApproval,setShowApproval] = useState(false)
+  const [showNonApproval, setShowNonApproval] = useState({
+    action:false,
+    id:null,
+    backupType:'',
+    nama:''
+  });
+  const [showApproval,setShowApproval] = useState({
+    action:false,
+    id:null,
+    backupType:''
+  })
   const [dataApproval,setDataApproval] = useState([])
 
   const[dataAddbackup,setDataAddBackup] = useState({
@@ -17,17 +31,7 @@ export default function PersetujuanUserBackup() {
   })
  
 
-  const fetchApproval = async () => {
-    try {
-      await axios
-      .get()
-      .then((res) => {
 
-      })
-    } catch (error) {
-      
-    }
-  }
 
   const fetchDataAddBackup = async (id,backupType) => {
     try {
@@ -37,7 +41,7 @@ export default function PersetujuanUserBackup() {
             const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setDataAddBackup(data);
             // console.log(test)
-            console.log(data)
+            // console.log(data)
           });
     } catch (error) {
       console.error(error);
@@ -66,6 +70,8 @@ export default function PersetujuanUserBackup() {
     };
     fetchData();
   },[]);
+
+
   return (
    <>
    <div className="d-flex" style={{height:"125vh"}}>
@@ -97,17 +103,17 @@ export default function PersetujuanUserBackup() {
               <td>{g.backupType}</td>
               <td>{g.duration} Hari</td>
               <td>{g.description}</td>
-              <td ><button onClick={() => handleShowModal(g.id,g.backupType)}>Detail</button></td>
+              {/* <td ><button onClick={() => handleShowModal(g.id,g.backupType)} className='btn-color-detail'>Detail</button></td> */}
+              <td><AiOutlineFileDone fontSize={25} style={{cursor:'pointer'}} onClick={() => handleShowModal(g.id,g.backupType)}/></td>
               <td className='d-flex'>{
                 g.approvalType === "Pending" ? 
-                <div >
-                  
-                  <button className='mx-1 px-2'>Y</button>
-                  <button className='px-2'>X</button>
+                <div className='m-auto'>
+                  <AiOutlineCheckCircle className='mx-2' fontSize={25} style={{cursor:'pointer'}} onClick={() => setShowApproval({action:true,id:g.id,backupType:g.backupType})}/>
+                  <AiOutlineCloseCircle fontSize={25} style={{cursor:'pointer'}}  onClick={() => setShowNonApproval({action:true,id:g.id,backupType:g.backupType,nama:g.name})}/>
                 </div>
                 : g.approvalType === "Approve" ? 
-                  <div><span>Disetujui</span></div>
-                : <p>Ditolak</p>
+                <p style={{margin:'auto'}}>Disetujui</p>
+                : <p style={{margin:'auto'}}>Ditolak</p>
               }
                
               </td>
@@ -119,86 +125,26 @@ export default function PersetujuanUserBackup() {
         )}
       </tbody>
     </Table>
-
-    {/* <Modal show={setShowConfirmation(true)} onHide={setShowConfirmation(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Data User Backup</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-      {dataAddbackup ? (
-            <Form>
-            <Form.Group as={Row} className="mb-3" controlid="nik">
-              <Form.Label column sm="4">
-                UID Backup :
-              </Form.Label>
-              <Col sm="8">
-                <Form.Control plaintext readOnly defaultValue={dataAddbackup.uid_bkp} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlid="nik">
-              <Form.Label column sm="4">
-                Nama :
-              </Form.Label>
-              <Col sm="8">
-                <Form.Control plaintext readOnly defaultValue="0000000000" />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlid="nik">
-              <Form.Label column sm="4">
-                Unit Kerja :
-              </Form.Label>
-              <Col sm="8">
-                <Form.Control plaintext readOnly defaultValue="0000000000" />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlid="nik">
-              <Form.Label column sm="4">
-                Jabatan :
-              </Form.Label>
-              <Col sm="8">
-                <Form.Control plaintext readOnly defaultValue="0000000000" />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlid="nik">
-              <Form.Label column sm="4">
-                Jenis Backup:
-              </Form.Label>
-              <Col sm="8">
-                <Form.Control plaintext readOnly defaultValue="0000000000" />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlid="nik">
-              <Form.Label column sm="4">
-                Durasi Backup :
-              </Form.Label>
-              <Col sm="8">
-                <Form.Control plaintext readOnly defaultValue="0000000000" />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" controlid="nik">
-              <Form.Label column sm="4">
-                Keterangan:
-              </Form.Label>
-              <Col sm="8">
-                <Form.Control plaintext readOnly defaultValue="0000000000" />
-              </Col>
-            </Form.Group>
-            </Form>
-          ) : (
-            <p>Loading details...</p>
-          )}
-      
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={setShowConfirmation(false)}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal> */}
     <DetailBackup
         show={showConfirmation}
         data={dataAddbackup}
         onClose={() => setShowConfirmation(false)}
+      />
+      <ApprovalMessage
+      show={showApproval.action}
+      id={showApproval.id}
+      backupType={showApproval.backupType}
+      aproval="Approve"
+      onClose={() => setShowApproval(false)}
+      />
+
+      <NonApprovalMessage
+       show={showNonApproval.action}
+       id={showNonApproval.id}
+       backupType={showNonApproval.backupType}
+       nama={showNonApproval.nama}
+       aproval="NonApprove"
+       onClose={() => setShowNonApproval(false)}
       />
     <Pagination>
      

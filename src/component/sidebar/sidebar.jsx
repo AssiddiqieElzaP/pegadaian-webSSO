@@ -1,16 +1,18 @@
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem} from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 
 const SidebarMenu = () => {
   return (
     // <div style={{ display: "flex", height: "100vh" }} className="mx-auto">
-      <Sidebar className="sidebar p-1" style={{height:'76%'}}>
+      <Sidebar className="sidebar p-1" style={{height:'95vh'}}>
         <Menu className="p-2">
-          <SubMenu label="PENGAJUAN" className="btn-sidebar" style={{color: 'white'}}>
-            <MenuItem component={<Link to="/add-backup"/>} > Pengajuan Baru </MenuItem>
-            <MenuItem component={<Link to="/register-backup"/>}> Persetujuan </MenuItem>
-          </SubMenu>
-          {/* <MenuItem component={<Link to="/approval"/>} className="btn-sidebar"> PERSETUJUAN </MenuItem> */}
+          
+              
+          <MenuItem component={<Link to="/"/>}  className="btn-sidebar"> Pengajuan User Backup</MenuItem>
+         
+          
+          <MenuItem component={<Link to="/persetujuan"/>} className="btn-sidebar" > Persetujuan User Backup</MenuItem>
+        
         </Menu>
       </Sidebar>
     // </div>

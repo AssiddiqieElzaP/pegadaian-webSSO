@@ -42,6 +42,7 @@ Form {
     display: block;
 }
 
+
 .btn-color-cancel {
     color: #20A94D;
     font-weight: 600;
@@ -60,16 +61,16 @@ Form {
 
 .btn-sidebar {
     background: #20A94D;
-    color: black;
+    color: white;
     border: none;
     outline: none;
-    border-radius: 20px;
+    border-radius: 15px;
     margin-top: 20px;
-    /* height: 50px; */
-    /* font-weight: 700; */
-    /* line-height: 19px; */
-    /* font-size: 16px; */
-    /* display: block; */
+    height: 50px;
+    font-weight: 500;
+    line-height: 16px;
+    font-size: 14px;
+    display: block;
 }
 
 .wrapper-headnav {

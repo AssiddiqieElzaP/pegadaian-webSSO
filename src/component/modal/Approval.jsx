@@ -1,7 +1,30 @@
+import axios from 'axios';
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-function ApprovalMessage({ show, onClose, onSave }) {
+function ApprovalMessage({ show, onClose, id,backupType}) {
+  const fetchApproval = async (id,backupType) => {
+    const insert = {
+      approvalType:'Approve',
+      reason:null,
+    }
+    try {
+      await axios
+      .put(`http://localhost:8080/api/v1/approval/action`, insert,{
+        params:{
+          id:id,
+          backupType:backupType,
+        },
+      })  
+      .then((res) =>{
+        const dataApprov = res.data
+        window.location.reload();
+        // console.log(dataApprov)
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
@@ -12,7 +35,7 @@ function ApprovalMessage({ show, onClose, onSave }) {
         <Button variant="secondary" onClick={onClose}>
           Batal
         </Button>
-        <Button variant="primary" onClick={onSave}>
+        <Button variant="primary" onClick={()=>fetchApproval(id,backupType)}>
           Simpan
         </Button>
       </Modal.Footer>
