@@ -6,6 +6,8 @@ import { addBusinessDays, isWeekend } from "date-fns";
 import './TambahUser.css'
 import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from '../../../component/modal/Confirmasi'
+
+
 function TambahUser() {
   
   const [data, setData] = useState({
@@ -110,36 +112,50 @@ function TambahUser() {
     }))
   }
 
+  const [validated, setValidated] = useState(false);
+  
+  
+
+
   const [alertMessage, setAlertMessage] = useState('');
  
   const handleSave = async (e) => {
     e.preventDefault();
-    const insert = {
-      user_id: data.user_id,
-      uid_bkp: data.user_id_bkp,
-      work_unit_id: parseInt(selectedUnit),
-      group_id: parseInt(selectedGroup),
-      duration: parseInt(selectedDate),
-      start_date: dateStart,
-      end_date: dateEnd,
-      description: formData.description,
-      name: data.nama_pegawai,
-      created_by: localStorage.getItem("name"),
-      updated_by: localStorage.getItem("name"),
-     
-    };
-   
-    // console.log('data tidak ada',validation())
-  
-    try {
-      const response = await axios.post('http://localhost:8080/api/v1/backup/create', insert);
-      setAlertMessage('Data tersimpan');
-      console.log('data tersimpan',response.data); 
-      // Optional: Handle the server response
-    } catch (error) {
-      setAlertMessage('Error submitting data!');
-      console.error('data tidak tersimpan',error);
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+      
     }
+    setValidated(true);
+    setShowConfirmation(true) 
+      const insert = {
+        user_id: data.user_id,
+        uid_bkp: data.user_id_bkp,
+        work_unit_id: parseInt(selectedUnit),
+        group_id: parseInt(selectedGroup),
+        duration: parseInt(selectedDate),
+        start_date: dateStart,
+        end_date: dateEnd,
+        description: formData.description,
+        name: data.nama_pegawai,
+        created_by: localStorage.getItem("name"),
+        updated_by: localStorage.getItem("name"),
+       
+      };
+      // console.log('data tidak ada',validation())
+      try {
+        const response = await axios.post('http://localhost:8080/api/v1/backup/create', insert);
+        setAlertMessage('Data tersimpan');
+        console.log('data tersimpan',response.data); 
+        // Optional: Handle the server response
+      } catch (error) {
+        setAlertMessage('Error submitting data!');
+        console.error('data tidak tersimpan',error);
+      }
+      
+   
+    
    
    // Tutup dialog konfirmasi
    setShowConfirmation(false);
@@ -180,22 +196,25 @@ function TambahUser() {
       <Container className="mx-auto p-0" id="defaultActiveKey">
         <Card className="mx-3 my-2" border="dark">
           {alertMessage && <div>{alertMessage}</div>}
-          <Form className="mx-3 py-3 px-3" onSubmit={handleSave}>
+          <Form className="mx-3 py-3 px-3" noValidate validated={validated} onSubmit={handleSave}>
             <Row className="mb-3">
-              <Form.Group as={Col} controlid="nik">
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">
                   Nik Pegawai<span>*</span>
                 </Form.Label>
                 <Form.Control
+                required
                   type="text"
                   placeholder="Masukkan Nik Pegawai lalu tekan enter"
                   onKeyDown={handleKey}
                   name="nik"
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                 />
-                 
+                 <Form.Control.Feedback type="invalid">
+            Please provide a valid city.
+          </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col}>
+              <Form.Group as={Col} controlId="validationCustom02">
                 <Row>
                   <Col>
                     <Form.Label className="mb-0 ms-1">
@@ -205,7 +224,7 @@ function TambahUser() {
                       style={{ fontSize: "12px" }}
                       value={selectedUnit}
                       onChange={pilihUnitKerja}
-                     
+                     required
                     >
                       <option>Kode Group - Nama Group</option>
                       {unit?.data?.map((list) => (
@@ -229,6 +248,7 @@ function TambahUser() {
                       style={{ fontSize: "12px" }}
                       value={selectedGroup}
                       onChange={pilihGroupKerja}
+                      required
                     >
                       <option>Kode Group - Nama Group</option>
 
@@ -243,7 +263,7 @@ function TambahUser() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlid="">
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Nama</Form.Label>
                 <Form.Control
                   type="text"
@@ -255,7 +275,7 @@ function TambahUser() {
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlid="backup">
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Keterangan Backup</Form.Label>
                 <Form.Control
                   type="text"
@@ -263,11 +283,12 @@ function TambahUser() {
                   name="description"
                   value={formData.description}
                   onChange={handleDecription}
+                  required
                 />
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col}>
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Unit Kerja</Form.Label>
                 <Form.Control
                   type="text"
@@ -279,10 +300,11 @@ function TambahUser() {
                       ? data.kode_unit_kerja && data.unit_kerja
                       : ""
                   }
+                  required
                 />
               </Form.Group>
 
-              <Form.Group as={Col}>
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Row>
                   <Col>
                     <Form.Label className="mb-0 ms-1">Tanggal Mulai</Form.Label>
@@ -294,6 +316,7 @@ function TambahUser() {
                       minDate={new Date()}
                       onChange={handleStartDateChange}
                       className={"form-control form-control-sm"}
+                      required
                     />
                   </Col>
                   <Col>
@@ -313,7 +336,7 @@ function TambahUser() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col}>
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Jabatan</Form.Label>
                 <Form.Control
                   type="text"
@@ -326,15 +349,16 @@ function TambahUser() {
                   }
                 />
               </Form.Group>
-              <Form.Group as={Col}>
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
+                  required
                 >
-                  <option>Pilih lama hari backup</option>
+                  <option null>Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>
                   <option value="1">2 Hari</option>
                   <option value="2">3 Hari</option>
@@ -342,7 +366,7 @@ function TambahUser() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col}>
+              <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">User ID Backup</Form.Label>
                 <Form.Control
                   type="text"
@@ -356,7 +380,7 @@ function TambahUser() {
             </Row>
           </Form>
           <div className="d-flex  mb-3 ">
-            <button className="btn-color me-2 group_button"  onClick={() => setShowConfirmation(true)}>
+            <button className="btn-color me-2 group_button"  onClick={handleSave}>
               Simpan
             </button>
             <button className="btn-color me-5">Batal</button>

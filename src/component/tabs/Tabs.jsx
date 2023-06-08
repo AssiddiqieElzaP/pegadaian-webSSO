@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 import Header from "../navbar/header";
 import SidebarMenu from "../sidebar/sidebar";
 import GantiBackup from "../../pages/Pendaftaran/Ganti/GantiBackup";
+import TestFormValidasi from "../test/TestFormValidasi";
 export default function Tabs() {
   // const [isActive, setIsActive] = useState(false);
 
@@ -18,7 +19,8 @@ export default function Tabs() {
     {
       id: 2,
       tabTitle: "Ganti",
-      content: <GantiBackup />,
+      // content: <GantiBackup />,
+      content:<TestFormValidasi/>,
     },
   ];
 
