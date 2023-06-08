@@ -6,7 +6,6 @@ import { addBusinessDays, isWeekend } from "date-fns";
 import "./TambahUser.css";
 import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from "../../../component/modal/Confirmasi";
-import NavbarComp from "../../../component/navbar/NavbarComp";
 
 function TambahUser() {
   const [data, setData] = useState({
@@ -117,33 +116,51 @@ function TambahUser() {
   const [nik, setNik] = useState("");
   const [ketBackup, setKetBackup] = useState("");
   const [durasi, setDurasi] = useState("");
+  const [unitGroupBackup, setUnitGroupBackup] = useState("");
+  const [tanggal, setTanggal] = useState("");
 
   const [nikError, setNikError] = useState("");
   const [ketBackupError, setKetBackupError] = useState("");
   const [durasiError, setDurasiError] = useState("");
+  const [unitGroupBackupError, setUnitGroupBackupError] = useState("");
+  const [tanggalError, setTanggalError] = useState("");
 
   const validateForm = () => {
     let isValid = true;
 
     if (!nik) {
-      setNikError("*Nik Harus Diisi");
+      setNikError("*Nik Harus Diisi / Field Tidak Boleh Kosong");
       isValid = false;
     } else {
       setNikError("");
     }
 
     if (!ketBackup) {
-      setKetBackupError("*Keterangan Backup Harus Diisi");
+      setKetBackupError("*Field Tidak Boleh Kosong / Keterangan Backup Harus Diisi");
       isValid = false;
     } else {
       setKetBackupError("");
     }
 
     if (!durasi) {
-      setDurasiError("*Durasi Harus Diisi");
+      setDurasiError("*Field Tidak Boleh Kosong / Durasi Harus Diisi");
       isValid = false;
     } else {
       setDurasiError("");
+    }
+
+    if (!unitGroupBackup) {
+      setUnitGroupBackupError("*Field Tidak Boleh Kosong / Unit Kerja dan Group Backup Harus Diisi");
+      isValid = false;
+    } else {
+      setUnitGroupBackupError("");
+    }
+
+    if (!tanggal) {
+      setTanggalError("*Field Tidak Boleh Kosong / Tanggal Harus Diisi");
+      isValid = false;
+    } else {
+      setTanggalError("");
     }
 
     return isValid;
@@ -162,6 +179,8 @@ function TambahUser() {
       setNik("");
       setKetBackup("");
       setDurasi("");
+      setUnitGroupBackup("");
+      setTanggal("");
     }
     const insert = {
       user_id: data.user_id,
@@ -259,7 +278,7 @@ function TambahUser() {
                     }
                   />
                   <div style={{ marginLeft: "5px" }}>
-                    {nikError && <div style={{ color: "red" }}>{nikError}</div>}
+                    {nikError && <div style={{ color: "red", fontSize:"12px" }}>{nikError}</div>}
                   </div>
                 </Form.Group>
                 <Form.Group as={Col}>
@@ -304,6 +323,11 @@ function TambahUser() {
                         ))}
                       </Form.Select>
                     </Col>
+                    <div style={{ marginLeft: "5px" }}>
+                    {unitGroupBackupError && (
+                      <div style={{ color: "red", fontSize:"12px" }}>{unitGroupBackupError}</div>
+                    )}
+                  </div>
                   </Row>
                 </Form.Group>
               </Row>
@@ -332,7 +356,7 @@ function TambahUser() {
                   />
                   <div style={{ marginLeft: "5px" }}>
                     {ketBackupError && (
-                      <div style={{ color: "red" }}>{ketBackupError}</div>
+                      <div style={{ color: "red", fontSize:"12px" }}>{ketBackupError}</div>
                     )}
                   </div>
                 </Form.Group>
@@ -385,6 +409,11 @@ function TambahUser() {
                       />
                     </Col>
                   </Row>
+                  <div style={{ marginLeft: "5px" }}>
+                    {tanggalError && (
+                      <div style={{ color: "red", fontSize:"12px" }}>{tanggalError}</div>
+                    )}
+                  </div>
                 </Form.Group>
               </Row>
               <Row className="mb-3">
@@ -414,6 +443,11 @@ function TambahUser() {
                     <option value="1">2 Hari</option>
                     <option value="2">3 Hari</option>
                   </Form.Select>
+                  <div style={{ marginLeft: "5px" }}>
+                    {durasiError && (
+                      <div style={{ color: "red", fontSize:"12px" }}>{durasiError}</div>
+                    )}
+                  </div>
                 </Form.Group>
               </Row>
               <Row className="mb-3">
