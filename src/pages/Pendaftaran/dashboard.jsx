@@ -1,14 +1,16 @@
 import React from "react";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container, Navbar } from "react-bootstrap";
 
 import TablefromAdd from "../../component/table/tablefromAdd";
 import Header from "../../component/navbar/header";
 import SidebarMenu from "../../component/sidebar/sidebar";
+import NavbarComp from "../../component/navbar/NavbarComp";
 
 function Dashboard() {
   
   return (
     <>
+    <NavbarComp/>
       <div className="d-flex" style={{height:"125vh"}}>
         <SidebarMenu />
         <Container className="m-0 p-0">

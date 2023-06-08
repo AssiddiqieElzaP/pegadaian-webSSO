@@ -22,7 +22,7 @@ const Login = () => {
             // console.log('test')
             try {
                 axios
-                .post('http://172.168.102.91:8080/api/v1/welcome/login', {
+                .post('http://localhost:8081/api/v1/welcome/login', {
                     nik: values.nik,
                     password: values.password,
                 })  
@@ -32,7 +32,7 @@ const Login = () => {
                     localStorage.setItem("token", res.data.data.Token);
                     localStorage.setItem("name", res.data.data.Name);
                     
-                    navigate("/dashboard")
+                    navigate("/add-backup")
                 })
                 
             } catch (error) {
