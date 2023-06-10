@@ -72,6 +72,14 @@ function DetailBackup({ show, onClose,data}) {
       </Form.Group>
       <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
+          Tanggal Akhir Backup
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control  value={formattedDate} defaultValue={data.tanggal_akhir_backup} disabled />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlid="">
+        <Form.Label column sm="4">
           Status
         </Form.Label>
         <Col sm="8">
@@ -80,10 +88,18 @@ function DetailBackup({ show, onClose,data}) {
       </Form.Group>
       <Form.Group as={Row} className="mb-3" controlid="">
         <Form.Label column sm="4">
+          Pemberi Persetujuan
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type='text' defaultValue={data.approved_by} disabled/>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlid="">
+        <Form.Label column sm="4">
           Keterangan
         </Form.Label>
         <Col sm="8">
-          <Form.Control type='text' defaultValue={data.keterangan} disabled/>
+          <Form.Control type='text' defaultValue={data.reason} disabled/>
         </Col>
       </Form.Group>
       </Form>

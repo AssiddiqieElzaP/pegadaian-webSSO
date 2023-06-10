@@ -19,8 +19,8 @@ export default function Tabs() {
     {
       id: 2,
       tabTitle: "Ganti",
-      // content: <GantiBackup />,
-      content:<TestFormValidasi/>,
+      content: <GantiBackup />,
+      // content:<TestFormValidasi/>,
     },
   ];
 

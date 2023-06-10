@@ -170,8 +170,8 @@ const [dateStart, setDateStart] = useState(null);
           console.error('data tidak tersimpan',error);
         }
         //dialog konfirmasi batal
-        setShowConfirmation(false);
         setValidated(true);
+        setShowConfirmation(false);
       };
 
       // validasi

@@ -127,8 +127,8 @@ function TambahUser() {
       e.stopPropagation();
       
     }
-    setValidated(true);
-    setShowConfirmation(true) 
+    setValidated(true)
+     
       const insert = {
         user_id: data.user_id,
         uid_bkp: data.user_id_bkp,
@@ -226,7 +226,7 @@ function TambahUser() {
                       onChange={pilihUnitKerja}
                      required
                     >
-                      <option>Kode Group - Nama Group</option>
+                      <option value=''>Kode Group - Nama Group</option>
                       {unit?.data?.map((list) => (
                         <option
                        
@@ -250,7 +250,7 @@ function TambahUser() {
                       onChange={pilihGroupKerja}
                       required
                     >
-                      <option>Kode Group - Nama Group</option>
+                      <option value=''>Kode Group - Nama Group</option>
 
                       {mygroup?.data?.map((g) => (
                         <option name="group_id" key={g.id} value={g.id}>
@@ -358,7 +358,7 @@ function TambahUser() {
                   name="duration"
                   required
                 >
-                  <option null>Pilih lama hari backup</option>
+                  <option value=''>Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>
                   <option value="1">2 Hari</option>
                   <option value="2">3 Hari</option>
@@ -380,7 +380,7 @@ function TambahUser() {
             </Row>
           </Form>
           <div className="d-flex  mb-3 ">
-            <button className="btn-color me-2 group_button"  onClick={handleSave}>
+            <button className="btn-color me-2 group_button"  onClick={() => setShowConfirmation(true)}>
               Simpan
             </button>
             <button className="btn-color me-5">Batal</button>

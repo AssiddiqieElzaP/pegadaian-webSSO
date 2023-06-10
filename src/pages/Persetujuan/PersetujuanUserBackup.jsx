@@ -5,7 +5,7 @@ import {  Card, Container, Pagination, Table} from 'react-bootstrap'
 import axios from 'axios';
 import DetailBackup from '../../component/modal/DetailBackup';
 
-import {AiOutlineCloseCircle,AiOutlineCheckCircle,AiOutlineFileDone} from 'react-icons/ai'
+import {FcCancel,FcViewDetails,FcOk} from 'react-icons/fc'
 // import {GoLog} from 'react-icons/go'
 import ApprovalMessage from '../../component/modal/Approval';
 import NonApprovalMessage from '../../component/modal/NonAprroval';
@@ -27,7 +27,8 @@ export default function PersetujuanUserBackup() {
 
   const[dataAddbackup,setDataAddBackup] = useState({
     id:null,
-    backupType:""
+    backupType:"",
+    reason:""
   })
  
 
@@ -41,7 +42,7 @@ export default function PersetujuanUserBackup() {
             const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setDataAddBackup(data);
             // console.log(test)
-            // console.log(data)
+            console.log(data)
           });
     } catch (error) {
       console.error(error);
@@ -104,12 +105,12 @@ export default function PersetujuanUserBackup() {
               <td>{g.duration} Hari</td>
               <td>{g.description}</td>
               {/* <td ><button onClick={() => handleShowModal(g.id,g.backupType)} className='btn-color-detail'>Detail</button></td> */}
-              <td><AiOutlineFileDone fontSize={25} style={{cursor:'pointer'}} onClick={() => handleShowModal(g.id,g.backupType)}/></td>
+              <td><FcViewDetails fontSize={25} style={{cursor:'pointer'}} onClick={() => handleShowModal(g.id,g.backupType)}/></td>
               <td className='d-flex'>{
                 g.approvalType === "Pending" ? 
                 <div className='m-auto'>
-                  <AiOutlineCheckCircle className='mx-2' fontSize={25} style={{cursor:'pointer'}} onClick={() => setShowApproval({action:true,id:g.id,backupType:g.backupType})}/>
-                  <AiOutlineCloseCircle fontSize={25} style={{cursor:'pointer'}}  onClick={() => setShowNonApproval({action:true,id:g.id,backupType:g.backupType,nama:g.name})}/>
+                  <FcOk className='mx-2' fontSize={25} style={{cursor:'pointer'}} onClick={() => setShowApproval({action:true,id:g.id,backupType:g.backupType})}/>
+                  <FcCancel fontSize={25} style={{cursor:'pointer'}}  onClick={() => setShowNonApproval({action:true,id:g.id,backupType:g.backupType,nama:g.name})}/>
                 </div>
                 : g.approvalType === "Approve" ? 
                 <p style={{margin:'auto'}}>Disetujui</p>

@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import Tabs from "./component/tabs/Tabs";
 import UserRoleMatrix from "./pages/Rolematrix/UserRoleMatrix";
 import PersetujuanUserBackup from "./pages/Persetujuan/PersetujuanUserBackup";
-
+import Login from '../src/login/'
 const App = () => {
   return (
     <>
@@ -18,7 +18,8 @@ const App = () => {
       <ProSidebarProvider>
         <NavbarComp/>
         <Routes>
-          <Route path="/" element={<Tabs />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/tabs" element={<Tabs />} />
           <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
           {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
         </Routes>
