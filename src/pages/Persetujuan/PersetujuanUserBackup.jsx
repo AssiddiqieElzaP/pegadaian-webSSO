@@ -1,7 +1,7 @@
 import React, {  useEffect, useState } from 'react'
 import SidebarMenu from '../../component/sidebar/sidebar'
 import Header from '../../component/navbar/header'
-import {  Card, Container, Pagination, Table} from 'react-bootstrap'
+import {  Card, Container,Table} from 'react-bootstrap'
 import axios from 'axios';
 import DetailBackup from '../../component/modal/DetailBackup';
 
@@ -9,6 +9,7 @@ import {FcCancel,FcViewDetails,FcOk} from 'react-icons/fc'
 // import {GoLog} from 'react-icons/go'
 import ApprovalMessage from '../../component/modal/Approval';
 import NonApprovalMessage from '../../component/modal/NonAprroval';
+import PageApproval from '../../component/pagination/PageApproval'
 
 export default function PersetujuanUserBackup() {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -60,12 +61,16 @@ export default function PersetujuanUserBackup() {
     const fetchData = async () => {
       try {
         await axios
-          .get(`http://localhost:8080/api/v1/approval/grid`)
+          .get(`http://localhost:8080/api/v1/approval/grid?page=${page}&limit=${limit}`)
           .then((res) => {
             const data = res.data.data.content; //harus dibuatkan variabel sebelum di panggil di usestate
             setDataApproval(data);
+            // setPage(data);
+            // setLimit(data);
             // console.log(test)
-            // console.log(data)
+            // console.log(limit)
+            // console.log(page)
+        
           });
       } catch (error) {}
     };
@@ -73,6 +78,16 @@ export default function PersetujuanUserBackup() {
   },[]);
 
 
+  //pagination
+  const [page,setPage] = useState(1);
+  const [limit] = useState(2);  
+  // const [pages,setPages] = useState(1);
+
+  //untuk menyesuaikan 
+  const indexOfLastPage = page * limit;
+  const indexOfFirstPage = indexOfLastPage - limit;
+  const currentPage =dataApproval.slice(indexOfFirstPage,indexOfLastPage)
+  const howManyPage = Math.ceil(dataApproval.length/limit)
   return (
    <>
    <div className="d-flex" style={{height:"125vh"}}>
@@ -94,10 +109,9 @@ export default function PersetujuanUserBackup() {
         </tr>
       </thead>
       <tbody  style={{fontSize:"14px"}}>
-        {dataApproval?.map((g,key)=>{
-          return(
-            
-            <tr key={key}>
+        {currentPage.map((g)=>{
+          return(         
+            <tr key={g.id}>
               <td>{g.name}</td>
               <td>{g.work_unit_code}-{g.work_unit_name}</td>
               <td>{g.position_name}</td>
@@ -147,17 +161,8 @@ export default function PersetujuanUserBackup() {
        aproval="NonApprove"
        onClose={() => setShowNonApproval(false)}
       />
-    <Pagination>
-     
-      <Pagination.Prev />
-      <Pagination.Item>{1}</Pagination.Item>
-      <Pagination.Item>{2}</Pagination.Item>
-      <Pagination.Item>{3}</Pagination.Item>
-      <Pagination.Item>{4}</Pagination.Item>
-      <Pagination.Item>{5}</Pagination.Item>
-      <Pagination.Next />
-      
-    </Pagination>
+
+      <PageApproval pages = {howManyPage} setPage={setPage}/>        
         </Card>
     </Container>
    </div>

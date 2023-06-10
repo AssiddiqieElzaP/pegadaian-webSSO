@@ -153,9 +153,6 @@ function TambahUser() {
         setAlertMessage('Error submitting data!');
         console.error('data tidak tersimpan',error);
       }
-      
-   
-    
    
    // Tutup dialog konfirmasi
    setShowConfirmation(false);
