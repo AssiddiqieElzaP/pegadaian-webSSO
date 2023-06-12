@@ -14,17 +14,21 @@ function TambahUser() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedGroup, setSelectedGroup] = useState("");
   const [unit, setUnit] = useState({
-    id: "",
-    groupId: "",
-    workUnitName: "",
-    workUnitCode: "",
+    work_unit_id:"",
+    kode_work_unit:"",
+    nama_work_unit:"",
+  });
+  
+  const [group, setGroup] = useState({
+    group_id:"",
+    kode_group:"",
+    kode_jabatan:"",
   });
 
 
   const pilihUnitKerja = (event) => {
     const selectedValue = event.target.value;
-    setSelectedUnit(selectedValue);
-    Click(selectedValue);
+    setSelectedUnit(selectedValue);   
   };
 
   const pilihGroupKerja = (event) => {
@@ -32,32 +36,32 @@ function TambahUser() {
     setSelectedGroup(selectedValue);
   };
 
-  const Click = async (value) => {
-    if (value == null) {
-      return <option>Kode Group - Nama Group</option>;
-    } else {
-      try {
-        await axios
-          .get(`http://10.87.10.8:8080/api/v1/backup/group?id=${value}`)
-          .then((res) => {
-            const testgroup = res.data;
-            setMygroup(testgroup);
-            // console.log(testgroup)
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
         await axios
-          .get("http://10.87.10.8:8080/api/v1/backup/work-unit")
+          .get("http://localhost:8080/api/v1/add-backup/work-unit")
           .then((res) => {
             const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setUnit(test);
             // console.log(test)
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await axios
+          .get("http://localhost:8080/api/v1/add-backup/group")
+          .then((res) => {
+            const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
+            setGroup(test);
+            console.log('datagroup',test)
           });
       } catch (error) {
         console.log(error);
@@ -71,7 +75,7 @@ function TambahUser() {
     if (Event.key === "Enter") {
       try {
         axios
-          .post("http://10.87.10.8:8080/api/v1/backup/nik", {
+          .post("http://localhost:8080/api/v1/add-backup/nik", {
             nik: data.nik,
           })
           .then((res) => {
@@ -120,21 +124,20 @@ function TambahUser() {
         start_date: dateStart,
         end_date: dateEnd,
         description: formData.description,
-        name: data.nama_pegawai,
         created_by: localStorage.getItem("name"),
         updated_by: localStorage.getItem("name"),
        
       };
       // console.log('data tidak ada',validation())
       try {
-        const response = await axios.post('http://10.87.10.8:8080/api/v1/backup/create', insert);
+        const response = await axios.post('http://localhost:8080/api/v1/add-backup/save', insert);
         setAlertMessage('Data tersimpan');
         console.log('data tersimpan',response.data); 
         setShowConfirmation(false)
         // Optional: Handle the server response
-      } catch (error) {
-        setAlertMessage('Error submitting data!');
-        console.error('data tidak tersimpan',error);
+      } catch  {
+        
+        console.log('data tidak tersimpan');
         setShowConfirmation(false)
       }
    // Tutup dialog konfirmasi
@@ -162,9 +165,11 @@ function TambahUser() {
     if (form.checkValidity()) {
       setShowConfirmation(true);
       form.reset();
+      
     } else {
       form.classList.add('was-validated');
     }
+    
   }
 
   // setting date
@@ -188,9 +193,13 @@ function TambahUser() {
     }
   };
 
+  //durasi disabled sebelum memilih tanggal
+  const [formDisabled,setFormDisabled] = useState(true)
+
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
+    setFormDisabled(false)
   };
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -216,13 +225,14 @@ function TambahUser() {
       unit_kerja: "",
       kode_unit_kerja: "",
     });
-    setDateStart("");
-    setDateEnd("");
-    setSelectedGroup("");
-    setSelectedDate("");
+    // setDateStart("");
+    // setDateEnd("");
+    // setSelectedGroup('');
+    // setSelectedDate("");
     setFormData({
       description: "",
     });
+    // setSelectedUnit('');
   };
 
   return (
@@ -264,11 +274,10 @@ function TambahUser() {
                       <option value="">Kode Group - Nama Group</option>
                       {unit?.data?.map((list) => (
                         <option
-                          key={list.id}
-                          value={list.id}
-                          onChange={pilihGroupKerja}
+                          key={list.work_unit_id}
+                          value={list.work_unit_id}
                         >
-                          {list.workUnitCode}-{list.workUnitName}
+                          {list.kode_work_unit}-{list.nama_work_unit}
                         </option>
                       ))}
                     </Form.Select>
@@ -278,7 +287,7 @@ function TambahUser() {
                   </Col>
 
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Group Backup</Form.Label>
+                    <Form.Label className="mb-0 ms-1">Group Backup Baru</Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
                       value={selectedGroup}
@@ -287,9 +296,9 @@ function TambahUser() {
                     >
                       <option value="">Kode Group - Nama Group</option>
 
-                      {mygroup?.data?.map((g) => (
-                        <option name="group_id" key={g.id} value={g.id}>
-                          {g.groupCode}-{g.groupName}
+                      {group?.data?.map((g) => (
+                        <option name="group_id" key={g.group_id} value={g.group_id}>
+                          {g.kode_group}-{g.kode_jabatan}
                         </option>
                       ))}
                     </Form.Select>
@@ -396,9 +405,10 @@ function TambahUser() {
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
+                  disabled={formDisabled}
                   required
                 >
-                  <option value="">Pilih lama hari backup</option>
+                  <option value="">Pilih Tanggal Mulai</option>
                   <option value="0">1 Hari</option>
                   <option value="1">2 Hari</option>
                   <option value="2">3 Hari</option>
