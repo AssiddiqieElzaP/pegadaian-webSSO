@@ -3,13 +3,11 @@ import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import axios from "axios";
 import { addBusinessDays, isWeekend } from "date-fns";
-import './TambahUser.css'
+import "./TambahUser.css";
 import FooterWeb from "../../../component/footer/FooterWeb";
-import Confirmasi from '../../../component/modal/Confirmasi'
-
+import Confirmasi from "../../../component/modal/Confirmasi";
 
 function TambahUser() {
-  
   const [data, setData] = useState({
     nik: "",
   });
@@ -24,16 +22,14 @@ function TambahUser() {
     workUnitCode: "",
   });
   const pilihUnitKerja = (event) => {
-    const selectedValue =  event.target.value
+    const selectedValue = event.target.value;
     setSelectedUnit(selectedValue);
     Click(selectedValue);
-    
   };
 
   const pilihGroupKerja = (event) => {
-    const selectedValue =  event.target.value;
+    const selectedValue = event.target.value;
     setSelectedGroup(selectedValue);
-    
   };
 
   const Click = async (value) => {
@@ -64,12 +60,11 @@ function TambahUser() {
             // console.log(test)
           });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     };
     fetchData();
   }, []);
-
 
   const [mygroup, setMygroup] = useState({});
   const handleKey = (Event) => {
@@ -92,7 +87,7 @@ function TambahUser() {
               user_id_bkp: res.data.data.user_id_bkp,
             });
           });
-          console.log('data Succes')
+        console.log("data Succes");
       } catch (error) {
         console.error(error);
       }
@@ -100,73 +95,73 @@ function TambahUser() {
   };
 
   const [formData, setFormData] = useState({
-    description:"",
-    nik:"",
+    description: "",
+    nik: "",
   });
 
-  const handleDecription = (event) =>{
-    const{name,value} = event.target;
+  const handleDecription = (event) => {
+    const { name, value } = event.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name] : value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const [validated, setValidated] = useState(false);
-  
-  
 
+  const [alertMessage, setAlertMessage] = useState("");
 
-  const [alertMessage, setAlertMessage] = useState('');
- 
   const handleSave = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
-      
     }
-    setValidated(true)
-     
-      const insert = {
-        user_id: data.user_id,
-        uid_bkp: data.user_id_bkp,
-        work_unit_id: parseInt(selectedUnit),
-        group_id: parseInt(selectedGroup),
-        duration: parseInt(selectedDate),
-        start_date: dateStart,
-        end_date: dateEnd,
-        description: formData.description,
-        name: data.nama_pegawai,
-        created_by: localStorage.getItem("name"),
-        updated_by: localStorage.getItem("name"),
-       
-      };
-      // console.log('data tidak ada',validation())
-      try {
-        const response = await axios.post('http://localhost:8080/api/v1/backup/create', insert);
-        setAlertMessage('Data tersimpan');
-        console.log('data tersimpan',response.data); 
-        // Optional: Handle the server response
-      } catch (error) {
-        setAlertMessage('Error submitting data!');
-        console.error('data tidak tersimpan',error);
-      }
-   
-   // Tutup dialog konfirmasi
-   setShowConfirmation(false);
+    setValidated(true);
+
+    const insert = {
+      user_id: data.user_id,
+      uid_bkp: data.user_id_bkp,
+      work_unit_id: parseInt(selectedUnit),
+      group_id: parseInt(selectedGroup),
+      duration: parseInt(selectedDate),
+      start_date: dateStart,
+      end_date: dateEnd,
+      description: formData.description,
+      name: data.nama_pegawai,
+      created_by: localStorage.getItem("name"),
+      updated_by: localStorage.getItem("name"),
+    };
+    // console.log('data tidak ada',validation())
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/backup/create",
+        insert
+      );
+      handleClear();
+      setAlertMessage("Data tersimpan");
+      console.log("data tersimpan", response.data);
+
+      // Optional: Handle the server response
+    } catch (error) {
+      setAlertMessage("Data yang anda masukan sudah terdaftar");
+      console.error("data tidak tersimpan", error);
+    }
+
+    // Tutup dialog konfirmasi
+    setShowConfirmation(false);
   };
+
   // setting date
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const handleChangeDurasi = (event) => {
-    const duration =  event.target.value;
+    const duration = event.target.value;
     setSelectedDate(duration);
     calculateEndDate(dateStart, duration);
   };
-
 
   // setting duration
   const calculateEndDate = (startDate, duration) => {
@@ -177,41 +172,75 @@ function TambahUser() {
     } else {
       setDateEnd(null);
     }
-  }; 
+  };
 
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
-
   };
 
-
   const [showConfirmation, setShowConfirmation] = useState(false);
+  // bersihkan field
+
+  const handleClear = () => {
+    setData({
+      user_id: "",
+      nik: "",
+      nama_pegawai: "",
+      jabatan: "",
+      kode_jabatan: "",
+      unit_kerja: "",
+      kode_unit_kerja: "",
+      user_id_bkp: "",
+    });
+    setUnit({
+      user_id: "",
+      nik: "",
+      nama_pegawai: "",
+      jabatan: "",
+      kode_jabatan: "",
+      unit_kerja: "",
+      kode_unit_kerja: "",
+    });
+    setDateStart("");
+    setDateEnd("");
+    setSelectedGroup("");
+    setSelectedDate("");
+    setFormData({
+      description: "",
+    });
+  };
 
   return (
     <>
       <Container className="mx-auto p-0" id="defaultActiveKey">
         <Card className="mx-3 my-2" border="dark">
-          {alertMessage && <div>{alertMessage}</div>}
-          <Form className="mx-3 py-3 px-3" noValidate validated={validated} onSubmit={handleSave}>
+          {alertMessage && <div className="text-center">{alertMessage}</div>}
+          <Form
+            className="mx-3 py-3 px-3"
+            noValidate
+            validated={validated}
+            onSubmit={handleSave}
+          >
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">
                   Nik Pegawai<span>*</span>
                 </Form.Label>
                 <Form.Control
-                required
+                  required
                   type="text"
                   placeholder="Masukkan Nik Pegawai lalu tekan enter"
                   onKeyDown={handleKey}
                   name="nik"
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
+                  value={data.nik}
                 />
-                 <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Field Tidak boleh Kosong
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} controlId="validationCustom02">
+              <Form.Group as={Col} controlid="validationCustom02">
                 <Row>
                   <Col>
                     <Form.Label className="mb-0 ms-1">
@@ -221,24 +250,24 @@ function TambahUser() {
                       style={{ fontSize: "12px" }}
                       value={selectedUnit}
                       onChange={pilihUnitKerja}
-                     required
+                      required
                     >
-                      <option value=''>Kode Group - Nama Group</option>
+                      <option value="">Kode Group - Nama Group</option>
                       {unit?.data?.map((list) => (
                         <option
-                       
                           key={list.id}
                           value={list.id}
                           onChange={pilihGroupKerja}
                         >
                           {list.workUnitCode}-{list.workUnitName}
-                         
                         </option>
                       ))}
                     </Form.Select>
-                   
+                    <Form.Control.Feedback type="invalid">
+                      Field Tidak boleh Kosong
+                    </Form.Control.Feedback>
                   </Col>
-                  
+
                   <Col>
                     <Form.Label className="mb-0 ms-1">Group Backup</Form.Label>
                     <Form.Select
@@ -247,7 +276,7 @@ function TambahUser() {
                       onChange={pilihGroupKerja}
                       required
                     >
-                      <option value=''>Kode Group - Nama Group</option>
+                      <option value="">Kode Group - Nama Group</option>
 
                       {mygroup?.data?.map((g) => (
                         <option name="group_id" key={g.id} value={g.id}>
@@ -255,12 +284,15 @@ function TambahUser() {
                         </option>
                       ))}
                     </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      Field Tidak boleh Kosong
+                    </Form.Control.Feedback>
                   </Col>
                 </Row>
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Nama</Form.Label>
                 <Form.Control
                   type="text"
@@ -268,11 +300,10 @@ function TambahUser() {
                   disabled
                   name="nama_pegawai"
                   value={data.nama_pegawai !== "" ? data.nama_pegawai : ""}
-                  
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Keterangan Backup</Form.Label>
                 <Form.Control
                   type="text"
@@ -282,10 +313,13 @@ function TambahUser() {
                   onChange={handleDecription}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  Field Tidak boleh Kosong
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Unit Kerja</Form.Label>
                 <Form.Control
                   type="text"
@@ -301,7 +335,7 @@ function TambahUser() {
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Row>
                   <Col>
                     <Form.Label className="mb-0 ms-1">Tanggal Mulai</Form.Label>
@@ -333,7 +367,7 @@ function TambahUser() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Jabatan</Form.Label>
                 <Form.Control
                   type="text"
@@ -346,7 +380,7 @@ function TambahUser() {
                   }
                 />
               </Form.Group>
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
@@ -355,15 +389,18 @@ function TambahUser() {
                   name="duration"
                   required
                 >
-                  <option value=''>Pilih lama hari backup</option>
+                  <option value="">Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>
                   <option value="1">2 Hari</option>
                   <option value="2">3 Hari</option>
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  Field Tidak boleh Kosong
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">User ID Backup</Form.Label>
                 <Form.Control
                   type="text"
@@ -377,19 +414,24 @@ function TambahUser() {
             </Row>
           </Form>
           <div className="d-flex  mb-3 ">
-            <button className="btn-color me-2 group_button"  onClick={() => setShowConfirmation(true)}>
+            <button
+              className="btn-color me-2 group_button"
+              onClick={() => setShowConfirmation(true)}
+            >
               Simpan
             </button>
-            <button className="btn-color me-5">Batal</button>
+            <button className="btn-color me-5" onClick={handleClear}>
+              Batal
+            </button>
           </div>
-           {/* Komponen Dialog Konfirmasi */}
-      <Confirmasi
-        show={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
-        onSave={handleSave}
-      />
+          {/* Komponen Dialog Konfirmasi */}
+          <Confirmasi
+            show={showConfirmation}
+            onClose={() => setShowConfirmation(false)}
+            onSave={handleSave}
+          />
         </Card>
-        <FooterWeb/>
+        <FooterWeb />
       </Container>
     </>
   );

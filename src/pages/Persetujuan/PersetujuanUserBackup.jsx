@@ -61,7 +61,7 @@ export default function PersetujuanUserBackup() {
     const fetchData = async () => {
       try {
         await axios
-          .get(`http://localhost:8080/api/v1/approval/grid?page=${page}&limit=${limit}`)
+          .get('http://localhost:8080/api/v1/approval/grid')
           .then((res) => {
             const data = res.data.data.content; //harus dibuatkan variabel sebelum di panggil di usestate
             setDataApproval(data);
@@ -74,8 +74,8 @@ export default function PersetujuanUserBackup() {
           });
       } catch (error) {}
     };
-    fetchData();
-  },[]);
+    fetchData()
+  },[dataApproval])
 
 
   //pagination
@@ -87,7 +87,7 @@ export default function PersetujuanUserBackup() {
   const indexOfLastPage = page * limit;
   const indexOfFirstPage = indexOfLastPage - limit;
   const currentPage =dataApproval.slice(indexOfFirstPage,indexOfLastPage)
-  const howManyPage = Math.ceil(dataApproval.length/limit)
+  const howManyPages = Math.ceil(dataApproval.length/limit)
   return (
    <>
    <div className="d-flex" style={{height:"125vh"}}>
@@ -109,8 +109,7 @@ export default function PersetujuanUserBackup() {
         </tr>
       </thead>
       <tbody  style={{fontSize:"14px"}}>
-        {currentPage.map((g)=>{
-          return(         
+        {currentPage.map(g =>
             <tr key={g.id}>
               <td>{g.name}</td>
               <td>{g.work_unit_code}-{g.work_unit_name}</td>
@@ -130,14 +129,10 @@ export default function PersetujuanUserBackup() {
                 <p style={{margin:'auto'}}>Disetujui</p>
                 : <p style={{margin:'auto'}}>Ditolak</p>
               }
-               
               </td>
-            </tr>
-           
-          )
-        }
+            </tr>)}
 
-        )}
+        
       </tbody>
     </Table>
     <DetailBackup
@@ -161,8 +156,12 @@ export default function PersetujuanUserBackup() {
        aproval="NonApprove"
        onClose={() => setShowNonApproval(false)}
       />
-
-      <PageApproval pages = {howManyPage} setPage={setPage}/>        
+      <PageApproval 
+      pages = {howManyPages} 
+      setPage={setPage}
+      currentPage = {currentPage}
+      dataApproval ={dataApproval}
+      />        
         </Card>
     </Container>
    </div>
