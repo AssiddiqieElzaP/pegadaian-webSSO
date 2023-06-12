@@ -14,6 +14,7 @@ function GantiBackup() {
   const [alertMessage, setAlertMessage] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [validated, setValidated] = useState(false);
+  const [formDisabled, setFormDisabled] = useState({});
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
@@ -140,6 +141,7 @@ function GantiBackup() {
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
+    setFormDisabled(false);
   };
   //akhir setting tanggal
 
@@ -380,6 +382,7 @@ function GantiBackup() {
                   value={selectedDate}
                   name="duration"
                   required
+                  disabled={formDisabled}
                 >
                   <option value="">Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>

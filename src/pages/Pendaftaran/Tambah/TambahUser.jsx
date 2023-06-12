@@ -14,7 +14,8 @@ function TambahUser() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [validated, setValidated] = useState(false);
-  const [mygroup, setMygroup] = useState({});
+  const [mygroup, setMygroup] = useState({});  
+  const [formDisabled, setFormDisabled] = useState({});  
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
@@ -164,6 +165,7 @@ function TambahUser() {
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
+    setFormDisabled(false);
   };
 
   // bersihkan field
@@ -392,6 +394,7 @@ function TambahUser() {
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
+                  disabled={formDisabled}
                   required
                 >
                   <option value="">Pilih lama hari backup</option>
