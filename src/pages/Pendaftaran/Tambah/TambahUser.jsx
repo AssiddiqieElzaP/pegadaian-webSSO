@@ -13,6 +13,8 @@ function TambahUser() {
   });
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedGroup, setSelectedGroup] = useState("");
+  const [formDisabled, setFormDisabled] = useState(true);
+
   const [unit, setUnit] = useState({
     id: "",
     groupId: "",
@@ -191,6 +193,7 @@ function TambahUser() {
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
+    setFormDisabled(false)
   };
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -396,9 +399,10 @@ function TambahUser() {
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
+                  disabled={formDisabled}
                   required
                 >
-                  <option value="">Pilih lama hari backup</option>
+                  <option value="">Pilih tanggal mulai</option>
                   <option value="0">1 Hari</option>
                   <option value="1">2 Hari</option>
                   <option value="2">3 Hari</option>
