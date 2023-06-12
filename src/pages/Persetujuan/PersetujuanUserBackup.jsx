@@ -37,7 +37,7 @@ export default function PersetujuanUserBackup() {
   const fetchDataAddBackup = async (id,backupType) => {
     try {
       await axios
-          .get(`http://localhost:8080/api/v1/approval/detail?id=${id}&backupType=${backupType}`)
+          .get(`http://10.87.10.8:8080/api/v1/approval/detail?id=${id}&backupType=${backupType}`)
           .then((res) => {
             const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setDataAddBackup(data);
@@ -60,7 +60,7 @@ export default function PersetujuanUserBackup() {
     const fetchData = async () => {
       try {
         await axios
-          .get(`http://localhost:8080/api/v1/approval/grid`)
+          .get(`http://10.87.10.8:8080/api/v1/approval/grid`)
           .then((res) => {
             const data = res.data.data.content; //harus dibuatkan variabel sebelum di panggil di usestate
             setDataApproval(data);

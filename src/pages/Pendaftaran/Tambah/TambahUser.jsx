@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import axios from "axios";
@@ -13,16 +13,16 @@ function TambahUser() {
   const [data, setData] = useState({
     nik: "",
   });
-
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedGroup, setSelectedGroup] = useState("");
-
   const [unit, setUnit] = useState({
     id: "",
     groupId: "",
     workUnitName: "",
     workUnitCode: "",
   });
+
+
   const pilihUnitKerja = (event) => {
     const selectedValue =  event.target.value
     setSelectedUnit(selectedValue);
@@ -42,7 +42,7 @@ function TambahUser() {
     } else {
       try {
         await axios
-          .get(`http://localhost:8080/api/v1/backup/group?id=${value}`)
+          .get(`http://10.87.10.8:8080/api/v1/backup/group?id=${value}`)
           .then((res) => {
             const testgroup = res.data;
             setMygroup(testgroup);
@@ -57,7 +57,7 @@ function TambahUser() {
     const fetchData = async () => {
       try {
         await axios
-          .get("http://localhost:8080/api/v1/backup/work-unit")
+          .get("http://10.87.10.8:8080/api/v1/backup/work-unit")
           .then((res) => {
             const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setUnit(test);
@@ -76,7 +76,7 @@ function TambahUser() {
     if (Event.key === "Enter") {
       try {
         axios
-          .post("http://localhost:8080/api/v1/backup/nik", {
+          .post("http://10.87.10.8:8080/api/v1/backup/nik", {
             nik: data.nik,
           })
           .then((res) => {
@@ -113,22 +113,9 @@ function TambahUser() {
   }
 
   const [validated, setValidated] = useState(false);
-  
-  
-
-
   const [alertMessage, setAlertMessage] = useState('');
  
-  const handleSave = async (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-    }
-    setValidated(true)
-     
+  const handleSave = async () => {
       const insert = {
         user_id: data.user_id,
         uid_bkp: data.user_id_bkp,
@@ -145,21 +132,46 @@ function TambahUser() {
       };
       // console.log('data tidak ada',validation())
       try {
-        const response = await axios.post('http://localhost:8080/api/v1/backup/create', insert);
+        const response = await axios.post('http://10.87.10.8:8080/api/v1/backup/create', insert);
         setAlertMessage('Data tersimpan');
         console.log('data tersimpan',response.data); 
+        setShowConfirmation(false)
         // Optional: Handle the server response
       } catch (error) {
         setAlertMessage('Error submitting data!');
         console.error('data tidak tersimpan',error);
+        setShowConfirmation(false)
       }
-      
-   
-    
-   
    // Tutup dialog konfirmasi
-   setShowConfirmation(false);
   };
+
+
+  const formRef = useRef(null);
+
+  const handleForm=(e)=>{
+    // e.preventDefault();
+    // const form = e.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   showConfirmation(false)
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    //   return;
+    // } else{
+    //   setShowConfirmation(true)
+    //   setValidated(true)
+    // }
+    e.preventDefault();
+
+    const form = formRef.current;
+
+    if (form.checkValidity()) {
+      setShowConfirmation(true);
+      form.reset();
+    } else {
+      form.classList.add('was-validated');
+    }
+  }
+
   // setting date
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
@@ -196,7 +208,7 @@ function TambahUser() {
       <Container className="mx-auto p-0" id="defaultActiveKey">
         <Card className="mx-3 my-2" border="dark">
           {alertMessage && <div>{alertMessage}</div>}
-          <Form className="mx-3 py-3 px-3" noValidate validated={validated} onSubmit={handleSave}>
+          <Form className="mx-3 py-3 px-3" noValidate validated={validated} ref={formRef} onSubmit={handleForm}>
             <Row className="mb-3">
               <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label className="mb-0 ms-1">
@@ -210,9 +222,9 @@ function TambahUser() {
                   name="nik"
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                 />
-                 <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                   Invalid NIK.
+                  </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} controlId="validationCustom02">
                 <Row>
@@ -285,6 +297,9 @@ function TambahUser() {
                   onChange={handleDecription}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  Harus diisi.
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -378,13 +393,14 @@ function TambahUser() {
               </Form.Group>
               <Form.Group as={Col}></Form.Group>
             </Row>
-          </Form>
-          <div className="d-flex  mb-3 ">
-            <button className="btn-color me-2 group_button"  onClick={() => setShowConfirmation(true)}>
+            <div className="d-flex  mb-3 " >
+            <button className="btn-color me-2 group_button" type="submit">
               Simpan
             </button>
             <button className="btn-color me-5">Batal</button>
           </div>
+          </Form>
+          
            {/* Komponen Dialog Konfirmasi */}
       <Confirmasi
         show={showConfirmation}
