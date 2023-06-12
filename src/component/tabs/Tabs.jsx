@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import TambahUser from "../../pages/Pendaftaran/Tambah/TambahUser";
-import { Container, Navbar } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Header from "../navbar/header";
 import SidebarMenu from "../sidebar/sidebar";
 import GantiBackup from "../../pages/Pendaftaran/Ganti/GantiBackup";
 import NavbarComp from "../navbar/NavbarComp";
+
 export default function Tabs() {
   // const [isActive, setIsActive] = useState(false);
 
@@ -20,6 +21,7 @@ export default function Tabs() {
       id: 2,
       tabTitle: "Ganti",
       content: <GantiBackup />,
+      // content:<TestFormValidasi/>,
     },
   ];
 

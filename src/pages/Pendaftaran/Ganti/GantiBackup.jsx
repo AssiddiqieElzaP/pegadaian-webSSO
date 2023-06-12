@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Card, Col, Container, Form, Row } from "react-bootstrap";
 // import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
@@ -9,6 +9,12 @@ import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from "../../../component/modal/Confirmasi";
 
 function GantiBackup() {
+  //Get Data NIK etc
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [validated, setValidated] = useState(false);
+  const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
   });
@@ -16,67 +22,11 @@ function GantiBackup() {
     nik: "",
   });
 
-  const [nikMenggantikan, setNikMenggantikan] = useState("");
-  const [nikDigantikan, setNikDigantikan] = useState("");
-  const [ketBackup, setKetBackup] = useState("");
-  const [durasi, setDurasi] = useState("");
-  const [tanggal, setTanggal] = useState("");
-
-  const [nikMenggantikanError, setNikMenggantikanError] = useState("");
-  const [nikDigantikanError, setNikDigantikanError] = useState("");
-  const [ketBackupError, setKetBackupError] = useState("");
-  const [durasiError, setDurasiError] = useState("");
-  const [tanggalError, setTanggalError] = useState("");
-
-  //validasi modal untuk informasi
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const validateForm = () => {
-    let isValid = true;
-
-    if (!nikMenggantikan) {
-      setNikMenggantikanError("*NikMenggantikan Harus Diisi / Field Tidak Boleh Kosong");
-      isValid = false;
-    } else {
-      setNikMenggantikanError("");
-    }
-    
-    if (!nikDigantikan) {
-      setNikDigantikanError("*NikDigantikan Harus Diisi / Field Tidak Boleh Kosong");
-      isValid = false;
-    } else {
-      setNikDigantikanError("");
-    }
-
-    if (!ketBackup) {
-      setKetBackupError("*Field Tidak Boleh Kosong / Keterangan Backup Harus Diisi");
-      isValid = false;
-    } else {
-      setKetBackupError("");
-    }
-
-    if (!durasi) {
-      setDurasiError("*Field Tidak Boleh Kosong / Durasi Harus Diisi");
-      isValid = false;
-    } else {
-      setDurasiError("");
-    }
-
-    if (!tanggal) {
-      setTanggalError("*Field Tidak Boleh Kosong / Tanggal Harus Diisi");
-      isValid = false;
-    } else {
-      setTanggalError("");
-    }
-
-    return isValid;
-  };
-
   const handleKey = (Event) => {
     if (Event.key === "Enter") {
       try {
         axios
-          .post("http://localhost:8080/api/v1/change-backup/nik", {
+          .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik`, {
             nik: data.nik,
           })
           .then((res) => {
@@ -98,73 +48,6 @@ function GantiBackup() {
     }
   };
 
-  const handleKeyGanti = (Event) => {
-    if (Event.key === "Enter") {
-      try {
-        axios
-          .post("http://localhost:8080/api/v1/change-backup/nik", {
-            nik: dataGanti.nik,
-          })
-          .then((res) => {
-            setDataGanti({
-              user_id: res.data.data.user_id,
-              nik: res.data.data.nik,
-              nama_pegawai: res.data.data.nama_pegawai,
-              jabatan: res.data.data.jabatan,
-              kode_jabatan: res.data.data.kode_jabatan,
-              unit_kerja: res.data.data.unit_kerja,
-              kode_unit_kerja: res.data.data.kode_unit_kerja,
-            });
-          });
-        console.log("data Succes");
-        console.log(dataGanti);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  // setting duration agar tanggal otomatis ke pilih
-  const [selectedDate, setSelectedDate] = useState("");
-
-  const handleChangeDurasi = (event) => {
-    const duration = event.target.value;
-    setSelectedDate(duration);
-    calculateEndDate(dateStart, duration);
-  };
-  const calculateEndDate = (startDate, duration) => {
-    const durationInDays = parseInt(duration, 10);
-    if (startDate && !isNaN(durationInDays)) {
-      const calculatedEndDate = addBusinessDays(startDate, durationInDays);
-      setDateEnd(calculatedEndDate);
-    } else {
-      setDateEnd(null);
-    }
-  };
-  // akhir setting duration
-
-  // setting tanggal
-  const [dateStart, setDateStart] = useState(null);
-  const [dateEnd, setDateEnd] = useState(null);
-  const handleStartDateChange = (date) => {
-    setDateStart(date);
-    calculateEndDate(dateStart, selectedDate);
-  };
-  //akhir setting tanggal
-  // untuk tugas insert (simpan database)
-  const [formData, setFormData] = useState({
-    description: "",
-  });
-
-  const handleDecription = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const [alertMessage, setAlertMessage] = useState("");
   const handleClear = () => {
     setData({
       user_id: "",
@@ -187,24 +70,100 @@ function GantiBackup() {
     });
     setDateStart("");
     setDateEnd("");
+    setFormData({
+      description: "",
+    });
+    setSelectedDate("");
+    setValidated("");
   };
-  const handleSave = async (e) => {
+
+  const handleForm = (e) => {
     e.preventDefault();
-    
-    if (validateForm()) {
-      setNikMenggantikan("");
-      setNikDigantikan("");
-      setKetBackup("");
-      setDurasi("");
-      setTanggal("");
-    }
 
-    const form = e.currentTarget;
+    const form = formRef.current;
 
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
+    if (form.checkValidity()) {
+      setShowConfirmation(true);
+      form.reset();
+    } else {
+      form.classList.add("was-validated");
     }
+  };
+
+  const handleKeyGanti = (Event) => {
+    if (Event.key === "Enter") {
+      try {
+        axios
+          .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik`, {
+            nik: dataGanti.nik,
+          })
+          .then((res) => {
+            setDataGanti({
+              user_id: res.data.data.user_id,
+              nik: res.data.data.nik,
+              nama_pegawai: res.data.data.nama_pegawai,
+              jabatan: res.data.data.jabatan,
+              kode_jabatan: res.data.data.kode_jabatan,
+              unit_kerja: res.data.data.unit_kerja,
+              kode_unit_kerja: res.data.data.kode_unit_kerja,
+            });
+          });
+        console.log("data Success");
+        console.log(dataGanti);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleChangeDurasi = (event) => {
+    const duration = event.target.value;
+    setSelectedDate(duration);
+    calculateEndDate(dateStart, duration);
+  };
+
+  // setting duration
+  const calculateEndDate = (startDate, duration) => {
+    const durationInDays = parseInt(duration, 10);
+    if (startDate && !isNaN(durationInDays)) {
+      const calculatedEndDate = addBusinessDays(startDate, durationInDays);
+      setDateEnd(calculatedEndDate);
+    } else {
+      setDateEnd(null);
+    }
+  };
+  // akhir setting duration
+
+  // setting tanggal
+  const [dateStart, setDateStart] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
+  const handleStartDateChange = (date) => {
+    setDateStart(date);
+    calculateEndDate(dateStart, selectedDate);
+  };
+  //akhir setting tanggal
+
+  // untuk tugas insert (simpan database)
+  const [formData, setFormData] = useState({
+    description: "",
+  });
+
+  //Keterangan Backup
+  const handleDecription = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = async () => {
+    // e.preventDefault();
+    // const form = e.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    // }
     const insert = {
       user_id: data.user_id,
       user_need_backup_id: dataGanti.user_id,
@@ -219,24 +178,20 @@ function GantiBackup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/change-backup/save",
+        `${process.env.REACT_APP_BASE_URL}/change-backup/save`,
         insert
       );
       setAlertMessage("Data tersimpan");
       console.log("data tersimpan", response.data);
+      setShowConfirmation(false);
       // Optional: Handle the server response
     } catch (error) {
       setAlertMessage("Error submitting data!");
       console.error("data tidak tersimpan", error);
+      setShowConfirmation(false);
     }
-    //dialog konfirmasi batal
-    setShowConfirmation(false);
-    setValidated(true);
   };
 
-  // validasi
-
-  const [validated, setValidated] = useState(false);
   return (
     <>
       <Container className="mx-auto p-0">
@@ -244,9 +199,10 @@ function GantiBackup() {
           {alertMessage && <div className="text-center">{alertMessage}</div>}
           <Form
             className="mx-3 py-3 px-3"
-            onSubmit={handleSave}
             noValidate
+            ref={formRef}
             validated={validated}
+            onSubmit={handleForm}
           >
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
@@ -260,28 +216,30 @@ function GantiBackup() {
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                   onKeyDown={handleKey}
                   value={data.nik}
+                  required
                 />
-                <div style={{ marginLeft: "5px" }}>
-                    {nikMenggantikanError && <div style={{ color: "red", fontSize:"12px" }}>{nikMenggantikanError}</div>}
-                  </div>
+                <Form.Control.Feedback type="invalid">
+                  Invalid NIK.
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} controlid="nik">
+              <Form.Group as={Col} controlid="nikGanti">
                 <Form.Label className="mb-0 ms-1">
                   Nik Pegawai yang Digantikan<span>*</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Nik Pegawai lalu tekan enter"
-                  name="nik"
+                  name="nikGanti"
                   onChange={(e) =>
                     setDataGanti({ ...dataGanti, nik: e.target.value })
                   }
                   onKeyDown={handleKeyGanti}
                   value={dataGanti.nik}
+                  required
                 />
-                <div style={{ marginLeft: "5px" }}>
-                    {nikDigantikanError && <div style={{ color: "red", fontSize:"12px" }}>{nikDigantikanError}</div>}
-                  </div>
+                <Form.Control.Feedback type="invalid">
+                  Invalid NIK.
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -388,6 +346,7 @@ function GantiBackup() {
                       minDate={new Date()}
                       onChange={handleStartDateChange}
                       className={"form-control form-control-sm"}
+                      required
                     />
                   </Col>
                   <Col>
@@ -404,33 +363,32 @@ function GantiBackup() {
                     />
                   </Col>
                 </Row>
-                <div style={{ marginLeft: "5px" }}>
+                {/* <div style={{ marginLeft: "5px" }}>
                     {tanggalError && (
                       <div style={{ color: "red", fontSize:"12px" }}>{tanggalError}</div>
                     )}
-                  </div>
+                  </div> */}
               </Form.Group>
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col}></Form.Group>
-              <Form.Group as={Col} controlId="formGridPassword">
+              <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
+                  required
                 >
-                  <option>Pilih lama hari backup</option>
+                  <option value="">Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>
                   <option value="1">2 Hari</option>
                   <option value="2">3 Hari</option>
                 </Form.Select>
-                <div style={{ marginLeft: "5px" }}>
-                    {durasiError && (
-                      <div style={{ color: "red", fontSize:"12px" }}>{durasiError}</div>
-                    )}
-                  </div>
+                <Form.Control.Feedback type="invalid">
+                  Field Tidak boleh Kosong
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -444,28 +402,24 @@ function GantiBackup() {
                   onChange={handleDecription}
                   name="description"
                   value={formData.description}
+                  required
                 />
-                <div style={{ marginLeft: "5px" }}>
+                {/* <div style={{ marginLeft: "5px" }}>
                     {ketBackupError && (
                       <div style={{ color: "red", fontSize:"12px" }}>{ketBackupError}</div>
                     )}
-                  </div>
+                  </div> */}
               </Form.Group>
             </Row>
+            <div className="d-flex  mb-3 ">
+              <button className="btn-color me-2 group_button" type="submit">
+                Simpan
+              </button>
+              <button className="btn-color me-5" onClick={handleClear}>
+                Batal
+              </button>
+            </div>
           </Form>
-          <div className="d-flex  mt-2 mb-3 me-3">
-            <button
-              className="btn-color me-2"
-              type="sumbit"
-              style={{ float: "right", display: "block", margin: "auto" }}
-              onClick={() => setShowConfirmation(true)}
-            >
-              Simpan
-            </button>
-            <button className="btn-color ms-3 me-3" onClick={handleClear}>
-              Batal
-            </button>
-          </div>
           {/* Komponen Dialog Konfirmasi */}
           <Confirmasi
             show={showConfirmation}

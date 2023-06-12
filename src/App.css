@@ -42,6 +42,11 @@ Form {
     display: block;
 }
 
+.group_button {
+    float: right;
+    display: block;
+    margin: auto;
+}
 
 .btn-color-cancel {
     color: #20A94D;

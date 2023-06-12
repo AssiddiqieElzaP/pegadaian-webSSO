@@ -20,7 +20,7 @@ function NonApprovalMessage({ show, onClose, id,backupType,nama}) {
   const fetchApproval = async (id,backupType) => {
     const insert = {
       approvalType:'NonApprove',
-      reason:'jelek'
+      reason:''
     }
     try {
       await axios
@@ -32,7 +32,7 @@ function NonApprovalMessage({ show, onClose, id,backupType,nama}) {
       })  
       .then((res) =>{
         const dataApprov = res.data
-        window.location.reload();
+        // window.location.reload();
         console.log(dataApprov)
       })
     } catch (error) {
@@ -48,10 +48,10 @@ function NonApprovalMessage({ show, onClose, id,backupType,nama}) {
         <Form onSubmit={fetchApproval}>
         <Row>
         <Form.Label column sm="2">
-          Nama
+          Nama Pegawai
         </Form.Label>
         <Col sm="8">
-          <Form.Control type="text" placeholder="Nama Pegawai"  className='mx-3' value={nama}/>
+          <Form.Control type="text" placeholder="Nama Pegawai"  className='mx-3' defaultValue={nama}/>
         </Col>
         </Row>
         <Row className='my-3'>
@@ -60,7 +60,7 @@ function NonApprovalMessage({ show, onClose, id,backupType,nama}) {
         </Form.Label>
         <Col sm="8">
         <Form.Control as="textarea" rows={5}  className='mx-3'
-        name='reason'
+        // name='reason'
         value={formData.reason}
         onChange={handleDecription}
          />

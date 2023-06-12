@@ -2,14 +2,11 @@ import React from "react";
 import { ProSidebarProvider } from "react-pro-sidebar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-
 import "./App.css";
-import Login from "./login";
-import Dashboard from "./pages/Pendaftaran/dashboard";
 import { ToastContainer } from "react-toastify";
 import Tabs from "./component/tabs/Tabs";
-import UserRoleMatrix from "./pages/Rolematrix/UserRoleMatrix";
 import PersetujuanUserBackup from "./pages/Persetujuan/PersetujuanUserBackup";
+import Login from '../src/login/index'
 
 const App = () => {
   return (
@@ -19,10 +16,10 @@ const App = () => {
       <ProSidebarProvider>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/add-backup" element={<Tabs />} />
-          <Route path="/approval" element={<PersetujuanUserBackup />} />
-          <Route path="/role-matrix" element={<UserRoleMatrix />} />
+          <Route path="/tabs" element={<Tabs />} />
+          <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
+          
+          {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
         </Routes>
       </ProSidebarProvider>
     </Router>
