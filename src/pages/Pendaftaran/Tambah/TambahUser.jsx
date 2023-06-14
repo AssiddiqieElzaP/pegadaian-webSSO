@@ -94,8 +94,9 @@ function TambahUser() {
       [name]: value,
     }));
   };
+  const [validated, setValidated] = useState(false);
 
-  const handleSave = async () => {
+      const insert = {
     const insert = {
       user_id: data.user_id,
       uid_bkp: data.user_id_bkp,
@@ -125,10 +126,9 @@ function TambahUser() {
       setShowConfirmation(false);
     }
     // Tutup dialog konfirmasi
-  };
+
 
   const handleForm = (e) => {
-    e.preventDefault();
 
     const form = formRef.current;
 
@@ -136,16 +136,16 @@ function TambahUser() {
       setShowConfirmation(true);
       form.reset();
     } else {
+      form.classList.add('was-validated');
       form.classList.add("was-validated");
-    }
+  }
   };
-
   // setting date
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
-
   const handleChangeDurasi = (event) => {
+
     const duration = event.target.value;
     setSelectedDate(duration);
     calculateEndDate(dateStart, duration);
@@ -165,11 +165,11 @@ function TambahUser() {
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
-    setFormDisabled(false);
   };
+    setFormDisabled(false);
 
-  // bersihkan field
-  const handleClear = () => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
     setData({
       user_id: "",
       nik: "",
@@ -196,9 +196,10 @@ function TambahUser() {
     setFormData({
       description: "",
     });
-    setValidated("");
   };
+    setValidated("");
 
+  return (
   //Fetch WorkUnit
   useEffect(() => {
     const fetchData = async () => {
@@ -217,11 +218,11 @@ function TambahUser() {
     fetchData();
   }, []);
 
-  return (
     <>
       <Container className="mx-auto p-0" id="defaultActiveKey">
         <Card className="mx-3 my-2" border="dark">
           {alertMessage && <div>{alertMessage}</div>}
+          <Form className="mx-3 py-3 px-3" noValidate validated={validated} ref={formRef} onSubmit={handleForm}>
           <Form
             className="mx-3 py-3 px-3"
             noValidate
@@ -229,7 +230,6 @@ function TambahUser() {
             ref={formRef}
             onSubmit={handleForm}
           >
-            <Row className="mb-3">
               <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">
                   Nik Pegawai<span>*</span>
@@ -243,10 +243,10 @@ function TambahUser() {
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                   value={data.nik}
                 />
+                  <Form.Control.Feedback type="invalid">
                 <Form.Control.Feedback type="invalid">
                   NIK Pegawai Harap Diisi / Field tidak boleh kosong
                 </Form.Control.Feedback>
-              </Form.Group>
               <Form.Group as={Col} controlid="validationCustom02">
                 <Row>
                   <Col>
@@ -321,8 +321,8 @@ function TambahUser() {
                   required
                 />
                 <Form.Control.Feedback type="invalid">
+                  Harus diisi.
                   Keterangan Backup Harap Diisi / Field tidak boleh kosong.
-                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -394,8 +394,9 @@ function TambahUser() {
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
-                  disabled={formDisabled}
                   required
+                  disabled={formDisabled}
+                  disabled={formDisabled}
                 >
                   <option value="">Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>
@@ -420,6 +421,7 @@ function TambahUser() {
               </Form.Group>
               <Form.Group as={Col}></Form.Group>
             </Row>
+            <div className="d-flex  mb-3 " >
             <div className="d-flex  mb-3 ">
               <button className="btn-color me-2 group_button" type="submit">
                 Simpan
@@ -428,13 +430,12 @@ function TambahUser() {
                 Batal
               </button>
             </div>
-          </Form>
+          
           <Confirmasi
             show={showConfirmation}
             onClose={() => setShowConfirmation(false)}
             onSave={handleSave}
           />
-        </Card>
         <FooterWeb />
       </Container>
     </>
