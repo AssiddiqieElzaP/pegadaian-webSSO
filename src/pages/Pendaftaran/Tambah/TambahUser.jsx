@@ -14,8 +14,8 @@ function TambahUser() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [validated, setValidated] = useState(false);
-  const [mygroup, setMygroup] = useState({});  
-  const [formDisabled, setFormDisabled] = useState({});  
+  const [mygroup, setMygroup] = useState({});
+  const [formDisabled, setFormDisabled] = useState({});
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
@@ -144,7 +144,7 @@ function TambahUser() {
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
-  
+
   const handleChangeDurasi = (event) => {
     const duration = event.target.value;
     setSelectedDate(duration);
@@ -244,7 +244,7 @@ function TambahUser() {
                   value={data.nik}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Invalid NIK.
+                  NIK Pegawai Harap Diisi / Field tidak boleh kosong
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} controlid="validationCustom02">
@@ -321,7 +321,7 @@ function TambahUser() {
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  Harus diisi.
+                  Keterangan Backup Harap Diisi / Field tidak boleh kosong.
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>

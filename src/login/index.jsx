@@ -22,7 +22,7 @@ const Login = () => {
             // console.log('test')
             try {
                 axios
-                .post('http://localhost:8080/api/v1/welcome/login', {
+                .post(`${process.env.REACT_APP_BASE_URL_CLIENT}/hcis/oauth/authorize?client_id=example321&response_type=code&redirect_uri=https://example.com&state=12345`, {
                     nik: values.nik,
                     password: values.password,
                 })  

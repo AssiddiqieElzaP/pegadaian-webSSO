@@ -221,7 +221,7 @@ function GantiBackup() {
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  Invalid NIK.
+                  NIK Pegawai Harap Diisi / Field tidak boleh kosong
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} controlid="nikGanti">
@@ -240,7 +240,7 @@ function GantiBackup() {
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  Invalid NIK.
+                  NIK Pegawai Harap Diisi / Field tidak boleh kosong
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
@@ -365,11 +365,9 @@ function GantiBackup() {
                     />
                   </Col>
                 </Row>
-                {/* <div style={{ marginLeft: "5px" }}>
-                    {tanggalError && (
-                      <div style={{ color: "red", fontSize:"12px" }}>{tanggalError}</div>
-                    )}
-                  </div> */}
+                <Form.Control.Feedback type="invalid">
+                  Tanggal Mulai harap Diisi / Field Tidak Boleh Kosong
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -407,11 +405,9 @@ function GantiBackup() {
                   value={formData.description}
                   required
                 />
-                {/* <div style={{ marginLeft: "5px" }}>
-                    {ketBackupError && (
-                      <div style={{ color: "red", fontSize:"12px" }}>{ketBackupError}</div>
-                    )}
-                  </div> */}
+                <Form.Control.Feedback type="invalid">
+                  Keterangan Backup Harap Diisi / Field tidak boleh kosong.
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <div className="d-flex  mb-3 ">
