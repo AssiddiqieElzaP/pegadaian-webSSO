@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import moment from "moment/moment";
-import './modal.css'
+import "./modal.css";
 
 function DetailBackup({ show, onClose, data }) {
   const currentDate = new Date();
@@ -126,7 +126,7 @@ function DetailBackup({ show, onClose, data }) {
               Keterangan
             </Form.Label>
             <Col sm="8">
-              <Form.Control type="text" defaultValue={data.reason} disabled />
+              <Form.Control type="text" defaultValue={data.alasan_ditolak} disabled />
             </Col>
           </Form.Group>
         </Form>

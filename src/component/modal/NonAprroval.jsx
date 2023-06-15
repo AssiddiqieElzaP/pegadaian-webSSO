@@ -6,21 +6,12 @@ function NonApprovalMessage({ show, onClose, id,backupType,nama}) {
     const [formData, setFormData] = useState({
         reason:""
       });
-    
-      const handleDecription = (event) =>{
-        const{name,value} = event.target;
-        setFormData((prevState) => ({
-          ...prevState,
-          [name] : value
-        }))
-    
-      }
       
 
   const fetchApproval = async (id,backupType) => {
     const insert = {
       approvalType:'NonApprove',
-      reason:''
+      reason: formData.reason
     }
     try {
       await axios
@@ -60,9 +51,9 @@ function NonApprovalMessage({ show, onClose, id,backupType,nama}) {
         </Form.Label>
         <Col sm="8">
         <Form.Control as="textarea" rows={5}  className='mx-3'
-        // name='reason'
-        value={formData.reason}
-        onChange={handleDecription}
+         name="reason"
+         onChange={(e) => setFormData({ reason: e.target.value })}
+         value={formData.reason}
          />
         </Col>
         </Row>

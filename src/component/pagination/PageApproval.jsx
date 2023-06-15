@@ -15,7 +15,7 @@ const PageApproval = ({ pages, setPage, dataApproval, currentPage }) => {
     setPage(currentButtons);
   }, [currentButtons, setPage]);
 
-  console.log(currentButtons);
+  // console.log(currentButtons);
   return (
     <Pagination>
       <Pagination.Prev

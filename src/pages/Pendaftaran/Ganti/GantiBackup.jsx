@@ -7,11 +7,11 @@ import axios from "axios";
 import { addBusinessDays, isWeekend } from "date-fns";
 import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from "../../../component/modal/Confirmasi";
+import { toast } from "react-toastify";
 
 function GantiBackup() {
   //Get Data NIK etc
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [validated, setValidated] = useState(false);
   const [formDisabled, setFormDisabled] = useState({});
@@ -23,10 +23,10 @@ function GantiBackup() {
     nik: "",
   });
 
-  const handleKey = (Event) => {
+  const handleKey = async(Event) => {
     if (Event.key === "Enter") {
       try {
-        axios
+        await axios
           .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik`, {
             nik: data.nik,
           })
@@ -44,7 +44,13 @@ function GantiBackup() {
           });
         console.log("data Succes");
       } catch (error) {
-        console.error(error);
+        toast.error("NIK Invalid", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
       }
     }
   };
@@ -88,13 +94,20 @@ function GantiBackup() {
       form.reset();
     } else {
       form.classList.add("was-validated");
+      toast.error("Silahkan isi data pengajuan terlebih dahulu", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        // hideProgressBar: true,
+        // closeOnClick: true,
+        pauseOnHover: true,
+      });
     }
   };
 
-  const handleKeyGanti = (Event) => {
+  const handleKeyGanti = async (Event) => {
     if (Event.key === "Enter") {
       try {
-        axios
+        await axios
           .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik`, {
             nik: dataGanti.nik,
           })
@@ -109,10 +122,17 @@ function GantiBackup() {
               kode_unit_kerja: res.data.data.kode_unit_kerja,
             });
           });
-        console.log("data Success");
-        console.log(dataGanti);
-      } catch (error) {
-        console.error(error);
+        // console.log("data Success");
+        // console.log(dataGanti);
+      } catch (err) {
+        // console.error(error);
+        toast.error("NIK Invalid", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
       }
     }
   };
@@ -160,12 +180,6 @@ function GantiBackup() {
   };
 
   const handleSave = async () => {
-    // e.preventDefault();
-    // const form = e.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    // }
     const insert = {
       user_id: data.user_id,
       user_need_backup_id: dataGanti.user_id,
@@ -179,16 +193,29 @@ function GantiBackup() {
     };
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_BASE_URL}/change-backup/save`,
         insert
       );
-      setAlertMessage("Data tersimpan");
-      console.log("data tersimpan", response.data);
+      toast.success("Data Tersimpan", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      handleClear()
       setShowConfirmation(false);
       // Optional: Handle the server response
     } catch (error) {
-      setAlertMessage("Error submitting data!");
+      toast.warning("Nik sudah diajukan", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      handleClear()
       console.error("data tidak tersimpan", error);
       setShowConfirmation(false);
     }
@@ -198,7 +225,6 @@ function GantiBackup() {
     <>
       <Container className="mx-auto p-0">
         <Card className="mx-3 my-2" border="dark">
-          {alertMessage && <div className="text-center">{alertMessage}</div>}
           <Form
             className="mx-3 py-3 px-3"
             noValidate
@@ -221,7 +247,7 @@ function GantiBackup() {
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  Invalid NIK.
+                Field tidak boleh kosong
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} controlid="nikGanti">
@@ -240,7 +266,7 @@ function GantiBackup() {
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  Invalid NIK.
+                Field tidak boleh kosong
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
@@ -407,6 +433,9 @@ function GantiBackup() {
                   value={formData.description}
                   required
                 />
+                 <Form.Control.Feedback type="invalid">
+                  Field tidak boleh kosong
+                </Form.Control.Feedback>
                 {/* <div style={{ marginLeft: "5px" }}>
                     {ketBackupError && (
                       <div style={{ color: "red", fontSize:"12px" }}>{ketBackupError}</div>
