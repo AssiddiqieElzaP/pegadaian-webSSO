@@ -6,13 +6,14 @@ import { addBusinessDays, isWeekend } from "date-fns";
 import "../../../App.css";
 import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from "../../../component/modal/Confirmasi";
+import { toast } from "react-toastify";
 
 function TambahUser() {
   //Get Data NIK etc
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
+  // const [alertMessage, setAlertMessage] = useState("");
   const [validated, setValidated] = useState(false);
   const [mygroup, setMygroup] = useState({});
   const [formDisabled, setFormDisabled] = useState({});
@@ -60,15 +61,15 @@ function TambahUser() {
     }
   };
 
-  const handleKey = (Event) => {
+  const handleKey = async (Event) => {
     if (Event.key === "Enter") {
       try {
-        axios
+        await axios
           .post(`${process.env.REACT_APP_BASE_URL}/backup/nik`, {
             nik: data.nik,
           })
+
           .then((res) => {
-            // console.log(res.data);
             setData({
               user_id: res.data.data.user_id,
               nik: res.data.data.nik,
@@ -79,10 +80,27 @@ function TambahUser() {
               kode_unit_kerja: res.data.data.kode_unit_kerja,
               user_id_bkp: res.data.data.user_id_bkp,
             });
+
+            // console.log(res.data);
+            // toast.success("Nik Terdaftar", {
+            //   position: toast.POSITION.TOP_CENTER,
+            //   autoClose: 3000,
+            //   hideProgressBar: true,
+            //   closeOnClick: true,
+            //   pauseOnHover: true,
+            // });
+            console.log("data Succes");
           });
-        console.log("data Succes");
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        // console.error(error);
+        console.log("data failed");
+        toast.error("NIK Invalid", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
       }
     }
   };
@@ -94,9 +112,8 @@ function TambahUser() {
       [name]: value,
     }));
   };
-  const [validated, setValidated] = useState(false);
 
-      const insert = {
+  const handleSave = async () => {
     const insert = {
       user_id: data.user_id,
       uid_bkp: data.user_id_bkp,
@@ -116,19 +133,33 @@ function TambahUser() {
         `${process.env.REACT_APP_BASE_URL}/backup/create`,
         insert
       );
-      setAlertMessage("Data tersimpan");
+      // setAlertMessage("Data tersimpan");
       console.log("data tersimpan", response.data);
       setShowConfirmation(false);
+      handleClear();
+      toast.success("Data Tersimpan", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
       // Optional: Handle the server response
     } catch (error) {
-      setAlertMessage("Error submitting data!");
-      console.error("data tidak tersimpan", error);
       setShowConfirmation(false);
+      toast.warning("Nik sudah diajukan", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
     }
     // Tutup dialog konfirmasi
-
+  };
 
   const handleForm = (e) => {
+    e.preventDefault();
 
     const form = formRef.current;
 
@@ -136,16 +167,23 @@ function TambahUser() {
       setShowConfirmation(true);
       form.reset();
     } else {
-      form.classList.add('was-validated');
       form.classList.add("was-validated");
-  }
+      toast.error("Silahkan isi data pengajuan terlebih dahulu", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        // hideProgressBar: true,
+        // closeOnClick: true,
+        pauseOnHover: true,
+      });
+    }
   };
+
   // setting date
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
-  const handleChangeDurasi = (event) => {
 
+  const handleChangeDurasi = (event) => {
     const duration = event.target.value;
     setSelectedDate(duration);
     calculateEndDate(dateStart, duration);
@@ -165,11 +203,11 @@ function TambahUser() {
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
-  };
     setFormDisabled(false);
+  };
 
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
+  // bersihkan field
+  const handleClear = () => {
     setData({
       user_id: "",
       nik: "",
@@ -180,32 +218,24 @@ function TambahUser() {
       kode_unit_kerja: "",
       user_id_bkp: "",
     });
-    setUnit({
-      user_id: "",
-      nik: "",
-      nama_pegawai: "",
-      jabatan: "",
-      kode_jabatan: "",
-      unit_kerja: "",
-      kode_unit_kerja: "",
-    });
+    setSelectedUnit("");
+    setSelectedGroup("");
     setDateStart("");
     setDateEnd("");
-    setSelectedGroup("");
     setSelectedDate("");
+    setMygroup("");
     setFormData({
       description: "",
     });
-  };
     setValidated("");
+  };
 
-  return (
   //Fetch WorkUnit
   useEffect(() => {
     const fetchData = async () => {
       try {
         await axios
-          .get(`${process.env.REACT_APP_BASE_URL}/backup/work-unit`)
+          .get(`http://10.87.10.19:8080/api/v1/backup/work-unit`)
           .then((res) => {
             const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setUnit(test);
@@ -218,11 +248,10 @@ function TambahUser() {
     fetchData();
   }, []);
 
+  return (
     <>
       <Container className="mx-auto p-0" id="defaultActiveKey">
         <Card className="mx-3 my-2" border="dark">
-          {alertMessage && <div>{alertMessage}</div>}
-          <Form className="mx-3 py-3 px-3" noValidate validated={validated} ref={formRef} onSubmit={handleForm}>
           <Form
             className="mx-3 py-3 px-3"
             noValidate
@@ -230,6 +259,7 @@ function TambahUser() {
             ref={formRef}
             onSubmit={handleForm}
           >
+            <Row className="mb-3">
               <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">
                   Nik Pegawai<span>*</span>
@@ -243,10 +273,10 @@ function TambahUser() {
                   onChange={(e) => setData({ ...data, nik: e.target.value })}
                   value={data.nik}
                 />
-                  <Form.Control.Feedback type="invalid">
                 <Form.Control.Feedback type="invalid">
-                  NIK Pegawai Harap Diisi / Field tidak boleh kosong
+                  Field tidak boleh kosong
                 </Form.Control.Feedback>
+              </Form.Group>
               <Form.Group as={Col} controlid="validationCustom02">
                 <Row>
                   <Col>
@@ -271,7 +301,7 @@ function TambahUser() {
                       ))}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
-                      Field Tidak boleh Kosong
+                      Field tidak boleh kosong
                     </Form.Control.Feedback>
                   </Col>
 
@@ -292,7 +322,7 @@ function TambahUser() {
                       ))}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
-                      Field Tidak boleh Kosong
+                      Field tidak boleh kosong
                     </Form.Control.Feedback>
                   </Col>
                 </Row>
@@ -321,8 +351,8 @@ function TambahUser() {
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  Harus diisi.
-                  Keterangan Backup Harap Diisi / Field tidak boleh kosong.
+                  Field tidak boleh kosong
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -394,9 +424,8 @@ function TambahUser() {
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
+                  disabled={formDisabled}
                   required
-                  disabled={formDisabled}
-                  disabled={formDisabled}
                 >
                   <option value="">Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>
@@ -421,7 +450,6 @@ function TambahUser() {
               </Form.Group>
               <Form.Group as={Col}></Form.Group>
             </Row>
-            <div className="d-flex  mb-3 " >
             <div className="d-flex  mb-3 ">
               <button className="btn-color me-2 group_button" type="submit">
                 Simpan
@@ -430,12 +458,13 @@ function TambahUser() {
                 Batal
               </button>
             </div>
-          
+          </Form>
           <Confirmasi
             show={showConfirmation}
             onClose={() => setShowConfirmation(false)}
             onSave={handleSave}
           />
+        </Card>
         <FooterWeb />
       </Container>
     </>
