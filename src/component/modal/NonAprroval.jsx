@@ -62,6 +62,7 @@ function NonApprovalMessage({ show, onClose, id, backupType, nama }) {
                 name="reason"
                 onChange={(e) => setFormData({ reason: e.target.value })}
                 value={formData.reason}
+                required
               />
             </Col>
           </Row>

@@ -50,8 +50,8 @@ export default function PersetujuanUserBackup() {
     }
   };
 
-  const handleShowModal = (id, backupType) => {
-    fetchDataAddBackup(id, backupType);
+  const handleShowModal = async (id, backupType) => {
+    await fetchDataAddBackup(id, backupType);
     setShowConfirmation(true);
   };
 
