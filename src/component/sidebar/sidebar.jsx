@@ -8,7 +8,6 @@ const SidebarMenu = () => {
         <Menu className="p-2">
           <MenuItem component={<Link to="/tabs"/>}  className="btn-sidebar"> Pengajuan User Backup</MenuItem>
           <MenuItem component={<Link to="/persetujuan"/>} className="btn-sidebar" > Persetujuan User Backup</MenuItem>
-          <MenuItem component={<Link to="/pagination"/>} className="btn-sidebar" > Test Pagination</MenuItem>
         </Menu>
       </Sidebar>
     // </div>

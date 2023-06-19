@@ -214,8 +214,6 @@ function TambahUser() {
       nama_pegawai: "",
       jabatan: "",
       kode_jabatan: "",
-      unit_kerja: "",
-      kode_unit_kerja: "",
       user_id_bkp: "",
     });
     setSelectedUnit("");
@@ -235,7 +233,7 @@ function TambahUser() {
     const fetchData = async () => {
       try {
         await axios
-          .get(`http://10.87.10.19:8080/api/v1/backup/work-unit`)
+          .get(`${process.env.REACT_APP_BASE_URL}/backup/work-unit`)
           .then((res) => {
             const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setUnit(test);
