@@ -78,6 +78,7 @@ export default function PersetujuanUserBackup() {
   const indexOfFirstPage = indexOfLastPage - limit;
   const currentPage = dataApproval.slice(indexOfFirstPage, indexOfLastPage);
   const howManyPages = Math.ceil(dataApproval.length / limit);
+
   return (
     <>
       <NavbarComp />
@@ -108,7 +109,7 @@ export default function PersetujuanUserBackup() {
                     </td>
                     <td>{g.position_name}</td>
                     <td>{g.backupType}</td>
-                    <td>{g.duration} Hari</td>
+                    <td>{parseInt(g.duration) + 1 } Hari</td>
                     <td>{g.description}</td>
                     {/* <td ><button onClick={() => handleShowModal(g.id,g.backupType)} className='btn-color-detail'>Detail</button></td> */}
                     <td>

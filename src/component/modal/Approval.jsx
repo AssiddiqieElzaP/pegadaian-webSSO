@@ -10,7 +10,7 @@ function ApprovalMessage({ show, onClose, id,backupType}) {
     }
     try {
       await axios
-      .put(`http://localhost:8080/api/v1/approval/action`, insert,{
+      .put(`${process.env.REACT_APP_BASE_URL}/approval/action`, insert,{
         params:{
           id:id,
           backupType:backupType,

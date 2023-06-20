@@ -255,7 +255,7 @@ function TambahUser() {
             noValidate
             validated={validated}
             ref={formRef}
-            onSubmit={handleForm}
+            onSubmit={handleSave}
           >
             <Row className="mb-3">
               <Form.Group as={Col} controlid="validationCustom01">
@@ -287,7 +287,7 @@ function TambahUser() {
                       onChange={pilihUnitKerja}
                       required
                     >
-                      <option value="">Kode Group - Nama Group</option>
+                      <option value="">Kode Unit - Nama Unit</option>
                       {unit?.data?.map((list) => (
                         <option
                           key={list.id}
@@ -448,22 +448,23 @@ function TambahUser() {
               </Form.Group>
               <Form.Group as={Col}></Form.Group>
             </Row>
-            <div className="d-flex  mb-3 ">
-              <button className="btn-color me-2 group_button" type="submit">
+            
+          </Form>
+          <div className="d-flex  mb-3 ">
+              <button className="btn-color me-2 group_button" onClick={handleForm}>
                 Simpan
               </button>
               <button className="btn-color me-5" onClick={handleClear}>
                 Batal
               </button>
             </div>
-          </Form>
           <Confirmasi
             show={showConfirmation}
             onClose={() => setShowConfirmation(false)}
             onSave={handleSave}
           />
         </Card>
-        <FooterWeb />
+        {/* <FooterWeb /> */}
       </Container>
     </>
   );

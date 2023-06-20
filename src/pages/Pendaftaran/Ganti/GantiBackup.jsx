@@ -230,7 +230,7 @@ function GantiBackup() {
             noValidate
             ref={formRef}
             validated={validated}
-            onSubmit={handleForm}
+            onSubmit={handleSave}
           >
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
@@ -436,15 +436,16 @@ function GantiBackup() {
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
-            <div className="d-flex  mb-3 ">
-              <button className="btn-color me-2 group_button" type="submit">
+            
+          </Form>
+          <div className="d-flex  mb-3 ">
+              <button className="btn-color me-2 group_button" onClick={handleForm}>
                 Simpan
               </button>
               <button className="btn-color me-5" onClick={handleClear}>
                 Batal
               </button>
             </div>
-          </Form>
           {/* Komponen Dialog Konfirmasi */}
           <Confirmasi
             show={showConfirmation}
@@ -452,7 +453,7 @@ function GantiBackup() {
             onSave={handleSave}
           />
         </Card>
-        <FooterWeb />
+        {/* <FooterWeb /> */}
       </Container>
     </>
   );

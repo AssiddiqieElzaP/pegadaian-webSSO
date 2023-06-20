@@ -4,8 +4,9 @@ import moment from "moment/moment";
 import "./modal.css";
 
 function DetailBackup({ show, onClose, data }) {
-  const currentDate = new Date();
-  const formattedDate = moment(currentDate).format("yyyy-MM-DD");
+  // const currentDate = data.tanggal_akhir_bkp()
+  const formattedDateMulai = moment(data.tanggal_mulai_bkp).format("yyyy-MM-DD");
+  const formattedDateAkhir = moment(data.tanggal_akhir_bkp).format("yyyy-MM-DD");
   return (
     <Modal show={show} onHide={onClose} size="lg">
       <Modal.Header closeButton>
@@ -72,8 +73,8 @@ function DetailBackup({ show, onClose, data }) {
                 Tanggal Mulai Backup
               </Form.Label>
               <Form.Control
-                value={formattedDate}
-                defaultValue={data.tanggal_mulai_backup}
+                value={formattedDateMulai}
+                defaultValue={data.tanggal_mulai_bkp}
                 disabled
               />
             </Form.Group>
@@ -91,8 +92,8 @@ function DetailBackup({ show, onClose, data }) {
                 Tanggal Akhir Backup
               </Form.Label>
               <Form.Control
-                value={formattedDate}
-                defaultValue={data.tanggal_akhir_backup}
+                value={formattedDateAkhir}
+                defaultValue={data.tanggal_akhir_bkp}
                 disabled
               />
             </Form.Group>
