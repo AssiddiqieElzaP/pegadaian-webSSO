@@ -106,8 +106,19 @@ function GantiBackup() {
 
   const handleKeyGanti = async (Event) => {
     if (Event.key === "Enter") {
-      try {
-        await axios
+      if(data.nik == dataGanti.nik){
+        toast.error("NIK sama", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          // hideProgressBar: true,
+          // closeOnClick: true,
+          pauseOnHover: true,
+        });
+      }
+      else{
+
+        try {
+          await axios
           .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik`, {
             nik: dataGanti.nik,
           })
@@ -122,17 +133,18 @@ function GantiBackup() {
               kode_unit_kerja: res.data.data.kode_unit_kerja,
             });
           });
-        // console.log("data Success");
-        // console.log(dataGanti);
-      } catch (err) {
-        // console.error(error);
-        toast.error("NIK Invalid", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-        });
+          // console.log("data Success");
+          // console.log(dataGanti);
+        } catch (err) {
+          // console.error(error);
+          toast.error("NIK Invalid", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+          });
+        }
       }
     }
   };
@@ -208,7 +220,7 @@ function GantiBackup() {
       setShowConfirmation(false);
       // Optional: Handle the server response
     } catch (error) {
-      toast.warning("Nik sudah diajukan", {
+      toast.error("NIK sudah diajukan", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
         hideProgressBar: true,
@@ -385,7 +397,7 @@ function GantiBackup() {
                       filterDate={(date) => !isWeekend(date)}
                       dateFormat="dd MMM yyyy"
                       className={"form-control form-control-sm"}
-                      value={dateEnd ? dateEnd.toDateString() : ""}
+                      value={dateEnd}
                       disabled
                       placeholderText="pilih durasi"
                     />

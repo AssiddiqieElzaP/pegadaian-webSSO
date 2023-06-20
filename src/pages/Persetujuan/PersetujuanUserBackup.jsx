@@ -71,7 +71,7 @@ export default function PersetujuanUserBackup() {
 
   //pagination
   const [page, setPage] = useState(1);
-  const [limit] = useState(2);
+  const [limit] = useState(10);
 
   //untuk menyesuaikan
   const indexOfLastPage = page * limit;

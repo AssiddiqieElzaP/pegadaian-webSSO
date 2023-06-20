@@ -147,7 +147,7 @@ function TambahUser() {
       // Optional: Handle the server response
     } catch (error) {
       setShowConfirmation(false);
-      toast.warning("Nik sudah diajukan", {
+      toast.error("NIK sudah diajukan", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
         hideProgressBar: true,
@@ -191,7 +191,7 @@ function TambahUser() {
 
   // setting duration
   const calculateEndDate = (startDate, duration) => {
-    const durationInDays = parseInt(duration, 10);
+    const durationInDays = parseInt(duration);
     if (startDate && !isNaN(durationInDays)) {
       const calculatedEndDate = addBusinessDays(startDate, durationInDays);
       setDateEnd(calculatedEndDate);
@@ -393,7 +393,7 @@ function TambahUser() {
                       filterDate={(date) => !isWeekend(date)}
                       dateFormat="dd MMM yyyy"
                       className={"form-control form-control-sm"}
-                      value={dateEnd ? dateEnd.toDateString() : ""}
+                      value={dateEnd}
                       disabled
                       placeholderText="pilih durasi"
                     />
