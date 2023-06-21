@@ -249,7 +249,7 @@ function GantiBackup() {
             <Row className="mb-3">
               <Form.Group as={Col} controlid="nik">
                 <Form.Label className="mb-0 ms-1">
-                  Nik Pegawai yang Menggantikan<span>*</span>
+                  Nik Pegawai yang Menggantikan<span className="color-span">*</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
@@ -266,7 +266,7 @@ function GantiBackup() {
               </Form.Group>
               <Form.Group as={Col} controlid="nikGanti">
                 <Form.Label className="mb-0 ms-1">
-                  Nik Pegawai yang Digantikan<span>*</span>
+                  Nik Pegawai yang Digantikan<span className="color-span">*</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
@@ -380,7 +380,7 @@ function GantiBackup() {
               <Form.Group as={Col}>
                 <Row>
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Tanggal Mulai</Form.Label>
+                    <Form.Label className="mb-0 ms-1">Tanggal Mulai<span className="color-span">*</span></Form.Label>
                     <DatePicker
                       name="start_date"
                       selected={dateStart}
@@ -415,7 +415,7 @@ function GantiBackup() {
             <Row className="mb-3">
               <Form.Group as={Col}></Form.Group>
               <Form.Group as={Col} controlid="validationCustom01">
-                <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
+                <Form.Label className="mb-0 ms-1">Durasi Backup<span className="color-span">*</span></Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
                   onChange={handleChangeDurasi}
@@ -438,7 +438,7 @@ function GantiBackup() {
               <Form.Group as={Col}></Form.Group>
 
               <Form.Group as={Col} controlid="backup">
-                <Form.Label className="mb-0 ms-1">Keterangan Backup</Form.Label>
+                <Form.Label className="mb-0 ms-1">Keterangan Backup <span className="color-span">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"

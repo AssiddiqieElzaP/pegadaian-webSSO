@@ -8,6 +8,8 @@ import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from "../../../component/modal/Confirmasi";
 import { toast } from "react-toastify";
 
+
+
 function TambahUser() {
   //Get Data NIK etc
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -263,7 +265,7 @@ function TambahUser() {
             <Row className="mb-3">
               <Form.Group as={Col} controlid="validationCustom01">
                 <Form.Label className="mb-0 ms-1">
-                  Nik Pegawai<span>*</span>
+                  Nik Pegawai<span className="color-span">*</span>
                 </Form.Label>
                 <Form.Control
                   required
@@ -282,7 +284,7 @@ function TambahUser() {
                 <Row>
                   <Col>
                     <Form.Label className="mb-0 ms-1">
-                      Unit Kerja Backup
+                      Unit Kerja Backup <span className="color-span">*</span>
                     </Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
@@ -308,7 +310,7 @@ function TambahUser() {
                   </Col>
 
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Group Jabatan</Form.Label>
+                    <Form.Label className="mb-0 ms-1">Group Jabatan <span className="color-span">*</span></Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
                       value={selectedGroup}
@@ -344,7 +346,7 @@ function TambahUser() {
               </Form.Group>
 
               <Form.Group as={Col} controlid="validationCustom01">
-                <Form.Label className="mb-0 ms-1">Keterangan Backup</Form.Label>
+                <Form.Label className="mb-0 ms-1">Keterangan Backup <span className="color-span">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"
@@ -379,7 +381,7 @@ function TambahUser() {
               <Form.Group as={Col} controlid="validationCustom01">
                 <Row>
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Tanggal Mulai</Form.Label>
+                    <Form.Label className="mb-0 ms-1">Tanggal Mulai <span className="color-span">*</span></Form.Label>
                     <DatePicker
                       name="start_date"
                       selected={dateStart}
@@ -423,13 +425,13 @@ function TambahUser() {
                 />
               </Form.Group>
               <Form.Group as={Col} controlid="validationCustom01">
-                <Form.Label className="mb-0 ms-1">Durasi Backup</Form.Label>
+                <Form.Label className="mb-0 ms-1">Durasi Backup <span className="color-span">*</span></Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
                   onChange={handleChangeDurasi}
                   value={selectedDate}
                   name="duration"
-                  disabled={formDisabled}
+                  disabled={formDisabledDuration}
                   required
                 >
                   <option value="">Pilih lama hari backup</option>
