@@ -304,14 +304,14 @@ function TambahUser() {
                   </Col>
 
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Group Backup</Form.Label>
+                    <Form.Label className="mb-0 ms-1">Group Jabatan</Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
                       value={selectedGroup}
                       onChange={pilihGroupKerja}
                       required
                     >
-                      <option value="">Kode Group - Nama Group</option>
+                      <option value="">Kode Jabatan - Nama Jabatan</option>
 
                       {mygroup?.data?.map((g) => (
                         <option name="group_id" key={g.id} value={g.id}>

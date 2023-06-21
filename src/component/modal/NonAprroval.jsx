@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function NonApprovalMessage({ show, onClose, id, backupType, nama }) {
   const [formData, setFormData] = useState({
@@ -12,23 +13,34 @@ function NonApprovalMessage({ show, onClose, id, backupType, nama }) {
       approvalType: "NonApprove",
       reason: formData.reason,
     };
-    try {
-      await axios
-        .put(`${process.env.REACT_APP_BASE_URL}/approval/action?`, insert, {
-          params: {
-            id: id,
-            backupType: backupType,
-          },
-        })
-        .then((res) => {
-          const dataApprov = res.data;
-          // window.location.reload();
-          console.log(dataApprov);
-        });
-    } catch (error) {
-      console.error("data tidak tersimpan", error);
+    if (formData.reason === "") {
+      toast.error("Silahkan isi data pengajuan terlebih dahulu", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        // hideProgressBar: true,
+        // closeOnClick: true,
+        pauseOnHover: true,
+      });
+    } else {
+      try {
+        await axios
+          .put(`${process.env.REACT_APP_BASE_URL}/approval/action?`, insert, {
+            params: {
+              id: id,
+              backupType: backupType,
+            },
+          })
+          .then((res) => {
+            const dataApprov = res.data;
+            window.location.reload();
+            console.log(dataApprov);
+          });
+      } catch (error) {
+        console.error("data tidak tersimpan", error);
+      }
     }
   };
+
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header>
