@@ -8,8 +8,6 @@ import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from "../../../component/modal/Confirmasi";
 import { toast } from "react-toastify";
 
-
-
 function TambahUser() {
   //Get Data NIK etc
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -66,9 +64,7 @@ function TambahUser() {
 
   const handleKey = async (Event) => {
     if (Event.key === "Enter") {
-      
       try {
-        
         await axios
           .post(`${process.env.REACT_APP_BASE_URL}/backup/nik`, {
             nik: data.nik,
@@ -310,7 +306,9 @@ function TambahUser() {
                   </Col>
 
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Group Jabatan <span className="color-span">*</span></Form.Label>
+                    <Form.Label className="mb-0 ms-1">
+                      Group Jabatan <span className="color-span">*</span>
+                    </Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
                       value={selectedGroup}
@@ -346,7 +344,9 @@ function TambahUser() {
               </Form.Group>
 
               <Form.Group as={Col} controlid="validationCustom01">
-                <Form.Label className="mb-0 ms-1">Keterangan Backup <span className="color-span">*</span></Form.Label>
+                <Form.Label className="mb-0 ms-1">
+                  Keterangan Backup <span className="color-span">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Alasan Backup"
@@ -381,7 +381,9 @@ function TambahUser() {
               <Form.Group as={Col} controlid="validationCustom01">
                 <Row>
                   <Col>
-                    <Form.Label className="mb-0 ms-1">Tanggal Mulai <span className="color-span">*</span></Form.Label>
+                    <Form.Label className="mb-0 ms-1">
+                      Tanggal Mulai <span className="color-span">*</span>
+                    </Form.Label>
                     <DatePicker
                       name="start_date"
                       selected={dateStart}
@@ -425,7 +427,9 @@ function TambahUser() {
                 />
               </Form.Group>
               <Form.Group as={Col} controlid="validationCustom01">
-                <Form.Label className="mb-0 ms-1">Durasi Backup <span className="color-span">*</span></Form.Label>
+                <Form.Label className="mb-0 ms-1">
+                  Durasi Backup <span className="color-span">*</span>
+                </Form.Label>
                 <Form.Select
                   style={{ fontSize: "12px" }}
                   onChange={handleChangeDurasi}
@@ -457,16 +461,18 @@ function TambahUser() {
               </Form.Group>
               <Form.Group as={Col}></Form.Group>
             </Row>
-            
           </Form>
           <div className="d-flex  mb-3 ">
-              <button className="btn-color me-2 group_button" onClick={handleForm}>
-                Simpan
-              </button>
-              <button className="btn-color me-5" onClick={handleClear}>
-                Batal
-              </button>
-            </div>
+            <button
+              className="btn-color me-2 group_button"
+              onClick={handleForm}
+            >
+              Simpan
+            </button>
+            <button className="btn-color me-5" onClick={handleClear}>
+              Batal
+            </button>
+          </div>
           <Confirmasi
             show={showConfirmation}
             onClose={() => setShowConfirmation(false)}

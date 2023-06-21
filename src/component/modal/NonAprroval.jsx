@@ -7,14 +7,14 @@ function NonApprovalMessage({ show, onClose, id, backupType, nama }) {
   const [formData, setFormData] = useState({
     reason: "",
   });
-
+  const [validated, setValidated] = useState(false);
   const fetchApproval = async (id, backupType) => {
     const insert = {
       approvalType: "NonApprove",
       reason: formData.reason,
     };
     if (formData.reason === "") {
-      toast.error("Silahkan isi data pengajuan terlebih dahulu", {
+      toast.error("Silahkan isi keterangan penolakan", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
         // hideProgressBar: true,
@@ -47,7 +47,7 @@ function NonApprovalMessage({ show, onClose, id, backupType, nama }) {
         <Modal.Title>Konfirmasi Tidak Setuju</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={fetchApproval}>
+        <Form onSubmit={fetchApproval} noValidate validated={validated}>
           <Row>
             <Form.Label column sm="3">
               Nama Pegawai
