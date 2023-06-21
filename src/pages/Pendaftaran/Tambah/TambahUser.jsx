@@ -463,13 +463,26 @@ function TambahUser() {
             </Row>
           </Form>
           <div className="d-flex  mb-3 ">
-              <button className="btn-color me-2 group_button" onClick={handleForm}>
-                Simpan
-              </button>
-              <button className="btn-color me-5" onClick={handleClear}>
-                Batal
-              </button>
-            </div>
+            <button
+              className="btn-color me-2 group_button"
+              onClick={handleForm}
+              disabled={formDisabled}
+              style={
+                formDisabled
+                  ? {
+                      backgroundColor: "gray",
+                      color: "white",
+                      cursor: "not-allowed",
+                    }
+                  : {}
+              }
+            >
+              Simpan
+            </button>
+            <button className="btn-color me-5" onClick={handleClear}>
+              Batal
+            </button>
+          </div>
           <Confirmasi
             show={showConfirmation}
             onClose={() => setShowConfirmation(false)}
