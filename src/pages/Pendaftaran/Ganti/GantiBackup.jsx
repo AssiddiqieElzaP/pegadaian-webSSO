@@ -14,8 +14,9 @@ function GantiBackup() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [validated, setValidated] = useState(false);
-  const [formDisabled, setFormDisabled] = useState({});
-  const [formDisabledField, setFormDisabledField] = useState({});
+  const [formDurationDisabled, setFormDurationDisabled] = useState({});
+  const [formDisabled, setformDisabled] = useState({});
+  const [textDisabledField, setTextDisabledField] = useState({});
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
@@ -42,7 +43,7 @@ function GantiBackup() {
               kode_unit_kerja: res.data.data.kode_unit_kerja,
               user_id_bkp: res.data.data.user_id_bkp,
             });
-            setFormDisabledField(false)
+            setformDisabled(false)
           });
         console.log("data Succes");
       } catch (error) {
@@ -175,7 +176,7 @@ function GantiBackup() {
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
-    setFormDisabled(false);
+    setFormDurationDisabled(false);
   };
   //akhir setting tanggal
 
@@ -278,7 +279,7 @@ function GantiBackup() {
                   onKeyDown={handleKeyGanti}
                   value={dataGanti.nik}
                   required
-                  disabled={formDisabledField}
+                  disabled={formDisabled}
                 />
                 <Form.Control.Feedback type="invalid">
                   NIK Pegawai Harap Diisi / Field tidak boleh kosong
@@ -390,7 +391,7 @@ function GantiBackup() {
                       onChange={handleStartDateChange}
                       className={"form-control form-control-sm"}
                       required
-                      disabled={formDisabledField}
+                      disabled={formDisabled}
                     />
                   </Col>
                   <Col>
@@ -422,7 +423,7 @@ function GantiBackup() {
                   value={selectedDate}
                   name="duration"
                   required
-                  disabled={formDisabled}
+                  disabled={formDurationDisabled}
                 >
                   <option value="">Pilih lama hari backup</option>
                   <option value="0">1 Hari</option>
@@ -446,7 +447,7 @@ function GantiBackup() {
                   name="description"
                   value={formData.description}
                   required
-                  disabled={formDisabledField}
+                  disabled={formDisabled}
                 />
                 <Form.Control.Feedback type="invalid">
                   Keterangan Backup Harap Diisi / Field tidak boleh kosong.
@@ -456,7 +457,10 @@ function GantiBackup() {
             
           </Form>
           <div className="d-flex  mb-3 ">
-              <button className="btn-color me-2 group_button" onClick={handleForm}>
+              <button className="btn-color me-2 group_button" 
+              onClick={handleForm}
+              disabled={formDisabled}
+              style={formDisabled ? { backgroundColor: 'gray', color: 'white', cursor: 'not-allowed' } : {}}>
                 Simpan
               </button>
               <button className="btn-color me-5" onClick={handleClear}>
