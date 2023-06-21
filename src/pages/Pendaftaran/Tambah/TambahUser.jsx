@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import axios from "axios";
 import { addBusinessDays, isWeekend } from "date-fns";
 import "../../../App.css";
-import FooterWeb from "../../../component/footer/FooterWeb";
+// import FooterWeb from "../../../component/footer/FooterWeb";
 import Confirmasi from "../../../component/modal/Confirmasi";
 import { toast } from "react-toastify";
 
