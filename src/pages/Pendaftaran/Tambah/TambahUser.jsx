@@ -16,6 +16,7 @@ function TambahUser() {
   // const [alertMessage, setAlertMessage] = useState("");
   const [validated, setValidated] = useState(false);
   const [mygroup, setMygroup] = useState({});
+  const [formDisabledDuration, setFormDisabledDuration] = useState({});
   const [formDisabled, setFormDisabled] = useState({});
   const formRef = useRef(null);
   const [data, setData] = useState({
@@ -63,7 +64,9 @@ function TambahUser() {
 
   const handleKey = async (Event) => {
     if (Event.key === "Enter") {
+      
       try {
+        
         await axios
           .post(`${process.env.REACT_APP_BASE_URL}/backup/nik`, {
             nik: data.nik,
@@ -80,7 +83,7 @@ function TambahUser() {
               kode_unit_kerja: res.data.data.kode_unit_kerja,
               user_id_bkp: res.data.data.user_id_bkp,
             });
-
+            setFormDisabled(false);
             // console.log(res.data);
             // toast.success("Nik Terdaftar", {
             //   position: toast.POSITION.TOP_CENTER,
@@ -203,7 +206,7 @@ function TambahUser() {
   const handleStartDateChange = (date) => {
     setDateStart(date);
     calculateEndDate(dateStart, selectedDate);
-    setFormDisabled(false);
+    setFormDisabledDuration(false);
   };
 
   // bersihkan field
@@ -286,6 +289,7 @@ function TambahUser() {
                       value={selectedUnit}
                       onChange={pilihUnitKerja}
                       required
+                      disabled={formDisabled}
                     >
                       <option value="">Kode Unit - Nama Unit</option>
                       {unit?.data?.map((list) => (
@@ -310,6 +314,7 @@ function TambahUser() {
                       value={selectedGroup}
                       onChange={pilihGroupKerja}
                       required
+                      disabled={formDisabled}
                     >
                       <option value="">Kode Jabatan - Nama Jabatan</option>
 
@@ -347,6 +352,7 @@ function TambahUser() {
                   value={formData.description}
                   onChange={handleDecription}
                   required
+                  disabled={formDisabled}
                 />
                 <Form.Control.Feedback type="invalid">
                   Field tidak boleh kosong
@@ -383,6 +389,7 @@ function TambahUser() {
                       onChange={handleStartDateChange}
                       className={"form-control form-control-sm"}
                       required
+                      disabled={formDisabled}
                     />
                   </Col>
                   <Col>

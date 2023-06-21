@@ -15,6 +15,7 @@ function GantiBackup() {
   const [selectedDate, setSelectedDate] = useState("");
   const [validated, setValidated] = useState(false);
   const [formDisabled, setFormDisabled] = useState({});
+  const [formDisabledField, setFormDisabledField] = useState({});
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
@@ -41,6 +42,7 @@ function GantiBackup() {
               kode_unit_kerja: res.data.data.kode_unit_kerja,
               user_id_bkp: res.data.data.user_id_bkp,
             });
+            setFormDisabledField(false)
           });
         console.log("data Succes");
       } catch (error) {
@@ -276,6 +278,7 @@ function GantiBackup() {
                   onKeyDown={handleKeyGanti}
                   value={dataGanti.nik}
                   required
+                  disabled={formDisabledField}
                 />
                 <Form.Control.Feedback type="invalid">
                   NIK Pegawai Harap Diisi / Field tidak boleh kosong
@@ -387,6 +390,7 @@ function GantiBackup() {
                       onChange={handleStartDateChange}
                       className={"form-control form-control-sm"}
                       required
+                      disabled={formDisabledField}
                     />
                   </Col>
                   <Col>
@@ -442,6 +446,7 @@ function GantiBackup() {
                   name="description"
                   value={formData.description}
                   required
+                  disabled={formDisabledField}
                 />
                 <Form.Control.Feedback type="invalid">
                   Keterangan Backup Harap Diisi / Field tidak boleh kosong.
