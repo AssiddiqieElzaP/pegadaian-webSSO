@@ -6,11 +6,13 @@ import axios from "axios";
 import DetailBackup from "../../component/modal/DetailBackup";
 
 // import {GoLog} from 'react-icons/go'
+import { MdDeleteSweep } from "react-icons/md";
 import { FcCancel, FcViewDetails, FcOk } from "react-icons/fc";
 import NavbarComp from "../../component/navbar/NavbarComp";
 import ApprovalMessage from "../../component/modal/Approval";
 import NonApprovalMessage from "../../component/modal/NonAprroval";
 import PageApproval from "../../component/pagination/PageApproval";
+import ActionDelete from "../../component/modal/ActionDelete";
 
 export default function PersetujuanUserBackup() {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -25,6 +27,8 @@ export default function PersetujuanUserBackup() {
     id: null,
     backupType: "",
   });
+
+  const [showconfirmationdelete, setShowConfirmationDelete] = useState(false);
   const [dataApproval, setDataApproval] = useState([]);
 
   const [dataAddbackup, setDataAddBackup] = useState({
@@ -50,6 +54,33 @@ export default function PersetujuanUserBackup() {
     }
   };
 
+  const fetchDelete = async (id, backupType) => {
+    try {
+      await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/approval/delete?id=${id}&backupType=${backupType}`
+        )
+        .then((res) => {
+          const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
+          setDataAddBackup(data);
+          // console.log(test)
+          console.log("data berhasil di hapus", data);
+          setShowConfirmationDelete(false);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [getId, setGetId] = useState(null);
+  const [getBackup, setGetBackup] = useState(null);
+
+  const handleDelete = (id, backupType) => {
+    setGetId(id);
+    setGetBackup(backupType);
+    setShowConfirmationDelete(true);
+  };
+
   const handleShowModal = async (id, backupType) => {
     await fetchDataAddBackup(id, backupType);
     setShowConfirmation(true);
@@ -67,7 +98,7 @@ export default function PersetujuanUserBackup() {
       } catch (error) {}
     };
     fetchData();
-  }, [dataApproval]);
+  }, []);
 
   //pagination
   const [page, setPage] = useState(1);
@@ -98,6 +129,7 @@ export default function PersetujuanUserBackup() {
                   <th>KETERANGAN</th>
                   <th>DETAIL</th>
                   <th>STATUS</th>
+                  <th>AKSI</th>
                 </tr>
               </thead>
               <tbody style={{ fontSize: "14px" }}>
@@ -109,7 +141,7 @@ export default function PersetujuanUserBackup() {
                     </td>
                     <td>{g.position_name}</td>
                     <td>{g.backupType}</td>
-                    <td>{parseInt(g.duration) + 1 } Hari</td>
+                    <td>{parseInt(g.duration) + 1} Hari</td>
                     <td>{g.description}</td>
                     {/* <td ><button onClick={() => handleShowModal(g.id,g.backupType)} className='btn-color-detail'>Detail</button></td> */}
                     <td>
@@ -153,6 +185,13 @@ export default function PersetujuanUserBackup() {
                         <p style={{ margin: "auto" }}>Ditolak</p>
                       )}
                     </td>
+                    <td>
+                      <MdDeleteSweep
+                        onClick={() => handleDelete(g.id, g.backupType)}
+                        fontSize={25}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -183,6 +222,11 @@ export default function PersetujuanUserBackup() {
               setPage={setPage}
               currentPage={currentPage}
               dataApproval={dataApproval}
+            />
+            <ActionDelete
+              show={showconfirmationdelete}
+              onClose={() => setShowConfirmationDelete(false)}
+              onDelete={fetchDelete(getId, getBackup)}
             />
           </Card>
         </Container>

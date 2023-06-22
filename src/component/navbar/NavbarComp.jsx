@@ -21,7 +21,6 @@ function NavbarComp() {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end mx-5">
             <NavbarBrand>
-                <i><FaBell/></i>
             </NavbarBrand>
             <NavDropdown title="USER ID" id="basic-nav-dropdown" className='' align={{ lg: 'start'}} >
               <NavDropdown.Item href="#action/3.1" >Logout</NavDropdown.Item>
