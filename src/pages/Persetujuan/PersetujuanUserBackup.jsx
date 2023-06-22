@@ -19,13 +19,13 @@ export default function PersetujuanUserBackup() {
   const [showNonApproval, setShowNonApproval] = useState({
     action: false,
     id: null,
-    backupType: "",
+
     nama: "",
   });
   const [showApproval, setShowApproval] = useState({
     action: false,
     id: null,
-    backupType: "",
+
   });
 
   const [showconfirmationdelete, setShowConfirmationDelete] = useState(false);
@@ -33,15 +33,15 @@ export default function PersetujuanUserBackup() {
 
   const [dataAddbackup, setDataAddBackup] = useState({
     id: null,
-    backupType: "",
+
     reason: "",
   });
 
-  const fetchDataAddBackup = async (id, backupType) => {
+  const fetchDataAddBackup = async (id) => {
     try {
       await axios
         .get(
-          `${process.env.REACT_APP_BASE_URL}/approval/detail?id=${id}&backupType=${backupType}`
+          `${process.env.REACT_APP_BASE_URL}/approval/detail?id=${id}`
         )
         .then((res) => {
           const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
@@ -54,18 +54,18 @@ export default function PersetujuanUserBackup() {
     }
   };
 
-  const fetchDelete = async (id, backupType) => {
+  const fetchDelete = async (id) => {
     try {
       await axios
         .get(
-          `${process.env.REACT_APP_BASE_URL}/approval/delete?id=${id}&backupType=${backupType}`
+          `${process.env.REACT_APP_BASE_URL}/approval/delete?id=${id}`
         )
         .then((res) => {
           const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
           setDataAddBackup(data);
           // console.log(test)
           console.log("data berhasil di hapus", data);
-          
+
         });
     } catch (error) {
       console.error(error);
@@ -73,15 +73,15 @@ export default function PersetujuanUserBackup() {
     setShowConfirmationDelete(false);
   };
 
-  
 
-  const handleDelete =  async (id, backupType) => {
-    await fetchDelete(id,backupType);
+
+  const handleDelete = async (id) => {
+    await fetchDelete(id);
     setShowConfirmationDelete(true);
   };
 
-  const handleShowModal = async (id, backupType) => {
-    await fetchDataAddBackup(id, backupType);
+  const handleShowModal = async (id) => {
+    await fetchDataAddBackup(id);
     setShowConfirmation(true);
   };
 
@@ -94,7 +94,7 @@ export default function PersetujuanUserBackup() {
             const data = res.data.data.content;
             setDataApproval(data);
           });
-      } catch (error) {}
+      } catch (error) { }
     };
     fetchData();
   }, []);
@@ -128,7 +128,6 @@ export default function PersetujuanUserBackup() {
                   <th>KETERANGAN</th>
                   <th>DETAIL</th>
                   <th>STATUS</th>
-                  <th>AKSI</th>
                 </tr>
               </thead>
               <tbody style={{ fontSize: "14px" }}>
@@ -147,11 +146,11 @@ export default function PersetujuanUserBackup() {
                       <FcViewDetails
                         fontSize={25}
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleShowModal(g.id, g.backupType)}
+                        onClick={() => handleShowModal(g.id)}
                       />
                     </td>
                     <td className="d-flex">
-                      {g.approvalType === "Pending" ? (
+                      {g.approval_type === "Pending" ? (
                         <div className="m-auto">
                           <FcOk
                             className="mx-2"
@@ -161,7 +160,6 @@ export default function PersetujuanUserBackup() {
                               setShowApproval({
                                 action: true,
                                 id: g.id,
-                                backupType: g.backupType,
                               })
                             }
                           />
@@ -172,24 +170,16 @@ export default function PersetujuanUserBackup() {
                               setShowNonApproval({
                                 action: true,
                                 id: g.id,
-                                backupType: g.backupType,
                                 nama: g.name,
                               })
                             }
                           />
                         </div>
-                      ) : g.approvalType === "Approve" ? (
+                      ) : g.approval_type === "Approve" ? (
                         <p style={{ margin: "auto" }}>Disetujui</p>
                       ) : (
                         <p style={{ margin: "auto" }}>Ditolak</p>
                       )}
-                    </td>
-                    <td>
-                      <MdDeleteSweep
-                        onClick={() => handleDelete(g.id, g.backupType)}
-                        fontSize={25}
-                        style={{ cursor: "pointer" }}
-                      />
                     </td>
                   </tr>
                 ))}
@@ -203,7 +193,7 @@ export default function PersetujuanUserBackup() {
             <ApprovalMessage
               show={showApproval.action}
               id={showApproval.id}
-              backupType={showApproval.backupType}
+
               aproval="Approve"
               onClose={() => setShowApproval(false)}
             />
@@ -211,7 +201,7 @@ export default function PersetujuanUserBackup() {
             <NonApprovalMessage
               show={showNonApproval.action}
               id={showNonApproval.id}
-              backupType={showNonApproval.backupType}
+
               nama={showNonApproval.nama}
               aproval="NonApprove"
               onClose={() => setShowNonApproval(false)}
@@ -222,11 +212,7 @@ export default function PersetujuanUserBackup() {
               currentPage={currentPage}
               dataApproval={dataApproval}
             />
-            <ActionDelete
-              show={showconfirmationdelete}
-              onClose={() => setShowConfirmationDelete(false)}
-              onDelete={fetchDelete}
-            />
+
           </Card>
         </Container>
       </div>

@@ -15,7 +15,7 @@ function TambahUser() {
   const [selectedUnit, setSelectedUnit] = useState("");
   // const [alertMessage, setAlertMessage] = useState("");
   const [validated, setValidated] = useState(false);
-  const [mygroup, setMygroup] = useState({});
+  // const [mygroup, setMygroup] = useState({});
   const [formDisabledDuration, setFormDisabledDuration] = useState({});
   const [formDisabled, setFormDisabled] = useState({});
   const formRef = useRef(null);
@@ -23,11 +23,16 @@ function TambahUser() {
     nik: "",
   });
   const [unit, setUnit] = useState({
-    id: "",
-    groupId: "",
-    workUnitName: "",
-    workUnitCode: "",
+    work_unit_id: "",
+    kode_work_unit: "",
+    nama_work_unit: "",
   });
+
+  const [jabatan,setJabatan] =useState({
+    jabtan_id:"",
+    nama_jabatan:"",
+
+  })
   const [formData, setFormData] = useState({
     description: "",
     nik: "",
@@ -36,7 +41,7 @@ function TambahUser() {
   const pilihUnitKerja = (event) => {
     const selectedValue = event.target.value;
     setSelectedUnit(selectedValue);
-    Click(selectedValue);
+    // Click(selectedValue);
   };
 
   const pilihGroupKerja = (event) => {
@@ -44,29 +49,29 @@ function TambahUser() {
     setSelectedGroup(selectedValue);
   };
 
-  const Click = async (value) => {
-    if (value == null) {
-      return <option>Kode Group - Nama Group</option>;
-    } else {
-      try {
-        await axios
-          .get(`${process.env.REACT_APP_BASE_URL}/backup/group?id=${value}`)
-          .then((res) => {
-            const testgroup = res.data;
-            setMygroup(testgroup);
-            // console.log(testgroup)
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+  // const Click = async (value) => {
+  //   if (value == null) {
+  //     return <option>Kode Group - Nama Group</option>;
+  //   } else {
+  //     try {
+  //       await axios
+  //         .get(`${process.env.REACT_APP_BASE_URL}/add-backup/group?id=${value}`)
+  //         .then((res) => {
+  //           const testgroup = res.data;
+  //           setMygroup(testgroup);
+  //           // console.log(testgroup)
+  //         });
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // };
 
   const handleKey = async (Event) => {
     if (Event.key === "Enter") {
       try {
         await axios
-          .post(`${process.env.REACT_APP_BASE_URL}/backup/nik`, {
+          .post(`${process.env.REACT_APP_BASE_URL}/add-backup/nik`, {
             nik: data.nik,
           })
 
@@ -116,22 +121,24 @@ function TambahUser() {
 
   const handleSave = async () => {
     const insert = {
-      user_id: data.user_id,
+      user_pengaju_id: data.user_id,
       uid_bkp: data.user_id_bkp,
-      work_unit_id: parseInt(selectedUnit),
-      group_id: parseInt(selectedGroup),
-      duration: parseInt(selectedDate),
+      work_unit_id: (selectedUnit),
+      jabatan_id: (selectedGroup),
+      duration: (selectedDate),
       start_date: dateStart,
       end_date: dateEnd,
       description: formData.description,
       name: data.nama_pegawai,
-      created_by: localStorage.getItem("name"),
-      updated_by: localStorage.getItem("name"),
+      created_by: "admin",
+      // created_by: localStorage.getItem("user_name"),
+      updated_by: "admin",
+      // updated_by: localStorage.getItem("user_name"),
     };
     // console.log('data tidak ada',validation())
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/backup/create`,
+        `${process.env.REACT_APP_BASE_URL}/add-backup/save`,
         insert
       );
       // setAlertMessage("Data tersimpan");
@@ -222,7 +229,6 @@ function TambahUser() {
     setDateStart("");
     setDateEnd("");
     setSelectedDate("");
-    setMygroup("");
     setFormData({
       description: "",
     });
@@ -234,10 +240,28 @@ function TambahUser() {
     const fetchData = async () => {
       try {
         await axios
-          .get(`${process.env.REACT_APP_BASE_URL}/backup/work-unit`)
+          .get(`${process.env.REACT_APP_BASE_URL}/add-backup/work-unit`)
           .then((res) => {
             const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setUnit(test);
+            // console.log(test)
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  //Fetch jabatan
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await axios
+          .get(`${process.env.REACT_APP_BASE_URL}/add-backup/group`)
+          .then((res) => {
+            const dataJabatan = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
+            setJabatan(dataJabatan);
             // console.log(test)
           });
       } catch (error) {
@@ -292,11 +316,11 @@ function TambahUser() {
                       <option value="">Kode Unit - Nama Unit</option>
                       {unit?.data?.map((list) => (
                         <option
-                          key={list.id}
-                          value={list.id}
+                          key={list.work_unit_id}
+                          value={list.work_unit_id}
                           onChange={pilihGroupKerja}
                         >
-                          {list.workUnitCode}-{list.workUnitName}
+                          {list.work_unit_id}-{list.nama_work_unit}
                         </option>
                       ))}
                     </Form.Select>
@@ -318,9 +342,9 @@ function TambahUser() {
                     >
                       <option value="">Kode Jabatan - Nama Jabatan</option>
 
-                      {mygroup?.data?.map((g) => (
-                        <option name="group_id" key={g.id} value={g.id}>
-                          {g.groupCode}-{g.groupName}
+                      {jabatan?.data?.map((g) => (
+                        <option name="group_id" key={g.jabatan_id} value={g.jabatan_id}>
+                          {g.nama_jabatan}
                         </option>
                       ))}
                     </Form.Select>
