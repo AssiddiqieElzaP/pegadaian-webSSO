@@ -109,6 +109,18 @@ function DetailBackup({ show, onClose, data }) {
           </Form.Group>
           <Form.Group className="mb-3" controlid="">
             <Form.Label column sm="4">
+              Pembuat Pengajuan
+            </Form.Label>
+            <Col sm="6">
+              <Form.Control
+                type="text"
+                defaultValue={data.created_by}
+                disabled
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group className="mb-3" controlid="">
+            <Form.Label column sm="4">
               Pemberi Persetujuan
             </Form.Label>
             <Col sm="6">

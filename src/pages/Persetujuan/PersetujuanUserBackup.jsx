@@ -65,19 +65,18 @@ export default function PersetujuanUserBackup() {
           setDataAddBackup(data);
           // console.log(test)
           console.log("data berhasil di hapus", data);
-          setShowConfirmationDelete(false);
+          
         });
     } catch (error) {
       console.error(error);
     }
+    setShowConfirmationDelete(false);
   };
 
-  const [getId, setGetId] = useState(null);
-  const [getBackup, setGetBackup] = useState(null);
+  
 
-  const handleDelete = (id, backupType) => {
-    setGetId(id);
-    setGetBackup(backupType);
+  const handleDelete =  async (id, backupType) => {
+    await fetchDelete(id,backupType);
     setShowConfirmationDelete(true);
   };
 
@@ -226,7 +225,7 @@ export default function PersetujuanUserBackup() {
             <ActionDelete
               show={showconfirmationdelete}
               onClose={() => setShowConfirmationDelete(false)}
-              onDelete={fetchDelete(getId, getBackup)}
+              onDelete={fetchDelete}
             />
           </Card>
         </Container>
