@@ -12,7 +12,7 @@ import NavbarComp from "../../component/navbar/NavbarComp";
 import ApprovalMessage from "../../component/modal/Approval";
 import NonApprovalMessage from "../../component/modal/NonAprroval";
 import PageApproval from "../../component/pagination/PageApproval";
-import ActionDelete from "../../component/modal/ActionDelete";
+import ConfirmationDelete from "../../component/modal/ConfirmationDelete";
 
 export default function PersetujuanUserBackup() {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -28,7 +28,6 @@ export default function PersetujuanUserBackup() {
 
   });
 
-  const [showconfirmationdelete, setShowConfirmationDelete] = useState(false);
   const [dataApproval, setDataApproval] = useState([]);
 
   const [dataAddbackup, setDataAddBackup] = useState({
@@ -53,27 +52,6 @@ export default function PersetujuanUserBackup() {
       console.error(error);
     }
   };
-
-  const fetchDelete = async (id) => {
-    try {
-      await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/approval/delete?id=${id}`
-        )
-        .then((res) => {
-          const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
-          setDataAddBackup(data);
-          // console.log(test)
-          console.log("data berhasil di hapus", data);
-
-        });
-    } catch (error) {
-      console.error(error);
-    }
-    setShowConfirmationDelete(false);
-  };
-
-
 
   const handleDelete = async (id) => {
     await fetchDelete(id);
@@ -185,11 +163,13 @@ export default function PersetujuanUserBackup() {
                 ))}
               </tbody>
             </Table>
+
             <DetailBackup
               show={showConfirmation}
               data={dataAddbackup}
               onClose={() => setShowConfirmation(false)}
             />
+
             <ApprovalMessage
               show={showApproval.action}
               id={showApproval.id}

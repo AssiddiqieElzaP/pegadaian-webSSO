@@ -2,18 +2,43 @@ import React from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import moment from "moment/moment";
 import "./modal.css";
+import ConfirmationDelete from "./ConfirmationDelete";
+import { useState } from "react";
+import axios from "axios";
 
-function DetailBackup({ show, onClose, data }) {
+function DetailBackup({ show, onClose, data, handleDelete }) {
   // const currentDate = data.tanggal_akhir_bkp()
+  const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
+  
   const formattedDateMulai = moment(data.tanggal_mulai_bkp).format("yyyy-MM-DD");
   const formattedDateAkhir = moment(data.tanggal_akhir_bkp).format("yyyy-MM-DD");
+
+  const fetchDelete = async (id) => {
+    try {
+      await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/approval/delete?id=${id}`
+        )
+        .then((res) => {
+          const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
+          setDataAddBackup(data);
+          // console.log(test)
+          console.log("data berhasil di hapus", data);
+
+        });
+    } catch (error) {
+      console.error(error);
+    }
+    setShowConfirmationDelete(false);
+  };
+
   return (
     <Modal show={show} onHide={onClose} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>Data User Backup</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form onSubmit={handleDelete}>
           <Row>
             <Form.Group as={Col} className="mb-3" controlid="">
               <Form.Label column sm="3">
@@ -27,7 +52,7 @@ function DetailBackup({ show, onClose, data }) {
             </Form.Group>
 
             <Form.Group as={Col} className="mb-3" controlid="">
-              <Form.Label column sm="4">
+              <Form.Label column sm="10">
                 Unit Kerja Backup
               </Form.Label>
               <Form.Control
@@ -99,58 +124,63 @@ function DetailBackup({ show, onClose, data }) {
             </Form.Group>
           </Row>
 
-          <Form.Group className="mb-3" controlid="">
-            <Form.Label column sm="4">
-              Status
-            </Form.Label>
-            <Col sm="6">
-              <Form.Control type="text" defaultValue={data.status} disabled />
-            </Col>
-          </Form.Group>
-          <Form.Group className="mb-3" controlid="">
-            <Form.Label column sm="4">
-              Pembuat Pengajuan
-            </Form.Label>
-            <Col sm="6">
-              <Form.Control
-                type="text"
-                defaultValue={data.created_by}
-                disabled
-              />
-            </Col>
-          </Form.Group>
-          <Form.Group className="mb-3" controlid="">
-            <Form.Label column sm="4">
-              Pemberi Persetujuan
-            </Form.Label>
-            <Col sm="6">
-              <Form.Control
-                type="text"
-                defaultValue={data.approved_by}
-                disabled
-              />
-            </Col>
-          </Form.Group>
-          <Form.Group className="mb-3" controlid="">
-            <Form.Label column sm="4">
-              Keterangan
-            </Form.Label>
-            <Col sm="6">
-              <Form.Control
-                type="text"
-                defaultValue={data.alasan_ditolak}
-                disabled
-              />
-            </Col>
-          </Form.Group>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlid="">
+              <Form.Label column sm="10">
+                Pembuat Pengajuan
+              </Form.Label>
+                <Form.Control
+                  type="text"
+                  defaultValue={data.created_by}
+                  disabled
+                />
+            </Form.Group>
+            <Form.Group as={Col} controlid="">
+              <Form.Label column sm="4">
+                Status
+              </Form.Label>
+                <Form.Control type="text" defaultValue={data.status} disabled />
+            </Form.Group>
+          </Row>
+
+          <Row className="mb-3">
+            <Form.Group as={Col} controlid="">
+              <Form.Label column sm="10">
+                Pemberi Persetujuan
+              </Form.Label>
+                <Form.Control
+                  type="text"
+                  defaultValue={data.approved_by}
+                  disabled
+                />
+            </Form.Group>
+            <Form.Group as={Col} controlid="">
+              <Form.Label column sm="4">
+                Keterangan
+              </Form.Label>
+                <Form.Control
+                  type="text"
+                  defaultValue={data.alasan_ditolak}
+                  disabled
+                />
+            </Form.Group>
+          </Row>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Close
+        <Button variant="danger" onClick={() => ConfirmationDelete()}>
+          Delete
         </Button>
       </Modal.Footer>
+      
+      <ConfirmationDelete 
+        show={showConfirmationDelete}
+        onDelete={fetchDelete}
+        onClose={() => setShowConfirmationDelete(false)}
+      />
+
     </Modal>
+    
   );
 }
 

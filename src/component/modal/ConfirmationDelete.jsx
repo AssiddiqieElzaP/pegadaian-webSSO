@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-function ActionDelete({ show, onClose, onDelete}) {
+function ConfirmationDelete({ show, onClose, onDelete}) {
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Body>Anda yakin ingin menghapus data ?</Modal.Body>
@@ -17,4 +17,4 @@ function ActionDelete({ show, onClose, onDelete}) {
   );
 }
 
-export default ActionDelete;
+export default ConfirmationDelete;

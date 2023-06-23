@@ -6,7 +6,10 @@ import "./App.css";
 import { ToastContainer } from "react-toastify";
 import Tabs from "./component/tabs/Tabs";
 import PersetujuanUserBackup from "./pages/Persetujuan/PersetujuanUserBackup";
-import Login from '../src/login/index'
+// import Login from '../src/login/index'
+// import { useLocation } from "react-router-dom/dist/umd/react-router-dom.development";
+// import { useEffect } from "react";
+// import axios from "axios";
 
 const App = () => {
   // function Riderect() {
@@ -22,16 +25,16 @@ const App = () => {
   //       console.log("test lagi");
   //       console.log(codes);
   //       try {
-  //         // await axios
-  //         //   .post(`http://localhost:8080/api/v1/auth-sso/code`, {
-  //         //     code: codes
-  //         //   })
-  //         //   .then((res) => {
-  //         //     const data = res.data
-  //         //     localStorage.setItem("token", "ini coba");
-  //         //     console.log("coba gembel");
-  //         //     console.log(data);
-  //         //   });
+  //         await axios
+  //           .post(`http://10.254.1.180:8081/api/v1/auth-sso/code`, {
+  //             code: codes
+  //           })
+  //           .then((res) => {
+  //             const data = res.data
+  //             localStorage.setItem("token", res.data.data.token);
+  //             console.log("coba gembel");
+  //             console.log(data);
+  //           });
   //       } catch (error) {
   //         console.log("error mulu");
   //       }
@@ -47,17 +50,19 @@ const App = () => {
   return (
     <>
     <ToastContainer theme='colored' position='center'></ToastContainer>
-    <Router>
-      <ProSidebarProvider>
-        <Routes>
-          {/* <Route path="/" element={<Login />} /> */}
-          <Route path="/" element={<Tabs />} />
-          <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
-          
-          {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
-        </Routes>
-      </ProSidebarProvider>
-    </Router>
+      <Router>
+        {/* <Riderect> */}
+          <ProSidebarProvider>
+            <Routes>
+              {/* <Route path="/" element={<Login />} /> */}
+              <Route path="/tabs" element={<Tabs />} />
+              <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
+              
+              {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
+            </Routes>
+          </ProSidebarProvider>
+        {/* </Riderect> */}
+      </Router>
     </>
   );
 };
