@@ -53,10 +53,10 @@ export default function PersetujuanUserBackup() {
     }
   };
 
-  const handleDelete = async (id) => {
-    await fetchDelete(id);
-    setShowConfirmationDelete(true);
-  };
+  // const handleDelete = async (id) => {
+  //   await fetchDelete(id);
+  //   setShowConfirmationDelete(true);
+  // };
 
   const handleShowModal = async (id) => {
     await fetchDataAddBackup(id);
@@ -111,12 +111,12 @@ export default function PersetujuanUserBackup() {
               <tbody style={{ fontSize: "14px" }}>
                 {currentPage.map((g) => (
                   <tr key={g.id}>
-                    <td>{g.name}</td>
+                    <td>{g.nama_pegawai}</td>
                     <td>
                       {g.work_unit_code}-{g.work_unit_name}
                     </td>
                     <td>{g.position_name}</td>
-                    <td>{g.backupType}</td>
+                    <td>{g.backup_type}</td>
                     <td>{parseInt(g.duration) + 1} Hari</td>
                     <td>{g.description}</td>
                     {/* <td ><button onClick={() => handleShowModal(g.id,g.backupType)} className='btn-color-detail'>Detail</button></td> */}

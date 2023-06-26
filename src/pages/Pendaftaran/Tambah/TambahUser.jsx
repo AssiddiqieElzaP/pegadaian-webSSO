@@ -66,13 +66,14 @@ function TambahUser() {
   //     }
   //   }
   // };
-
-  const handleKey = async (Event) => {
+  
+  const handleKey = async (Event,kd_kantor) => {
     if (Event.key === "Enter") {
       try {
         await axios
-          .post(`${process.env.REACT_APP_BASE_URL}/add-backup/nik`, {
+          .post(`${process.env.REACT_APP_BASE_URL}/add-backup/nik?kd_kantor=${kd_kantor}`, {
             nik: data.nik,
+            kd_kantor : data.kd_kantor,
           })
 
           .then((res) => {
@@ -197,6 +198,7 @@ function TambahUser() {
     calculateEndDate(dateStart, duration);
   };
 
+  
   // setting duration
   const calculateEndDate = (startDate, duration) => {
     const durationInDays = parseInt(duration);

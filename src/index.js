@@ -4,10 +4,12 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { BrowserRouter } from 'react-router-dom/dist/umd/react-router-dom.development';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <BrowserRouter>
   <React.StrictMode>
     <App />
   </React.StrictMode>
+  </BrowserRouter>
 );
