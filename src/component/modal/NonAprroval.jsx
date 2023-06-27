@@ -83,7 +83,7 @@ function NonApprovalMessage({ show, onClose, id, nama }) {
         <Button variant="secondary" onClick={onClose}>
           Batal
         </Button>
-        <Button variant="primary" onClick={() => fetchApproval(id, backupType)}>
+        <Button variant="primary" onClick={() => fetchApproval(id)}>
           Simpan
         </Button>
       </Modal.Footer>
