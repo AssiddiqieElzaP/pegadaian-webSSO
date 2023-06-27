@@ -21,7 +21,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
         )
         .then((res) => {
           const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
-          setDataAddBackup(data);
+          // setDataAddBackup(data);
           // console.log(test)
           console.log("data berhasil di hapus", data);
 

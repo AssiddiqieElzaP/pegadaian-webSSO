@@ -71,9 +71,9 @@ function TambahUser() {
     if (Event.key === "Enter") {
       try {
         await axios
-          .post(`${process.env.REACT_APP_BASE_URL}/add-backup/nik?kd_kantor=${kd_kantor}`, {
+          .post(`${process.env.REACT_APP_BASE_URL}/add-backup/nik?kd_kantor=12321`, {
             nik: data.nik,
-            kd_kantor : data.kd_kantor,
+          
           })
 
           .then((res) => {
@@ -85,7 +85,7 @@ function TambahUser() {
               kode_jabatan: res.data.data.kode_jabatan,
               unit_kerja: res.data.data.unit_kerja,
               kode_unit_kerja: res.data.data.kode_unit_kerja,
-              user_id_bkp: res.data.data.user_id_bkp,
+              user_id_bck: res.data.data.user_id_bck,
             });
             setFormDisabled(false);
             // console.log(res.data);
@@ -123,7 +123,7 @@ function TambahUser() {
   const handleSave = async () => {
     const insert = {
       user_pengaju_id: data.user_id,
-      uid_bkp: data.user_id_bkp,
+      username_delegasi: data.user_id_bck,
       work_unit_id: (selectedUnit),
       jabatan_id: (selectedGroup),
       duration: (selectedDate),
@@ -131,15 +131,15 @@ function TambahUser() {
       end_date: dateEnd,
       description: formData.description,
       name: data.nama_pegawai,
-      created_by: "admin",
+      created_by: "P94005",
       // created_by: localStorage.getItem("user_name"),
-      updated_by: "admin",
+      updated_by: "P94005",
       // updated_by: localStorage.getItem("user_name"),
     };
     // console.log('data tidak ada',validation())
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/add-backup/save`,
+        `${process.env.REACT_APP_BASE_URL}/add-backup/save?kd_jabatan=PTKAdmin`,
         insert
       );
       // setAlertMessage("Data tersimpan");
@@ -242,7 +242,7 @@ function TambahUser() {
     const fetchData = async () => {
       try {
         await axios
-          .get(`${process.env.REACT_APP_BASE_URL}/add-backup/work-unit`)
+          .get(`${process.env.REACT_APP_BASE_URL}/add-backup/work-unit?parent_work_unit=00002`)
           .then((res) => {
             const test = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setUnit(test);
@@ -260,7 +260,7 @@ function TambahUser() {
     const fetchData = async () => {
       try {
         await axios
-          .get(`${process.env.REACT_APP_BASE_URL}/add-backup/group`)
+          .get(`${process.env.REACT_APP_BASE_URL}/add-backup/group?work_unit=00017`)
           .then((res) => {
             const dataJabatan = res.data; //harus dibuatkan variabel sebelum di panggil di usestate
             setJabatan(dataJabatan);
@@ -318,11 +318,11 @@ function TambahUser() {
                       <option value="">Kode Unit - Nama Unit</option>
                       {unit?.data?.map((list) => (
                         <option
-                          key={list.work_unit_id}
-                          value={list.work_unit_id}
+                          key={list.kode_work_unit}
+                          value={list.kode_work_unit}
                           onChange={pilihGroupKerja}
                         >
-                          {list.work_unit_id}-{list.nama_work_unit}
+                          {list.kode_work_unit}-{list.nama_work_unit}
                         </option>
                       ))}
                     </Form.Select>
@@ -345,7 +345,7 @@ function TambahUser() {
                       <option value="">Kode Jabatan - Nama Jabatan</option>
 
                       {jabatan?.data?.map((g) => (
-                        <option name="group_id" key={g.jabatan_id} value={g.jabatan_id}>
+                        <option name="group_id" key={g.kode_jabatan} value={g.kode_jabatan}>
                           {g.nama_jabatan}
                         </option>
                       ))}
@@ -481,7 +481,7 @@ function TambahUser() {
                   type="text"
                   placeholder="Generate NIKBKP"
                   disabled
-                  value={data.user_id_bkp !== "" ? data.user_id_bkp : ""}
+                  value={data.user_id_bck !== "" ? data.user_id_bck : ""}
                   name="uid_bkp"
                 />
               </Form.Group>

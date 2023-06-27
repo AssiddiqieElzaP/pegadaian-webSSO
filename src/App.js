@@ -18,17 +18,17 @@ const App = () => {
     <>
     <ToastContainer theme='colored' position='center'></ToastContainer>
       
-        <AuthSSO>
+        {/* <AuthSSO> */}
           <ProSidebarProvider>
             <Routes>
               {/* <Route path="/" element={<Login />} /> */}
               {/* <Route path="/pengajuan" element={<Tabs />} /> */}
               <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
-              <Route exact path="/pengajuan" element={<Tabs />} />
+              <Route exact path="/" element={<Tabs />} />
               {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
             </Routes>
           </ProSidebarProvider>
-        </AuthSSO>
+        {/* </AuthSSO> */}
       
     </>
   );

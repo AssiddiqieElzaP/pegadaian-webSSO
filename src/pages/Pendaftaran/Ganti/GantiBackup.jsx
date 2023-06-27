@@ -29,7 +29,7 @@ function GantiBackup() {
     if (Event.key === "Enter") {
       try {
         await axios
-          .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik`, {
+          .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik?kd_kantor=12231`, {
             nik: data.nik,
           })
           .then((res) => {
@@ -41,7 +41,7 @@ function GantiBackup() {
               kode_jabatan: res.data.data.kode_jabatan,
               unit_kerja: res.data.data.unit_kerja,
               kode_unit_kerja: res.data.data.kode_unit_kerja,
-              user_id_bkp: res.data.data.user_id_bkp,
+              user_id_bck: res.data.data.user_id_bck,
             });
             setformDisabled(false)
           });
@@ -67,7 +67,7 @@ function GantiBackup() {
       kode_jabatan: "",
       unit_kerja: "",
       kode_unit_kerja: "",
-      user_id_bkp: "",
+      user_id_bck: "",
     });
     setDataGanti({
       user_id: "",
@@ -122,7 +122,7 @@ function GantiBackup() {
 
         try {
           await axios
-          .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik`, {
+          .post(`${process.env.REACT_APP_BASE_URL}/change-backup/nik?kd_kantor=12231`, {
             nik: dataGanti.nik,
           })
           .then((res) => {
@@ -196,20 +196,22 @@ function GantiBackup() {
 
   const handleSave = async () => {
     const insert = {
-      user_id: data.user_id,
+      user_pengaju_id: data.user_id,
       user_need_backup_id: dataGanti.user_id,
-      uidBkp: data.user_id_bkp,
+      username_delegasi: data.user_id_bck,
       duration: parseInt(selectedDate),
       start_date: dateStart,
+      kode_jabatan: "PTK",
+      kode_kantor: "10339",
       end_date: dateEnd,
       description: formData.description,
-      created_by: localStorage.getItem("name"),
-      updated_by: localStorage.getItem("name"),
+      created_by: "P94005",
+      updated_by: "P94005",
     };
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/change-backup/save`,
+        `${process.env.REACT_APP_BASE_URL}/change-backup/save?=kd_jabatan=PTK`,
         insert
       );
       toast.success("Data Tersimpan", {
@@ -219,7 +221,7 @@ function GantiBackup() {
         closeOnClick: true,
         pauseOnHover: true,
       });
-      handleClear()
+      // handleClear()
       setShowConfirmation(false);
       // Optional: Handle the server response
     } catch (error) {
@@ -374,7 +376,7 @@ function GantiBackup() {
                   type="text"
                   placeholder="Generate NIKBKP"
                   disabled
-                  value={data.user_id_bkp !== "" ? data.user_id_bkp : ""}
+                  value={data.user_id_bck !== "" ? data.user_id_bck : ""}
                 />
               </Form.Group>
 
