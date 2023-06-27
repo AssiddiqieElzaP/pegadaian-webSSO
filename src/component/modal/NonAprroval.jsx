@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 
-function NonApprovalMessage({ show, onClose, id, backupType, nama }) {
+function NonApprovalMessage({ show, onClose, id, nama }) {
   const [formData, setFormData] = useState({
     reason: "",
   });
   const [validated, setValidated] = useState(false);
-  const fetchApproval = async (id, backupType) => {
+  const fetchApproval = async (id) => {
     const insert = {
       approvalType: "NonApprove",
       reason: formData.reason,
@@ -27,7 +27,6 @@ function NonApprovalMessage({ show, onClose, id, backupType, nama }) {
           .put(`${process.env.REACT_APP_BASE_URL}/approval/action?`, insert, {
             params: {
               id: id,
-              backupType: backupType,
             },
           })
           .then((res) => {

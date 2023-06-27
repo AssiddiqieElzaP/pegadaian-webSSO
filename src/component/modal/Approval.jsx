@@ -2,8 +2,8 @@ import axios from 'axios';
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-function ApprovalMessage({ show, onClose, id,backupType}) {
-  const fetchApproval = async (id,backupType) => {
+function ApprovalMessage({ show, onClose, id}) {
+  const fetchApproval = async (id) => {
     const insert = {
       approvalType:'Approve',
       reason:null,
@@ -13,7 +13,6 @@ function ApprovalMessage({ show, onClose, id,backupType}) {
       .put(`${process.env.REACT_APP_BASE_URL}/approval/action`, insert,{
         params:{
           id:id,
-          backupType:backupType,
         },
       })  
       .then((res) =>{
@@ -35,7 +34,7 @@ function ApprovalMessage({ show, onClose, id,backupType}) {
         <Button variant="secondary" onClick={onClose}>
           Batal
         </Button>
-        <Button variant="primary" onClick={()=>fetchApproval(id,backupType)}>
+        <Button variant="primary" onClick={()=>fetchApproval(id)}>
           Simpan
         </Button>
       </Modal.Footer>

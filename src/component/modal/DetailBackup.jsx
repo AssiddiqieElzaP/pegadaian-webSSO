@@ -10,8 +10,8 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
   // const currentDate = data.tanggal_akhir_bkp()
   const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
   
-  const formattedDateMulai = moment(data.tanggal_mulai_bkp).format("yyyy-MM-DD");
-  const formattedDateAkhir = moment(data.tanggal_akhir_bkp).format("yyyy-MM-DD");
+  const formattedDateMulai = moment(data.tanggal_mulai_bck).format("yyyy-MM-DD");
+  const formattedDateAkhir = moment(data.tanggal_akhir_bck).format("yyyy-MM-DD");
 
   const fetchDelete = async (id) => {
     try {
@@ -57,7 +57,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               </Form.Label>
               <Form.Control
                 type="text"
-                defaultValue={data.unit_kerja_bkp}
+                defaultValue={data.unit_kerja_bck}
                 disabled
               />
             </Form.Group>
@@ -68,7 +68,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               <Form.Label column sm="4">
                 User ID Backup
               </Form.Label>
-              <Form.Control type="text" defaultValue={data.uid_bkp} disabled />
+              <Form.Control type="text" defaultValue={data.uid_bck} disabled />
             </Form.Group>
             <Form.Group as={Col} className="mb-3" controlid="">
               <Form.Label column sm="4">
@@ -76,7 +76,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               </Form.Label>
               <Form.Control
                 type="text"
-                defaultValue={data.jabatan_bkp}
+                defaultValue={data.jabatan_bck}
                 disabled
               />
             </Form.Group>
@@ -99,7 +99,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               </Form.Label>
               <Form.Control
                 value={formattedDateMulai}
-                defaultValue={data.tanggal_mulai_bkp}
+                defaultValue={data.tanggal_mulai_bck}
                 disabled
               />
             </Form.Group>
@@ -118,7 +118,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               </Form.Label>
               <Form.Control
                 value={formattedDateAkhir}
-                defaultValue={data.tanggal_akhir_bkp}
+                defaultValue={data.tanggal_akhir_bck}
                 disabled
               />
             </Form.Group>
@@ -131,7 +131,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               </Form.Label>
                 <Form.Control
                   type="text"
-                  defaultValue={data.created_by}
+                  defaultValue={data.diajukan_oleh}
                   disabled
                 />
             </Form.Group>
@@ -150,7 +150,7 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               </Form.Label>
                 <Form.Control
                   type="text"
-                  defaultValue={data.approved_by}
+                  defaultValue={data.pemberi_persetujuan}
                   disabled
                 />
             </Form.Group>
