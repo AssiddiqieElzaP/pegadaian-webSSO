@@ -26,6 +26,10 @@ const AuthSSO = () => {
               const data = res.data;
               console.log("coba gembel", data.data);
               localStorage.setItem("token", data.data.token);
+              localStorage.setItem("username",data.data.user_name)
+              localStorage.setItem("role",data.data.role)
+              localStorage.setItem("kode_jabatan", data.data.kode_jabatan)
+              localStorage.setItem("work_unit",data.data.kode_parent_work_unit)
               console.log(data);
               navigate('/pengajuan')
             });
