@@ -25,7 +25,7 @@ function TambahUser() {
     jabatan:"",
     kode_jabatan:"",
     unit_kerja:"",
-    user_id_bck:"",
+    user_name:"",
     kode_grade:"",
   });
   const [unit, setUnit] = useState({
@@ -91,7 +91,7 @@ function TambahUser() {
               kode_jabatan: res.data.data.kode_jabatan,
               unit_kerja: res.data.data.unit_kerja,
               kode_unit_kerja: res.data.data.kode_unit_kerja,
-              user_id_bck: res.data.data.user_id_bck,
+              user_id_bck: res.data.data.user_name,
               kode_grade : res.data.data.kode_grade,
             });
             setFormDisabled(false);
