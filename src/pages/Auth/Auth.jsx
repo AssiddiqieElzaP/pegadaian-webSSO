@@ -1,8 +1,11 @@
 import { useEffect } from "react";
-import { redirectLoginSSo, isLogged } from "../../helpers/utils";
-import { useNavigate } from "react-router-dom/dist/umd/react-router-dom.development";
+import { redirectLoginSSo, isLogged, test } from "../../helpers/utils";
+// import { useNavigate } from "react-router-dom/dist/umd/react-router-dom.development";
 import { ApiAuth } from "../../helpers/Api";
-
+import { redirect } from "react-router-dom/dist/umd/react-router-dom.development";
+import { useNavigate } from "react-router-dom";
+import NavbarComp from "../../component/navbar/NavbarComp";
+import SidebarMenu from "../../component/sidebar/sidebar";
 
 const AuthSSO = () => {
   //dibikin kondisi untuk jika code tidak didapat masuk kedalam HOME
@@ -11,35 +14,27 @@ const AuthSSO = () => {
     () => async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const authCode = urlParams.get("code");
-      const isLogin = isLogged() ?? ""
-      
-      if (authCode === null || isLogin === "") {
-        redirectLoginSSo()
-      }
+      const haveTokken = isLogged() ?? "";
 
-      else {
-
+      if (authCode === null && haveTokken === '') {
+        redirectLoginSSo();
+      } else {
         try {
-          await ApiAuth().loginSSO({ code: authCode})
+          await ApiAuth()
+            .loginSSO({ code: authCode })
             .then((res) => {
               const data = res.data;
               console.log("coba gembel", data.data);
               localStorage.setItem("token", data.data.token);
               console.log(data);
-              if(data.code === '200'){
-                navigate("/")
-              }
+              navigate('/pengajuan')
             });
         } catch (error) {
           console.log("error mulu");
         }
+      }if(haveTokken){
+          navigate('/pengajuan')
       }
-       if (isLogged) {
-        console.log("ini is", isLogged)
-        navigate("/pengajuan");
-        console.log(localStorage.getItem("token"))
-      }
-      
 
       // if (authCode) {
       //   dispatch(loginUSERSSO(authCode)).then((res) => {
@@ -51,7 +46,7 @@ const AuthSSO = () => {
       //   router.push("/");
       // }
     },
-    [isLogged()]
+    []
   );
 };
 
