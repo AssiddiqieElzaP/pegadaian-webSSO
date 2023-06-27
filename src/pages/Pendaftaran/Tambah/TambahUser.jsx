@@ -21,6 +21,12 @@ function TambahUser() {
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
+    nama_pegawai: "",
+    jabatan:"",
+    kode_jabatan:"",
+    unit_kerja:"",
+    user_id_bck:"",
+    kode_grade:"",
   });
   const [unit, setUnit] = useState({
     work_unit_id: "",
