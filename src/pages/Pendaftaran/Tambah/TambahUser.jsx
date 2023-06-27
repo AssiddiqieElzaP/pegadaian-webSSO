@@ -67,7 +67,7 @@ function TambahUser() {
   //   }
   // };
   
-  const handleKey = async (Event,kd_kantor) => {
+  const handleKey = async (Event) => {
     if (Event.key === "Enter") {
       try {
         await axios
@@ -86,6 +86,7 @@ function TambahUser() {
               unit_kerja: res.data.data.unit_kerja,
               kode_unit_kerja: res.data.data.kode_unit_kerja,
               user_id_bck: res.data.data.user_id_bck,
+              kode_grade : res.data.data.kode_grade,
             });
             setFormDisabled(false);
             // console.log(res.data);
