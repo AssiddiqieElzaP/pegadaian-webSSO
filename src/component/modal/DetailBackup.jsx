@@ -9,22 +9,23 @@ import axios from "axios";
 function DetailBackup({ show, onClose, data, handleDelete }) {
   // const currentDate = data.tanggal_akhir_bkp()
   const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-  
-  const formattedDateMulai = moment(data.tanggal_mulai_bkp).format("yyyy-MM-DD");
-  const formattedDateAkhir = moment(data.tanggal_akhir_bkp).format("yyyy-MM-DD");
+  const setDataAddBackup = null;
+  const formattedDateMulai = moment(data.tanggal_mulai_bkp).format(
+    "yyyy-MM-DD"
+  );
+  const formattedDateAkhir = moment(data.tanggal_akhir_bkp).format(
+    "yyyy-MM-DD"
+  );
 
   const fetchDelete = async (id) => {
     try {
       await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/approval/delete?id=${id}`
-        )
+        .get(`${process.env.REACT_APP_BASE_URL}/approval/delete?id=${id}`)
         .then((res) => {
           const data = res.data.data; //harus dibuatkan variabel sebelum di panggil di usestate
           setDataAddBackup(data);
           // console.log(test)
           console.log("data berhasil di hapus", data);
-
         });
     } catch (error) {
       console.error(error);
@@ -129,17 +130,17 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               <Form.Label column sm="10">
                 Pembuat Pengajuan
               </Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={data.created_by}
-                  disabled
-                />
+              <Form.Control
+                type="text"
+                defaultValue={data.created_by}
+                disabled
+              />
             </Form.Group>
             <Form.Group as={Col} controlid="">
               <Form.Label column sm="4">
                 Status
               </Form.Label>
-                <Form.Control type="text" defaultValue={data.status} disabled />
+              <Form.Control type="text" defaultValue={data.status} disabled />
             </Form.Group>
           </Row>
 
@@ -148,21 +149,21 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
               <Form.Label column sm="10">
                 Pemberi Persetujuan
               </Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={data.approved_by}
-                  disabled
-                />
+              <Form.Control
+                type="text"
+                defaultValue={data.approved_by}
+                disabled
+              />
             </Form.Group>
             <Form.Group as={Col} controlid="">
               <Form.Label column sm="4">
                 Keterangan
               </Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={data.alasan_ditolak}
-                  disabled
-                />
+              <Form.Control
+                type="text"
+                defaultValue={data.alasan_ditolak}
+                disabled
+              />
             </Form.Group>
           </Row>
         </Form>
@@ -172,15 +173,13 @@ function DetailBackup({ show, onClose, data, handleDelete }) {
           Delete
         </Button>
       </Modal.Footer>
-      
-      <ConfirmationDelete 
+
+      <ConfirmationDelete
         show={showConfirmationDelete}
         onDelete={fetchDelete}
         onClose={() => setShowConfirmationDelete(false)}
       />
-
     </Modal>
-    
   );
 }
 

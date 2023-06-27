@@ -16,7 +16,6 @@ function GantiBackup() {
   const [validated, setValidated] = useState(false);
   const [formDurationDisabled, setFormDurationDisabled] = useState({});
   const [formDisabled, setformDisabled] = useState({});
-  const [textDisabledField, setTextDisabledField] = useState({});
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
@@ -41,7 +40,7 @@ function GantiBackup() {
               kode_jabatan: res.data.data.kode_jabatan,
               unit_kerja: res.data.data.unit_kerja,
               kode_unit_kerja: res.data.data.kode_unit_kerja,
-              user_id_bkp: res.data.data.user_id_bkp,
+              user_id_bck: res.data.data.user_id_bck,
             });
             setformDisabled(false)
           });
@@ -67,7 +66,7 @@ function GantiBackup() {
       kode_jabatan: "",
       unit_kerja: "",
       kode_unit_kerja: "",
-      user_id_bkp: "",
+      user_id_bck: "",
     });
     setDataGanti({
       user_id: "",
@@ -198,7 +197,7 @@ function GantiBackup() {
     const insert = {
       user_id: data.user_id,
       user_need_backup_id: dataGanti.user_id,
-      uidBkp: data.user_id_bkp,
+      uidbck: data.user_id_bck,
       duration: parseInt(selectedDate),
       start_date: dateStart,
       end_date: dateEnd,
@@ -354,7 +353,7 @@ function GantiBackup() {
               </Form.Group>
 
               <Form.Group as={Col} controlid="jabatan">
-                <Form.Label className="mb-0 ms-1">Jabatan</Form.Label>
+                <Form.Label className="mb-0 ms-1">Jabatan Backup</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Kode Jabatan - Nama Jabatan"
@@ -372,9 +371,9 @@ function GantiBackup() {
                 <Form.Label className="mb-0 ms-1">User ID Backup</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Generate NIKBKP"
+                  placeholder="Generate NIKBCK"
                   disabled
-                  value={data.user_id_bkp !== "" ? data.user_id_bkp : ""}
+                  value={data.user_id_bck !== "" ? data.user_id_bck : ""}
                 />
               </Form.Group>
 

@@ -123,7 +123,7 @@ function TambahUser() {
   const handleSave = async () => {
     const insert = {
       user_pengaju_id: data.user_id,
-      uid_bkp: data.user_id_bkp,
+      uid_bck: data.user_id_bck,
       work_unit_id: (selectedUnit),
       jabatan_id: (selectedGroup),
       duration: (selectedDate),
@@ -224,7 +224,7 @@ function TambahUser() {
       nama_pegawai: "",
       jabatan: "",
       kode_jabatan: "",
-      user_id_bkp: "",
+      user_id_bck: "",
     });
     setSelectedUnit("");
     setSelectedGroup("");
@@ -333,7 +333,7 @@ function TambahUser() {
 
                   <Col>
                     <Form.Label className="mb-0 ms-1">
-                      Group Jabatan <span className="color-span">*</span>
+                      Jabatan Backup <span className="color-span">*</span>
                     </Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
