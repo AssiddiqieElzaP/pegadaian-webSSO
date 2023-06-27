@@ -211,7 +211,7 @@ function GantiBackup() {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/change-backup/save?=kd_jabatan=PTK`,
+        `${process.env.REACT_APP_BASE_URL}/change-backup/save?kd_jabatan=PTK`,
         insert
       );
       toast.success("Data Tersimpan", {
