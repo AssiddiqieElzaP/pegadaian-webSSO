@@ -1,6 +1,6 @@
 import React from "react";
 import { ProSidebarProvider } from "react-pro-sidebar";
-import {  Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
 import { ToastContainer } from "react-toastify";
@@ -13,23 +13,31 @@ import axios from "axios";
 import AuthSSO from "./pages/Auth/Auth";
 
 const App = () => {
-  
   return (
     <>
-    <ToastContainer theme='colored' position='center'></ToastContainer>
-      
-        <AuthSSO>
+      <ToastContainer theme="colored" position="center"></ToastContainer>
+
+      <ProSidebarProvider>
+        <Routes>
+          <Route path="/" element={<AuthSSO />} />
+          {/* <Route path="/pengajuan" element={<Tabs />} /> */}
+          <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
+          <Route exact path="/pengajuan" element={<Tabs />} />
+          {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
+        </Routes>
+      </ProSidebarProvider>
+
+      {/* <AuthSSO> */}
           <ProSidebarProvider>
             <Routes>
-              {/* <Route path="/" element={<Login />} /> */}
+              <Route path="/" element={<Login />} />
               {/* <Route path="/pengajuan" element={<Tabs />} /> */}
               <Route path="/persetujuan" element={<PersetujuanUserBackup />} />
               <Route exact path="/pengajuan" element={<Tabs />} />
               {/* <Route path="/user-role" element={<UserRoleMatrix />} /> */}
             </Routes>
           </ProSidebarProvider>
-        </AuthSSO>
-      
+        {/* </AuthSSO> */}
     </>
   );
 };
