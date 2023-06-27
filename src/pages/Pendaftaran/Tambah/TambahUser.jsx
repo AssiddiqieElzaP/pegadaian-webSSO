@@ -130,7 +130,6 @@ function TambahUser() {
       start_date: dateStart,
       end_date: dateEnd,
       description: formData.description,
-      name: data.nama_pegawai,
       created_by: "P94005",
       // created_by: localStorage.getItem("user_name"),
       updated_by: "P94005",
@@ -224,7 +223,7 @@ function TambahUser() {
       nama_pegawai: "",
       jabatan: "",
       kode_jabatan: "",
-      user_id_bkp: "",
+      user_id_bck: "",
     });
     setSelectedUnit("");
     setSelectedGroup("");
@@ -333,7 +332,7 @@ function TambahUser() {
 
                   <Col>
                     <Form.Label className="mb-0 ms-1">
-                      Group Jabatan <span className="color-span">*</span>
+                       Jabatan Backup <span className="color-span">*</span>
                     </Form.Label>
                     <Form.Select
                       style={{ fontSize: "12px" }}
@@ -440,7 +439,7 @@ function TambahUser() {
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="validationCustom01">
-                <Form.Label className="mb-0 ms-1">Jabatan</Form.Label>
+                <Form.Label className="mb-0 ms-1">Jabatan </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Kode Jabatan - Nama Jabatan"
