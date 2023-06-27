@@ -21,12 +21,6 @@ function TambahUser() {
   const formRef = useRef(null);
   const [data, setData] = useState({
     nik: "",
-    nama_pegawai: "",
-    jabatan:"",
-    kode_jabatan:"",
-    unit_kerja:"",
-    user_name:"",
-    kode_grade:"",
   });
   const [unit, setUnit] = useState({
     work_unit_id: "",
@@ -91,7 +85,7 @@ function TambahUser() {
               kode_jabatan: res.data.data.kode_jabatan,
               unit_kerja: res.data.data.unit_kerja,
               kode_unit_kerja: res.data.data.kode_unit_kerja,
-              user_id_bck: res.data.data.user_name,
+              user_id_bck: res.data.data.user_id_bck,
               kode_grade : res.data.data.kode_grade,
             });
             setFormDisabled(false);
@@ -487,8 +481,8 @@ function TambahUser() {
                   type="text"
                   placeholder="Generate NIKBKP"
                   disabled
-                  value={data.user_name !== "" ? data.user_name : ""}
-                  name="uid_bkp"
+                  value={data.user_id_bck !== "" ? data.user_id_bck : ""}
+                  name="user_id_bck"
                 />
               </Form.Group>
               <Form.Group as={Col}></Form.Group>
