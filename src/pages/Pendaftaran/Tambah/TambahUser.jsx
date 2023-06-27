@@ -487,7 +487,7 @@ function TambahUser() {
                   type="text"
                   placeholder="Generate NIKBKP"
                   disabled
-                  value={data.user_id_bck !== "" ? data.user_id_bck : ""}
+                  value={data.user_name !== "" ? data.user_name : ""}
                   name="uid_bkp"
                 />
               </Form.Group>
