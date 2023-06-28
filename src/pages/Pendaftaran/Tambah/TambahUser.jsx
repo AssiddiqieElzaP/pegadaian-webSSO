@@ -98,6 +98,7 @@ function TambahUser() {
             //   pauseOnHover: true,
             // });
             console.log("data Succes");
+            console.log(data)
           });
       } catch (err) {
         // console.error(error);
