@@ -314,7 +314,7 @@ function GantiBackup() {
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="unitkerja">
-                <Form.Label className="mb-0 ms-1">Unit Kerja</Form.Label>
+                <Form.Label className="mb-0 ms-1">Unit Kerja Backup</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Kode Unit - Unit Kerja"
@@ -342,7 +342,7 @@ function GantiBackup() {
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} controlid="jabatan">
-                <Form.Label className="mb-0 ms-1">Jabatan</Form.Label>
+                <Form.Label className="mb-0 ms-1">Jabatan Backup</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Kode Jabatan - Nama Jabatan"
@@ -374,7 +374,7 @@ function GantiBackup() {
                 <Form.Label className="mb-0 ms-1">User ID Backup</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Generate NIKBKP"
+                  placeholder="Generate NIKBCK"
                   disabled
                   value={data.user_id_bck !== "" ? data.user_id_bck : ""}
                 />

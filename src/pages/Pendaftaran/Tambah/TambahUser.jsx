@@ -480,7 +480,7 @@ function TambahUser() {
                 <Form.Label className="mb-0 ms-1">User ID Backup</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Generate NIKBKP"
+                  placeholder="Generate NIKBCK"
                   disabled
                   value={data.user_id_bck !== "" ? data.user_id_bck : ""}
                   name="user_id_bck"
