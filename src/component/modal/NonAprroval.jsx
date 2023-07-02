@@ -10,7 +10,8 @@ function NonApprovalMessage({ show, onClose, id, nama }) {
   const [validated, setValidated] = useState(false);
   const fetchApproval = async (id) => {
     const insert = {
-      approvalType: "NonApprove",
+      approval_type:'NonApprove',
+      updated_by:'P94006',
       reason: formData.reason,
     };
     if (formData.reason === "") {

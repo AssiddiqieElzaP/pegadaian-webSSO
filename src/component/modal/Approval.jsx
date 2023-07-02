@@ -5,7 +5,8 @@ import { Modal, Button } from 'react-bootstrap';
 function ApprovalMessage({ show, onClose, id}) {
   const fetchApproval = async (id) => {
     const insert = {
-      approvalType:'Approve',
+      approval_type:'Approve',
+      updated_by:'P94006',
       reason:null,
     }
     try {

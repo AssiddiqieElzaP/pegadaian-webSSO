@@ -10,7 +10,8 @@ import PersetujuanUserBackup from "./pages/Persetujuan/PersetujuanUserBackup";
 import { useLocation } from "react-router-dom/dist/umd/react-router-dom.development";
 import { useEffect } from "react";
 import axios from "axios";
-import AuthSSO from "./pages/Auth/Auth";
+// import AuthSSO from "./pages/Auth/Auth";
+import Login from "./login";
 
 const App = () => {
   
