@@ -109,8 +109,10 @@ export default function PersetujuanUserBackup() {
                 </tr>
               </thead>
               <tbody style={{ fontSize: "14px" }}>
-                {currentPage.map((g) => (
-                  <tr key={g.id}>
+                {
+                currentPage.map((g,key) => {
+                  return(
+                  <tr key={key}>
                     <td>{g.nama_pegawai}</td>
                     <td>
                       {g.work_unit_code}-{g.work_unit_name}
@@ -160,7 +162,8 @@ export default function PersetujuanUserBackup() {
                       )}
                     </td>
                   </tr>
-                ))}
+                )})
+                }
               </tbody>
             </Table>
 

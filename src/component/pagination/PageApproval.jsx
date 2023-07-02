@@ -13,7 +13,7 @@ const PageApproval = ({ pages, setPage, dataApproval, currentPage }) => {
 
   useEffect(() => {
     setPage(currentButtons);
-  }, [currentButtons, setPage]);
+  }, [currentButtons, cure]);
 
   // console.log(currentButtons);
   return (
