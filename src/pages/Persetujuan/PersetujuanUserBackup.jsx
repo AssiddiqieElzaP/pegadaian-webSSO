@@ -148,7 +148,7 @@ export default function PersetujuanUserBackup() {
                               setShowNonApproval({
                                 action: true,
                                 id: g.id,
-                                nama: g.name,
+                                nama: g.nama_pegawai,
                               })
                             }
                           />
